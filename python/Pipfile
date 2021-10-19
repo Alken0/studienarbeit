@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 tensorflow = "2.6"
 pillow = "3.10"
+scikit-image = "0.18"
 
 [dev-packages]
 

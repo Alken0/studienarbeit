@@ -7,11 +7,13 @@ class Configuration:
     seed: int
     image_size: int
     image_amount: int
+    min_figur_size: int
 
-    def __init__(self, seed, imageSize, imageAmount) -> None:
+    def __init__(self, seed, imageSize, imageAmount, minFigurSize) -> None:
         self.seed = seed
         self.image_size = imageSize
         self.image_amount = imageAmount
+        self.min_figur_size = minFigurSize
 
 def load() -> Configuration:
     with open(FILE_PATH) as config_file:
