@@ -8,7 +8,8 @@ class Generator:
     EXPORT_DIR = "data/training"
 
     def cleanExportDir(self) -> None:
-        shutil.rmtree(self.EXPORT_DIR)
+        if os.path.exists(self.EXPORT_DIR):
+            shutil.rmtree(self.EXPORT_DIR)
         os.mkdir(self.EXPORT_DIR)
 
     def generate(self) -> None:
