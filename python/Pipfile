@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 tensorflow = "2.6"
+pillow = "3.10"
 
 [dev-packages]
 

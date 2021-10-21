@@ -1,3 +1,5 @@
 {
-    "seed": 123456789
+    "seed": 123456789,
+    "imageSize": 28,
+    "imageAmount": 3
 }
