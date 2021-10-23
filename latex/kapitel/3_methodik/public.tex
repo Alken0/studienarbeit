@@ -1,15 +1,48 @@
 \chapter{Methodik}
 % How to write methods section: http://rc.rcjournal.com/content/respcare/49/10/1229.full.pdf
 \section{Synthetische Trainingsdaten}
+\subsection{Warum synthetische Daten?}
+Mehr Kontrolle über die Bilder:
+\footnote{Die meisten Anpassungen erlauben auch Rechenleistung zu reduzieren, falls Computer überlastet sein sollten.}
 \begin{enumerate}
-	\item Eigenschaften der Bilder
-	\item warum synthetisch
-	\item wie generiert? -> Deterministisch -> Seed
+	\item Anpassung von Größe
+	\item Anzahl der unterschiedlichen labels (wieviel unterschiedliche Formen sind enthalten)
+	\item sich unterscheidende Features in den Bildern (wo genau sind die Bilder zu finden, unterschiedliche Größe, Rotation?)
+	\item wie generiert? $\rightarrow$ Deterministisch $\rightarrow$ Seed
 \end{enumerate}
 
-\section{GAN}
+\subsection{Welche Eigenschaften haben die Bilder genau?}
 \begin{enumerate}
-	\item Was soll am GAN verändert werden? + Erklärung der Sachen
-	\item Was soll das GAN produzieren?
-	\item Was sind erfolgskriterien für ein gutes GAN?
+	\item größe: 28x28
+	\item farbe: 1-dimensional $\rightarrow$ scharz-weiß 
+\end{enumerate}
+
+\section{Training}
+Ziel: GAN das möglichst diverse und korrekte Bilder erzeugt $\rightarrow$ Wie wird das erreicht?
+\begin{enumerate}
+	\item Anpassung von Hyperparametern (Learning-rate, batch-size, momentum)
+	\footnote{https://towardsdatascience.com/what-are-hyperparameters-and-how-to-tune-the-hyperparameters-in-a-deep-neural-network-d0604917584a}
+	\footnote{Grid-search (erlaubt methodisches Suchen nach optimalen Hyperparametern): https://www.tensorflow.org/tensorboard/hyperparameter\_tuning\_with\_hparams}
+	\item Anpassung von Neuralen Netzarchitektur
+	\footnote{https://lab.wallarm.com/the-first-step-by-step-guide-for-implementing-neural-architecture-search-with-reinforcement-learning-using-tensorflow-99ade71b3d28/}
+\end{enumerate}
+
+\section{Bewertung bzw. Vergleich der GANs}
+Ziel: messbare Vergleichskriterien
+
+\subsection{Korrektheit der Bilder}
+\begin{enumerate}
+	\item richtige Form für das angegebene Label? 
+	\item muss per Hand bestimmt werden? oder festen algorithmus, der form erkennt? neuronales netz wäre zu ungenau?
+\end{enumerate}
+
+\subsection{Diversität der generierten Bilder}
+\begin{enumerate}
+	\item Vergleich zu Trainingsdaten (wird etwas neues geschaffen?)
+	\item Vergleich zu anderen generierten Bildern $\rightarrow$ (Parital) Mode-Collapse?
+	\footnote{https://developers.google.com/machine-learning/gan/problems}
+	\footnote{eventuell 2 discriminator?: https://dl.acm.org/doi/10.1145/3283254.3283282}
+	\footnote{Google: https://research.google/pubs/pub45829/}
+	
+	\item Vergleich von Bildern durch 'Pixel by Pixel' Ähnlichkeit bestimmen $\rightarrow$ die X bilder mit einer Ähnlichkeit über Y \% können dann angeguckt werden
 \end{enumerate}
