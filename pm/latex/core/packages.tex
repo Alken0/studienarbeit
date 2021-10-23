@@ -1,0 +1,220 @@
+%!TEX root = ../main.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% eigene Packages/Einstellungen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Zeilenumbruch und mehr
+\usepackage[activate]{microtype}
+
+% Zeichencodierung
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{verbatim}
+
+% Zeilenabstand
+\usepackage[onehalfspacing]{setspace}
+
+% Index-Erstellung
+\usepackage{makeidx}
+
+% Lokalisierung (neue deutsche Rechtschreibung)
+\usepackage[ngerman]{babel}
+
+% Anführungszeichen 
+\usepackage[babel,german=quotes]{csquotes}
+
+
+% % Spezielle Tabellenform fuer Deckblatt
+% \usepackage{longtable}
+% \setlength{\tabcolsep}{10pt} %Abstand zwischen Spalten
+% \renewcommand{\arraystretch}{1.5} %Zeilenabstand
+
+% Grafiken
+\usepackage{graphicx}
+
+% Mathematische Textsaetze
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Pakete um Textteile drehen zu können, oder eine Seite Querformat anzeigen kann.
+%\usepackage{rotating}
+%\usepackage{lscape}
+
+
+
+% Literaturverweise nach Harvard (mit deutschem und)
+\usepackage[dcucite]{harvard}
+\renewcommand{\harvardand}{und}
+
+% Verschiedene Schriftarten
+%\usepackage{goudysans}
+%\usepackage{lmodern}
+%\usepackage{libertine}
+% \usepackage{palatino} 
+
+% Hurenkinder und Schusterjungen verhindern
+% http://projekte.dante.de/DanteFAQ/Silbentrennung
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+
+% Fussnoten
+\usepackage[marginal, multiple, bottom, stable]{footmisc}
+
+
+
+%Gleitumgebungen (Bilder, Tabellen, usw\ldots) lassen sich mit H an genau der
+% definierten Stelle platzieren
+\usepackage{float}
+
+% für die vertikale Platzierung von Text in Tabellen
+\usepackage{array}
+
+% für die Darstellung des Euro-Symbols
+\usepackage[right]{eurosym}
+
+% für textumflossene Grafiken
+\usepackage{wrapfig}
+
+% eine Kommentarumgebung "k" (Handhabe mit \begin{k}<Kommentartext>\end{k},
+% Kommentare werden rot gedruckt). Wird \% vor excludecomment{k} entfernt,
+% werden keine Kommentare mehr gedruckt.
+\usepackage{comment}
+\specialcomment{k}{\begingroup\color{red}}{\endgroup}
+%\excludecomment{k}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% needed packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{babel}      % Sprachanpassungen für generierte Texte wie "Inhaltsverzeichnis" etc
+\usepackage[T1]{fontenc}% Interne LaTeX Codierungen
+\usepackage[dvipsnames,table]{xcolor} % Extending L A TEX’s color facilities
+% \usepackage[babel, german=guillemets]{csquotes}   % Context sensitive quotation facilities.
+% \usepackage{xspace}     % http://www.ctan.org/tex-archive/help/Catalogue/entries/xspace.html
+\usepackage{array}      % http://www.ctan.org/tex-archive/help/Catalogue/entries/array.html
+\usepackage{tabularx}   % http://www.ctan.org/tex-archive/help/Catalogue/entries/tabularx.html
+\usepackage{eurosym}    % \euro
+\usepackage{pdfpages}   % http://www.ctan.org/tex-archive/help/Catalogue/entries/pdfpages.html
+\usepackage{needspace}  % http://www.tex.ac.uk/cgi-bin/texfaq2html?label=nopagebrk
+\usepackage[onehalfspacing]{setspace}
+\usepackage[bookmarksopen,bookmarksnumbered]{hyperref}
+\usepackage{bookmark}   % Bookmarks for hyperref
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+%%%%%%COLORS%%%%%%%%%%%%%
+\definecolor{simusorange}{HTML}{FF8000}
+\definecolor{simusdark}{HTML}{F7893F}
+\definecolor{darkblue}{HTML}{3B4FD1}
+\definecolor{grasGreen}{RGB}{204, 255, 153}
+\definecolor{lightBlue}{RGB}{153,204,255}
+\definecolor{lightPurple}{RGB}{153, 153, 255}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{simusgreen}{HTML}{0EA458}
+\definecolor{literaturrecherche}{HTML}{2F75B5}
+\definecolor{testen}{HTML}{548235}
+\definecolor{entwicklung}{HTML}{993366}
+\definecolor{schriftlicheAusarbeitung}{HTML}{CB5F05}
+
+%%%%%%%%%
+% Glossar
+\usepackage[
+nonumberlist, %keine Seitenzahlen anzeigen
+%acronym,      %ein Abkürzungsverzeichnis erstellen
+%section,     %im Inhaltsverzeichnis auf section-Ebene erscheinen
+toc,          %Einträge im Inhaltsverzeichnis
+]{glossaries}
+
+%Akronyme
+\usepackage[printonlyused,footnote, withpage]{acronym} %maybe without page
+%%%%%%%%%%%%%%
+
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subfiles}
+%\usepackage{subfigure}
+%\usepackage{subfig}
+\usepackage{subcaption} 
+%\usepackage[list=true, font=large, labelfont=bf, labelformat=brace, position=top]{subcaption}
+\usepackage{hyperref}
+\usepackage[ngerman]{cleveref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%PseudoCode%%%%%%%%%%%%%%%
+\usepackage{algorithm2e} %for psuedo code
+\usepackage[lmargin=3.81cm,tmargin=2.54cm,rmargin=2.54cm,bmargin=2.52cm]{geometry}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% Programmlistings setzen %%%%%%%%%%%%%%%
+\usepackage{listings}   % http://www.ctan.org/tex-archive/macros/latex/contrib/listings/
+
+% Wie sollen die Überschriften benannt werden:
+\renewcommand{\lstlistingname}{Alg}
+
+% Wie die Liste der Listings, s. \lstlistoflistings in bericht.tex
+\renewcommand{\lstlistlistingname}{Liste der Algorithmen}
+
+% So kann man einen Stil für alle  Algorithmen definieren
+\lstdefinestyle{algoBericht}{
+	numbers=left,              % Zeilennummern einfügen
+	numberstyle=\tiny,         % wie werden sie gesetzt
+	numbersep=5pt,             % Abstand der Nummern zum Text
+	numberblanklines=false,    % bei Leerzeilen keine Nummer ausgeben (aber zählen)
+	basicstyle=\sffamily\small,         % Wie soll der Algorithmus gesetzt werden
+}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{white},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{simusorange}\bfseries,
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[headings]{fullpage}
+\usepackage{url}
+\usepackage{microtype}  % http://tug.ctan.org/tex-archive/macros/latex/contrib/microtype/
+%\usepackage{lmodern}    % Computern-Modern Schriftfamilie
+\usepackage{helvet}
+\usepackage{amssymb}    % Symbole
+\usepackage{framed}     % Framed or shaded regions that can break across pages.
+% http://dante.ctan.org/tex-archive/help/Catalogue/entries/framed.html
+% Benutzung siehe erklaerung.tex
+
+\usepackage{makeidx}    % Erstellung eines Indexes
+\makeindex
+
+\usepackage{fancyhdr}  
+%\pagestyle{fancy}
+\fancyhead[L]{ }
+\fancyhead[R]{ }
+\fancyfoot[L]{}
+
+\usepackage{wrapfig}    % Bilder von text umfliessen lassen
+
+\usepackage[colorinlistoftodos]{todonotes}
+% Einfache Verwaltung und Erstellung von TODO's Markierungen
+% http://tug.ctan.org/tex-archive/macros/latex/contrib/todonotes/
+% wichtige Paket-Optionen: disable
+
+
+
+
