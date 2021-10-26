@@ -1,0 +1,18 @@
+
+% logos
+\newcommand{\logodhbw}{\includegraphics[width=6cm]{kapitel/0_offizielles/img/dhbw}}
+
+% print pages
+\newcommand{\printListOfFigures}{
+	\cleardoublepage
+	\phantomsection
+	\addcontentsline{toc}{chapter}{\listfigurename}
+	\listoffigures
+}
+
+\newcommand{\printListOfTables}{
+	\cleardoublepage
+	\phantomsection
+	\addcontentsline{toc}{chapter}{\listtablename}
+	\listoftables
+}

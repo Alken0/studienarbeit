@@ -1,0 +1,45 @@
+%!TEX root = ../main.tex
+
+% character encoding
+\usepackage[utf8]{inputenc}
+
+% page definition
+\usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm,includehead,includefoot,headsep=1cm]{geometry}
+
+% Header/Footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily \theAuthor}
+\fancyhead[R]{\sffamily \nouppercase{\leftmark}}
+\fancyfoot[C]{\sffamily \thepage}
+
+% Linespace
+\usepackage[onehalfspacing]{setspace}
+
+% Language = German
+\usepackage[ngerman]{babel}
+\usepackage[babel, german=quotes]{csquotes}
+
+% Graphics
+\usepackage{graphicx}
+\usepackage{float}
+
+% Lists
+\usepackage{enumitem}
+%\usepackage{listings}
+
+% must have: http://tug.ctan.org/tex-archive/macros/latex/contrib/microtype/
+\usepackage{microtype}
+
+% citation, bibliography
+\usepackage[sorting=none]{biblatex}
+\addbibresource{references.bib}
+
+
+%%%% have to be last and in this order %%%%
+\usepackage{hyperref}
+
+\usepackage[toc, acronym]{glossaries}
+\include{glossaries}
+\makeglossaries

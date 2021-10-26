@@ -1,65 +1,18 @@
-\documentclass[12pt,a4paper,oneside,titlepage]{scrreprt}
-\usepackage[utf8]{inputenc}
-\usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm,includehead,includefoot,headsep=1cm]{geometry}
-\usepackage{fancyhdr}
-\usepackage[ngerman]{babel}
-\usepackage{graphicx}
-\usepackage{setspace}
-\usepackage{float}
-\usepackage{enumitem}
-\usepackage{listings}
-\usepackage{color}
-\usepackage{microtype}
-\usepackage[sorting=none]{biblatex}
-\usepackage[babel, german=quotes]{csquotes}
-%have to be last and in this order
-\usepackage{hyperref}
-\usepackage[toc, acronym]{glossaries}
+\documentclass[
+	12pt,
+	a4paper,
+	oneside,
+	titlepage
+]{scrreprt}
 
-% Infos
-\newcommand{\theAuthor}{Jonas Bürgel und Patrick Welter}
-\newcommand{\theTitle}{Evaluierung des Lernerfolgs eines GANs mittels Generierung von geometrischen Figuren}
-\newcommand{\theSubtitle}{Studienarbeit}
-\newcommand{\deadline}{15. Mai 2022}
-\newcommand{\supervisor}{Markus Reischl}
-\renewcommand{\copyright}{© 2022}
+\input{core/infos}
+\input{core/packages}
+\input{core/commands}
 
-% logos
-\newcommand{\logodhbw}{\includegraphics[width=6cm]{kapitel/0_offizielles/img/dhbw}}
-
-% header/footer
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\sffamily \theAuthor}
-\fancyhead[R]{\sffamily \nouppercase{\leftmark}}
-\fancyfoot[C]{\sffamily \thepage}
-
-% styles
-\onehalfspacing
-
-% define resources
-\include{glossaries}
-\makeglossaries
-\addbibresource{references.bib}
-
-% create reference summaries
-\newcommand{\printListOfFigures}{
-	\cleardoublepage
-	\phantomsection
-	\addcontentsline{toc}{chapter}{\listfigurename}
-	\listoffigures
-}
-\newcommand{\printListOfTables}{
-	\cleardoublepage
-	\phantomsection
-	\addcontentsline{toc}{chapter}{\listtablename}
-	\listoftables
-}
 
 \begin{document}
 	\input{kapitel/0_offizielles/public.tex}
 
-	
 	\tableofcontents
 	\printListOfFigures
 	\printListOfTables
