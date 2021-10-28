@@ -17,6 +17,7 @@ BATCH_SIZE = 28 # increase this to maximum your gpu can handle
 dataset = preprocessing.image_dataset_from_directory(
     directory="data/training",
     label_mode=None,
+    color_mode='grayscale',
     image_size=(64, 64),
     batch_size=BATCH_SIZE,
     shuffle=True,
@@ -24,7 +25,7 @@ dataset = preprocessing.image_dataset_from_directory(
 
 discriminator = Sequential(
     layers=[
-        Input(shape=(64, 64, 3)),
+        Input(shape=(64, 64, 1)),
         layers.Conv2D(64, kernel_size=4, strides=2, padding="same"),
         layers.LeakyReLU(0.2),
         layers.Conv2D(128, kernel_size=4, strides=2, padding="same"),
@@ -52,7 +53,7 @@ generator = Sequential(
         layers.LeakyReLU(0.2),
         layers.Conv2DTranspose(512, kernel_size=4, strides=2, padding="same"),
         layers.LeakyReLU(0.2),
-        layers.Conv2D(3, kernel_size=3, padding="same", activation="sigmoid")
+        layers.Conv2D(1, kernel_size=3, padding="same", activation="sigmoid")
     ],
     name="generator"
 )
