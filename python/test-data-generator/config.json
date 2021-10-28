@@ -1,6 +1,6 @@
 {
     "seed": 123456789,
-    "imageSize": 280,
+    "imageSize": 64,
     "imageAmount": 100,
     "minFigurSize": 25
 }
