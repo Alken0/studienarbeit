@@ -4,7 +4,15 @@
 \usepackage[utf8]{inputenc}
 
 % page definition
-\usepackage[top=25mm,bottom=25mm,left=25mm,right=25mm,includehead,includefoot,headsep=1cm]{geometry}
+\usepackage[
+	top=25mm,
+	bottom=25mm,
+	left=25mm,
+	right=25mm,
+	includehead,
+	includefoot,
+	headsep=1cm,
+]{geometry}
 
 % Header/Footer
 \usepackage{fancyhdr}
@@ -19,7 +27,10 @@
 
 % Language = German
 \usepackage[ngerman]{babel}
-\usepackage[babel, german=quotes]{csquotes}
+\usepackage[
+	babel, 
+	german=quotes,
+]{csquotes}
 
 % Graphics
 \usepackage{graphicx}
@@ -33,13 +44,18 @@
 \usepackage{microtype}
 
 % citation, bibliography
-\usepackage[sorting=none]{biblatex}
+\usepackage[
+	backend=biber,
+	sorting=none,
+]{biblatex}
 \addbibresource{references.bib}
-
 
 %%%% have to be last and in this order %%%%
 \usepackage{hyperref}
 
-\usepackage[toc, acronym]{glossaries}
-\include{glossaries}
+\usepackage[
+	toc, 
+	acronym,
+]{glossaries}
+\input{glossaries}
 \makeglossaries
