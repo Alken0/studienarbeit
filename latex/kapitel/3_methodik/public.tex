@@ -1,6 +1,110 @@
 \chapter{Methodik}
+In diesem Kapitel werden zunächst Eigenschaften der Trainingsdaten erläutert.
+Dabei wird auf die Bildeigenschaften und Besonderheiten der dargestellten Figuren in den Bildern eingegangen.
+Danach erfolgt eine Festlegung der Kriterien für ein erfolgreiche trainiertes 'GAN', das Grundlage für spätere Vergleiche von Trainingserfolgen sein wird.
+
+\section{Trainingsdaten}
+Bei den Trainingsdaten handelt es sich um synthetisch generierte Bilder mit geometrischen Figuren.
+Zwar gibt es bereits Datensätze mit solchen Bildern (\cite{dataset:four-shapes}, \cite{dataset:2d-geometric-shapes-dataset}), im Rahmen der Studienarbeit werden jedoch keine vorgefertigten Datensätze verwendet.
+Die Generierung eigener Bilder erlaubt nämlich eine größere Kontrolle über Eigenschaften der Bilder und Inhalte, als vorgefertigte Sets.
+Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden kann, wird die Generierung deterministisch reproduzierbar und dokumentiert sein.
+
+\subsection{Bildeigenschaften}
+Auch Bildeigenschaften sind ein wichtiger Bestandteil des Datensatzes.
+Die Bildeigenschaften beeinflussen vor allem Trainingszeiten, da zum Beispiel größere Bilder deutlich mehr Grafikspeicher in der GPU belegen (wodurch dann weniger Bilder auf einmal geladen werden können).
+
+\begin{description}
+	\item[Farbe]
+	Die Bilder sind grau-skaliert, das heißt ein Pixel entspricht einer Zahl zwischen 0 (schwarz) und 255 (weiß).
+	Durch den Verzicht von Farbe können insbesondere mehr gleichzeitig in die GPU geladen werden, was Trainingszeiten verbessert.
+	
+	\item[Größe]
+	Alle Bilder benötigen die gleiche Größe, um zur späteren GAN-Architektur zu passen.
+	Damit die geometrischen Formen auch erkennbar sind, dürfen sie jedoch nicht zu klein sein, wohingegen zu große Bilder das Trainieren erschweren (es wird mehr Speicherplatz im RAM der GPU benötigt).
+	Deshalb wurde sich für das Format 64x64 Pixel entschieden.
+\end{description}
+
+\subsection{Eigenschaften der Figuren}
+Die Trainingsbilder für das GAN stellen jeweils eine geometrische Form dar.
+Bei den Formen handelt es sich um Kreise, Dreiecke und Rechtecke, die von Bild zu Bild unterschiedlich sind.
+Die Bilder unterscheiden sich in mehreren Aspekten:
+\begin{description}[style=nextline]
+	\item[Position]
+	Die Formen sind zufällig auf dem Bild positioniert.
+	Allerdings sind sie immer vollständig abgebildet, das heißt die Kanten des Bildes schneiden die Form nicht.
+	%Formen erstrecken sich nicht über Ränder und erscheinen auf der anderen Seite wieder?
+	
+	\item[Größe und Form]
+	Die Formen sind unterschiedlich groß, besitzen aber eine maximal und minimal Größe.
+	So ist gewährleistet, dass Bilder nicht einfarbig erscheinen und die Form immer erkennbar bleibt.
+	
+	Während sich Rechtecke durch unterschiedliche Seitenlängen stark voneinander unterscheiden könne, werden Dreiecke und Kreise nur skaliert.
+	%Form wird gleichbleibend vergrößert/verkleinert -> passendes Wort?
+\end{description}
+
+\section{Training}
+Der Vergleich von GANs ist ein schwieriges Unterfangen \cite{are-gans-created-equally}.
+So gibt es nicht nur viele sehr sensible Konfigurationsmöglichkeiten, sie beeinflussen sich auch gegenseitig.
+Zudem starten Neuronale Netze vor dem Training in der Regel in einem zufälligen Ausgangszustand, weswegen auch gleiche Trainingsbedingungen zu leicht unterschiedlichen Resultaten führen können.
+Im Folgenden werden die Schwierigkeiten und angewendete 'Lösungen' für einen möglichst objektiven Vergleich aufgezeigt.
+
+\subsection{Schwierigkeiten beim Vergleich von GANs}
+Zunächst ist anzumerken, dass es nicht möglich ist, alle Konfigurationen durchzuprobieren.
+Dafür würden zu hohe Rechenkapazitäten benötigt, die selbst große Unternehmen wie Google nicht immer aufbieten wollen/können \cite{are-gans-created-equally}.
+Deshalb muss eine 'sinnvolle' Vorauswahl an Konfigurationen getroffen werden, wodurch das Ergebnis schon einer gewissen Voreingenommenheit unterliegt.
+Somit wird die finale Entscheidung für die (möglichst) optimalen Konfigurationen des GANs immer subjektiv geprägt sein.
+
+\subsection{Erfolgskriterien}
+Damit die Konfigurationen treffend vorausgewählt werden könne, müssen die Kriterien für ein erfolgreich trainiertes GAN klar definiert werden.
+Als Erfolgskriterien zählen in diesem Fall die Varietät der generierten Bilder und die Korrektheit der generierten Figuren.
+Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
+
+\paragraph{Varietät}
+Die Varietät bezieht zum einen auf die Ähnlichkeit zwischen Trainingsbildern und den generierten Bildern der GANs.
+Die Ähnlichkeit zwischen diesen beiden Bildersets beschreibt, wie gut das GAN 'etwas neues schaffen' kann, oder ob es nur Trainingsbilder dupliziert.
+Sollte die Ähnlichkeit sehr gering sein, werden viele 'neue' Bilder generiert, was sehr positiv zu bewerten ist.
+Zum anderen bezieht sich die Varietät auf die generierten Bilder untereinander.
+Sie sollten auch möglichst verschieden sein, was oftmals nicht der Fall ist.
+Das Phänomen ist als 'mode-collapse' bekannt (siehe Stand der Technik). %TODO steht das auch in Stand der Technik?
+
+Beide Probleme lassen sich durch den Vergleich der Bilder mittels 'Structural Similarity Index' \cite{structural-similarity-index} bewerten.
+% https://scikit-image.org/docs/0.12.x/api/skimage.measure.html#skimage.measure.compare_ssim
+
+\paragraph{Korrektheit}
+Neben der Varietät besitzt auch die Korrektheit eine hohe Bedeutung für die Bewertung der GANs.
+Dabei muss zum einen sichergestellt werden, dass die richtige Figur generiert wurde und erkennbar ist.
+Die Figuren müssen außerdem den gleichen Kriterien wie die Trainingsdaten genügen, das heißt, die Figuren sollten zum Beispiel vollständig innerhalb des Bildes abgebildet sein.
+Es ist allerdings eher unwahrscheinlich, dass das GAN Bilder generiert, die keinem Pendant aus den Trainingsbildern entsprechen.
+Ein weiterer wichtiger Aspekt der Bilder ist das Verhalten im Hintergrund der Figur.
+So sollten im Hintergrund möglichst keine anderen Figuren oder Pixelfragmente erzeugt werden.
+
+All diese Kriterien werden durch eine manuelle Überprüfung evaluiert werden.
+
+
+\begin{comment}
+
+Die Korrektheit bezieht sich dabei auf die generierte Figur im Bild oder auch umliegende Bildpunkte.
+Für die Korrektur der richtigen Formen gibt es mehrere Möglichkeiten:
+\begin{description}
+	\item[Neuronales Kontrollnetz]
+	Dafür wird ein weiteres Netzwerk zur Bewertung der Resultate trainiert.
+	Diese Variante ist sehr ungenau, da sie wieder von dem Trainingserfolg eines Neuronalen Netzes abhängt.
+	Allerdings erlaubt das Neuronale Netzwerk die Analyse von großen Datensätzen, die aber in diesem Fall nicht in der Form nötig sein wird.
+	
+	\item[händisch]
+	Das händische Kontrollieren ist sehr aufwändig.
+	Für die Kontrolle sollte das aber möglich sein.
+	
+	\item[Formvergleich]
+	Es ist möglich, die Lösung zu brute-forcen.
+	Das bedeutet, es wird jede mögliche Form über das Bild gelegt und diejenige mit der höchsten Überschneidung ausgewählt und als Indikator genommen.
+\end{description}
+
+
+
+\section{GAN: Bewertungs- und Vergleichskriterien}
+
 % How to write methods section: http://rc.rcjournal.com/content/respcare/49/10/1229.full.pdf
-\section{Synthetische Trainingsdaten}
 \subsection{Warum synthetische Daten?}
 Mehr Kontrolle über die Bilder:
 \footnote{Die meisten Anpassungen erlauben auch Rechenleistung zu reduzieren, falls Computer überlastet sein sollten.}
@@ -9,6 +113,7 @@ Mehr Kontrolle über die Bilder:
 	\item Anzahl der unterschiedlichen labels (wieviel unterschiedliche Formen sind enthalten)
 	\item sich unterscheidende Features in den Bildern (wo genau sind die Bilder zu finden, unterschiedliche Größe, Rotation?)
 	\item wie generiert? $\rightarrow$ Deterministisch $\rightarrow$ Seed
+	\item weniger Arbeitsaufwand als händische Generierung
 \end{enumerate}
 
 \subsection{Welche Eigenschaften haben die Bilder genau?}
@@ -46,3 +151,4 @@ Ziel: messbare Vergleichskriterien
 	
 	\item Vergleich von Bildern durch 'Pixel by Pixel' Ähnlichkeit bestimmen $\rightarrow$ die X bilder mit einer Ähnlichkeit über Y \% können dann angeguckt werden
 \end{enumerate}
+\end{comment}
