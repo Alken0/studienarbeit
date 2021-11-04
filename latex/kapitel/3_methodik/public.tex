@@ -59,7 +59,7 @@ Damit die Konfigurationen treffend vorausgewählt werden könne, müssen die Kri
 Als Erfolgskriterien zählen in diesem Fall die Varietät der generierten Bilder und die Korrektheit der generierten Figuren.
 Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
 
-\paragraph{Varietät}
+\paragraphNewLine{Varietät}
 Die Varietät bezieht zum einen auf die Ähnlichkeit zwischen Trainingsbildern und den generierten Bildern der GANs.
 Die Ähnlichkeit zwischen diesen beiden Bildersets beschreibt, wie gut das GAN 'etwas neues schaffen' kann, oder ob es nur Trainingsbilder dupliziert.
 Sollte die Ähnlichkeit sehr gering sein, werden viele 'neue' Bilder generiert, was sehr positiv zu bewerten ist.
@@ -70,7 +70,7 @@ Das Phänomen ist als 'mode-collapse' bekannt (siehe Stand der Technik). %TODO s
 Beide Probleme lassen sich durch den Vergleich der Bilder mittels 'Structural Similarity Index' \cite{structural-similarity-index} bewerten.
 % https://scikit-image.org/docs/0.12.x/api/skimage.measure.html#skimage.measure.compare_ssim
 
-\paragraph{Korrektheit}
+\paragraphNewLine{Korrektheit}
 Neben der Varietät besitzt auch die Korrektheit eine hohe Bedeutung für die Bewertung der GANs.
 Dabei muss zum einen sichergestellt werden, dass die richtige Figur generiert wurde und erkennbar ist.
 Die Figuren müssen außerdem den gleichen Kriterien wie die Trainingsdaten genügen, das heißt, die Figuren sollten zum Beispiel vollständig innerhalb des Bildes abgebildet sein.
