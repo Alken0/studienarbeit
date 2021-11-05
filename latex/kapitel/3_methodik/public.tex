@@ -6,22 +6,25 @@ Danach erfolgt eine Festlegung der Kriterien für ein erfolgreiche trainiertes '
 \section{Trainingsdaten}
 Bei den Trainingsdaten handelt es sich um synthetisch generierte Bilder mit geometrischen Figuren.
 Zwar gibt es bereits Datensätze mit solchen Bildern (\cite{dataset:four-shapes}, \cite{dataset:2d-geometric-shapes-dataset}), im Rahmen der Studienarbeit werden jedoch keine vorgefertigten Datensätze verwendet.
-Die Generierung eigener Bilder erlaubt nämlich eine größere Kontrolle über Eigenschaften der Bilder und Inhalte, als vorgefertigte Sets.
+Denn die Generierung eigener Bilder erlaubt eine größere Kontrolle über Eigenschaften der Bilder und Inhalte, als vorgefertigte Sets.
 Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden kann, wird die Generierung deterministisch reproduzierbar und dokumentiert sein.
 
 \subsection{Bildeigenschaften}
-Auch Bildeigenschaften sind ein wichtiger Bestandteil des Datensatzes.
-Die Bildeigenschaften beeinflussen vor allem Trainingszeiten, da zum Beispiel größere Bilder deutlich mehr Grafikspeicher in der GPU belegen (wodurch dann weniger Bilder auf einmal geladen werden können).
+Auch die Bildeigenschaften sind ein wichtiger Bestandteil des Datensatzes.
+Mit Bildeigenschaften sind dabei nicht Inhalte sondern allgemeinere Merkmale gemeint.
+Durch die Merkmale werden vor allem die benötigten Rechenkapazitäten zum Trainieren des GANs beeinflusst.
+So können Trainingszeiten durch kleinere Bilder verkürzt werden, da mehr Bilder auf einmal in den Grafikspeicher der GPU geladen werden können.
+Als Folge können mehr Konfigurationen ausprobiert werden
+Die Qualität der Bilder muss allerdings immer hoch genug bleiben, dass eine Erkennbarkeit der Formen gewährleisten ist.
 
 \begin{description}
 	\item[Farbe]
 	Die Bilder sind grau-skaliert, das heißt ein Pixel entspricht einer Zahl zwischen 0 (schwarz) und 255 (weiß).
-	Durch den Verzicht von Farbe können insbesondere mehr gleichzeitig in die GPU geladen werden, was Trainingszeiten verbessert.
 	
 	\item[Größe]
 	Alle Bilder benötigen die gleiche Größe, um zur späteren GAN-Architektur zu passen.
-	Damit die geometrischen Formen auch erkennbar sind, dürfen sie jedoch nicht zu klein sein, wohingegen zu große Bilder das Trainieren erschweren (es wird mehr Speicherplatz im RAM der GPU benötigt).
-	Deshalb wurde sich für das Format 64x64 Pixel entschieden.
+	Damit die geometrischen Formen auch erkennbar sind, dürfen sie jedoch nicht zu klein sein, wohingegen zu große Bilder Trainingszeiten unnötig verlängern.
+	Die Bilder sind 64x64 Pixel groß, was einen Kompromiss darstellt.
 \end{description}
 
 \subsection{Eigenschaften der Figuren}
@@ -31,16 +34,50 @@ Die Bilder unterscheiden sich in mehreren Aspekten:
 \begin{description}[style=nextline]
 	\item[Position]
 	Die Formen sind zufällig auf dem Bild positioniert.
-	Allerdings sind sie immer vollständig abgebildet, das heißt die Kanten des Bildes schneiden die Form nicht.
+	Allerdings sind sie immer vollständig abgebildet, das heißt, die Kanten des Bildes schneiden die Form nicht.
 	%Formen erstrecken sich nicht über Ränder und erscheinen auf der anderen Seite wieder?
+	Je nach Größe der Form muss so die Position treffend gewählt werden.
 	
 	\item[Größe und Form]
 	Die Formen sind unterschiedlich groß, besitzen aber eine maximal und minimal Größe.
 	So ist gewährleistet, dass Bilder nicht einfarbig erscheinen und die Form immer erkennbar bleibt.
 	
-	Während sich Rechtecke durch unterschiedliche Seitenlängen stark voneinander unterscheiden könne, werden Dreiecke und Kreise nur skaliert.
+	Während sich Rechtecke durch unterschiedliche Seitenlängen stark voneinander unterscheiden können, werden Dreiecke und Kreise gleichmäßig skaliert.
 	%Form wird gleichbleibend vergrößert/verkleinert -> passendes Wort?
 \end{description}
+
+\section{Notizen für Aufbau + Training GAN}
+\todo[inline,shadow]{In Stichpunkten, weil noch nicht umgesetzt/müssen noch ausprobieren, ob das so gut funktioniert}
+\todo[inline,shadow]{@Markus: falls du denkst, dass das so nicht funktionieren wird, gerne anmerken :D}
+
+
+\begin{description}
+	\item[Einleitung] 
+	- Besteht aus Generator und Discriminator, werden im folgenden erklärt...
+	
+	\item[Generator] 
+	- 2 Inputs: 'random-noise' + 'label für Form' \newline
+	- 3 Schichten: 128, 256, 512 groß \newline
+	- Output: Bildgröße + Farbe = Float zwischen 0 und 1
+	
+	\item[Discriminator]
+	- Input: Bildgröße (Farbe=Float zwischen 0 und 1 $\rightarrow$ Datenset wird automatisch transformiert von 0-255 zu 0.-1.) \newline
+	- 3 Schichten: 512, 256, 128 groß \newline
+	- 1 Output: Zahl zwischen 0 und 1 (fake/real?)
+	
+	\item[Allgemein]
+	- Optimizer: Adam (laut Internetrecherche relativ egal welcher genommen wird) \newline
+	- Loss-Function: Binary Crossentropy (für Bewertung des Discriminators)
+	%https://towardsdatascience.com/understanding-binary-cross-entropy-log-loss-a-visual-explanation-a3ac6025181a
+	
+	\item[Training]
+	- batch-size: so viel wie gpu zu lässt, Bilder werden zufällig aus dataset entnommen (shuffle=True) \newline
+	- epoch: nach jeder epoch werden beispielbilder aus dem batch für spätere Doku abgespeichert
+	
+\end{description}
+
+
+
 
 \section{Training}
 Der Vergleich von GANs ist ein schwieriges Unterfangen \cite{are-gans-created-equally}.
@@ -48,7 +85,7 @@ So gibt es nicht nur viele sehr sensible Konfigurationsmöglichkeiten, sie beein
 Zudem starten Neuronale Netze vor dem Training in der Regel in einem zufälligen Ausgangszustand, weswegen auch gleiche Trainingsbedingungen zu leicht unterschiedlichen Resultaten führen können.
 Im Folgenden werden die Schwierigkeiten und angewendete 'Lösungen' für einen möglichst objektiven Vergleich aufgezeigt.
 
-\subsection{Schwierigkeiten beim Vergleich von GANs}
+\subsection{Vorauswahl von Konfigurationen}
 Zunächst ist anzumerken, dass es nicht möglich ist, alle Konfigurationen durchzuprobieren.
 Dafür würden zu hohe Rechenkapazitäten benötigt, die selbst große Unternehmen wie Google nicht immer aufbieten wollen/können \cite{are-gans-created-equally}.
 Deshalb muss eine 'sinnvolle' Vorauswahl an Konfigurationen getroffen werden, wodurch das Ergebnis schon einer gewissen Voreingenommenheit unterliegt.
@@ -63,7 +100,7 @@ Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
 Die Varietät bezieht zum einen auf die Ähnlichkeit zwischen Trainingsbildern und den generierten Bildern der GANs.
 Die Ähnlichkeit zwischen diesen beiden Bildersets beschreibt, wie gut das GAN 'etwas neues schaffen' kann, oder ob es nur Trainingsbilder dupliziert.
 Sollte die Ähnlichkeit sehr gering sein, werden viele 'neue' Bilder generiert, was sehr positiv zu bewerten ist.
-Zum anderen bezieht sich die Varietät auf die generierten Bilder untereinander.
+Zudem bezieht sich die Varietät auf die generierten Bilder untereinander.
 Sie sollten auch möglichst verschieden sein, was oftmals nicht der Fall ist.
 Das Phänomen ist als 'mode-collapse' bekannt (siehe Stand der Technik). %TODO steht das auch in Stand der Technik?
 
@@ -72,7 +109,7 @@ Beide Probleme lassen sich durch den Vergleich der Bilder mittels 'Structural Si
 
 \paragraphNewLine{Korrektheit}
 Neben der Varietät besitzt auch die Korrektheit eine hohe Bedeutung für die Bewertung der GANs.
-Dabei muss zum einen sichergestellt werden, dass die richtige Figur generiert wurde und erkennbar ist.
+Dabei muss sichergestellt werden, dass die richtige Figur generiert wurde und erkennbar ist.
 Die Figuren müssen außerdem den gleichen Kriterien wie die Trainingsdaten genügen, das heißt, die Figuren sollten zum Beispiel vollständig innerhalb des Bildes abgebildet sein.
 Es ist allerdings eher unwahrscheinlich, dass das GAN Bilder generiert, die keinem Pendant aus den Trainingsbildern entsprechen.
 Ein weiterer wichtiger Aspekt der Bilder ist das Verhalten im Hintergrund der Figur.
