@@ -1,0 +1,79 @@
+%!TEX root = ../main.tex
+
+\newcommand{\Titel}{Projektdefinition}
+\input{allgemein/Titelseite}
+
+\section{Projektziel}
+Ziel der Studienarbeit ist die Erforschung möglichst optimaler Konfigurationen eines GANs.
+Das GAN soll scharz-weiß Bilder generieren, auf denen verschiedene und unterschiedliche geometrische Formen sichtbar sind.
+
+\section{Projekttermin und Bearbeitungsdauer}
+Die Studienarbeit ist bis zum \textbf{16. Mai 2022}.
+Damit beträgt die theoretische Bearbeitungsdauer 7 Monate, wobei wahrscheinlich 2 Monate aufgrund der Praxisphase entfallen werden.
+
+\section{Funktionen inklusive Alternativen und Bewertung}
+Der Fokus der Studienarbeit ist nicht auf Implementierungen von GANs gerichtet, dafür werden Bibliotheken genutzt werden.
+Stattdessen soll ausschließlich die Konfiguration der GANs erforscht werden.
+
+
+\begin{description}[style=nextline]
+	\item[Generierung von synthetischen Trainingsbildern]
+	Damit die Konfiguration ausreichend untersucht werden kann, wird eine Vielzahl an gelabelten Trainingsbildern benötigt werden.
+	Die Generierung erlaubt auch das 'Ein-/Ausschalten' bestimmter Eigenschaften in den Bildern, um eventuell andere Konfigurationen des GANs auszutesten.
+	
+	\textit{Alternative:}
+	Es ist möglich, die Bilder manuell zu erstellen.
+	Dafür können neue Bilder erzeugt werden und mit Bildbearbeitungstools verändert werden.
+	
+	\textit{Bewertung:}
+	Die Generierung von Bildern ist kein neues Problem, weshalb Bibliotheken zur Generierung existieren werden.
+	Ansonsten ist selbst eine komplette 'Eigenimplementierung' wahrscheinlich mit weniger Aufwand verbunden, als die Bilder manuell zu erstellen.
+	
+	\item[Generierung von Figuren nach Label]
+	Jeder Figur wird ein Label zugeordnet, das die jeweilige Form beschreibt (ist ein Rechteck auf dem Bild zu sehen, wäre das Label 'Rechteck').
+	Das GAN bekommt das Label als Eingabe für die Generierung und soll dann die entsprechende Form generieren.
+	
+	\textit{Alternative:}
+	Die Generierung nach Label ist nicht unbedingt für die Studienarbeit notwendig.
+	Folglich kann die Funktion im Notfall weggelassen werden.
+	
+	\textit{Bewertung:}
+	Das Entfallen der Funktion ist zwar eine mögliche Option, aber sollte vermieden werden.
+	
+	\item[Generierung von Figuren mit unterschiedlicher Größe]
+	Zwar sollen die Bilder gleich groß sein, die Formen in ihnen allerdings nicht.
+	Das führt zu mehr Varietät zwischen den Bildern, wodurch das GAN mehr abstrahieren muss.
+	Bei der Größenwahl ist zu beachten, dass die Form erkennbar bleibt.
+	Das bedeutet, sie darf nicht zu groß oder zu klein sein.
+	
+	\textit{Alternative:}
+	Die Generierung von Figuren unterschiedlicher Größe ist nicht unbedingt für die Studienarbeit notwendig.
+	Folglich kann die Funktion im Notfall weggelassen werden.
+	
+	\textit{Bewertung:}
+	Das Entfallen der Funktion ist zwar eine mögliche Option, aber sollte vermieden werden.
+	
+	\item[Generierung von Figuren mit unterschiedlicher Postition]
+	Auch unterschiedliche Positionen zwingen das GAN die Figuren stärker zu abstrahieren.
+	Bei der unterschiedlichen Positionen sind allerdings Randbedingungen zu beachten.
+	So sollten die Figuren immer vollständig innerhalb des Bildes abgebildet sein.
+	Ansonsten könnten zum Beispiel komplett leere Bilder entstehen.
+	
+	\textit{Alternative:}
+	Die Generierung von Figuren mit unterschiedlicher Position ist nicht unbedingt für die Studienarbeit notwendig.
+	Folglich kann die Funktion im Notfall weggelassen werden.
+	
+	\textit{Bewertung:}
+	Das Entfallen der Funktion ist zwar eine mögliche Option, aber sollte vermieden werden.
+	
+	\item[Generierung von Figuren mit unterschiedlicher Rotation]
+	Bei der Wahl der Rotation handelt es sich wieder um eine Eigenschaft, die es dem GAN schwerer machen sollte, korrekte Bilder zu generieren.
+	Auch bei der Rotation ist zu beachten, dass die Figuren vollständig im Bild verbleiben.
+	
+	\textit{Alternative:}
+	Die Generierung mit Rotation ist nicht unbedingt für die Studienarbeit notwendig.
+	Folglich kann die Funktion im Notfall weggelassen werden.
+	
+	\textit{Bewertung:}
+	Das Entfallen der Funktion ist zwar eine mögliche Option, aber sollte vermieden werden.
+\end{description}
