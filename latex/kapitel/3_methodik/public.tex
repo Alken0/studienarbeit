@@ -9,6 +9,23 @@ Zwar gibt es bereits Datensätze mit solchen Bildern \cite{dataset:four-shapes, 
 Denn die Generierung eigener Bilder erlaubt eine größere Kontrolle über Eigenschaften der Bilder und Inhalte, als vorgefertigte Sets.
 Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden kann, wird die Generierung deterministisch reproduzierbar und dokumentiert sein.
 
+\newcommand{\trainDataImage}[1]{\subfloat{\fbox{\includegraphics[width=.29\linewidth]{#1}}}}
+\begin{figure}
+	\trainDataImage{kapitel/3\_methodik/data/circle\_00.png}\hfill
+	\trainDataImage{kapitel/3\_methodik/data/circle\_01.png}\hfill
+	\trainDataImage{kapitel/3\_methodik/data/circle\_02.png}\par \hfill
+	
+	\trainDataImage{kapitel/3\_methodik/data/rectangle\_00.png}\hfill
+	\trainDataImage{kapitel/3\_methodik/data/rectangle\_01.png}\hfill
+	\trainDataImage{kapitel/3\_methodik/data/rectangle\_02.png}\par \hfill
+	
+	\trainDataImage{kapitel/3\_methodik/data/triangle\_00.png}\hfill
+	\trainDataImage{kapitel/3\_methodik/data/triangle\_01.png}\hfill
+	\trainDataImage{kapitel/3\_methodik/data/triangle\_02.png}\par \hfill
+	
+	\caption{Zufällig generierte Trainingsbilder}
+\end{figure}
+
 \subsection{Bildeigenschaften}
 Auch die Bildeigenschaften sind ein wichtiger Bestandteil des Datensatzes.
 Mit Bildeigenschaften sind dabei nicht Inhalte, sondern allgemeinere Merkmale gemeint.
