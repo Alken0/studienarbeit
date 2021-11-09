@@ -11,7 +11,7 @@ Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden k
 
 \subsection{Bildeigenschaften}
 Auch die Bildeigenschaften sind ein wichtiger Bestandteil des Datensatzes.
-Mit Bildeigenschaften sind dabei nicht Inhalte sondern allgemeinere Merkmale gemeint.
+Mit Bildeigenschaften sind dabei nicht Inhalte, sondern allgemeinere Merkmale gemeint.
 Durch die Merkmale werden vor allem die benötigten Rechenkapazitäten zum Trainieren des GANs beeinflusst.
 So können Trainingszeiten durch kleinere Bilder verkürzt werden, da mehr Bilder auf einmal in den Grafikspeicher der GPU geladen werden können.
 Als Folge können mehr Konfigurationen ausprobiert werden
@@ -39,11 +39,10 @@ Die Bilder unterscheiden sich in mehreren Aspekten:
 	Je nach Größe der Form muss so die Position treffend gewählt werden.
 	
 	\item[Größe und Form]
-	Die Formen sind unterschiedlich groß, besitzen aber eine maximal und minimal Größe.
+	Die Formen sind unterschiedlich groß, besitzen aber eine minimale und maximale Größe.
 	So ist gewährleistet, dass Bilder nicht einfarbig erscheinen und die Form immer erkennbar bleibt.
 	
-	Während sich Rechtecke durch unterschiedliche Seitenlängen stark voneinander unterscheiden können, werden Dreiecke und Kreise gleichmäßig skaliert.
-	%Form wird gleichbleibend vergrößert/verkleinert -> passendes Wort?
+	Während sich Rechtecke durch unterschiedliche Seitenlängen stark voneinander unterscheiden können, werden Dreiecke und Kreise unter gleichbleibenden Seitenverhältnissen skaliert.
 \end{description}
 
 \section{Notizen für Aufbau + Training GAN}
