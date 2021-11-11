@@ -4,7 +4,7 @@
     "minFigurSize": 25,
     "shapes": {
         "triangle": {
-            "generate": true,
+            "generate": false,
             "amount": 100
         },
         "rectangle": {
@@ -13,7 +13,7 @@
         },
         "circle": {
             "generate": true,
-            "amount": 100
+            "amount": 10
         }
     }
     

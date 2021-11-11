@@ -2,6 +2,7 @@ from typing import List
 import configuration as config
 import os
 import shutil
+import inspect
 from PIL import Image
 from skimage.draw import random_shapes
 from configuration import Shape
@@ -27,23 +28,24 @@ class Generator:
             path = f"{self.EXPORT_DIR}/{shape}/{i:0{digit_format}d}.png"
             Image.fromarray(image).save(path, "PNG")
 
-    def __cleanExportDir(self, shapes: List[str]) -> None:
+    def __cleanExportDir(self) -> None:
         if os.path.exists(self.EXPORT_DIR):
             shutil.rmtree(self.EXPORT_DIR)
 
-        for shape in shapes:
-            os.makedirs(f"{self.EXPORT_DIR}/{shape}")
-
     def generate(self) -> None:
-        config_shapes = self.CONFIG.shapes
-        shapes: dict[str, Shape] = self.CONFIG.__dict__.get("shapes")
-
-        self.__cleanExportDir(shapes.keys())
+        shapes = self.CONFIG.shapes
+        
+        self.__cleanExportDir()
 
         for key in shapes:
-            shape = shapes.get(key)
-            if shape.generate:
-                self.__generate_shape(key, shape.amount)
+            shape = shapes.get(key) 
+            if shape.get('generate'):
+                os.makedirs(f"{self.EXPORT_DIR}/{key}")
+                self.__generate_shape(key, shape.get('amount'))
+        
+
+       
+                
        
      
 

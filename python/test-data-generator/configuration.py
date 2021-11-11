@@ -13,7 +13,7 @@ class Shapes:
     rectangle: Shape
     circle: Shape
 
-    def __init__(self, triangle, rectangle, circle) -> None:
+    def __init__(self, triangle: Shape, rectangle: Shape, circle: Shape) -> None:
         self.triangle = triangle
         self.rectangle = rectangle
         self.circle = circle
@@ -25,7 +25,7 @@ class Configuration:
     min_figur_size: int
     shapes: Shapes
 
-    def __init__(self, seed, imageSize, minFigurSize, shapes) -> None:
+    def __init__(self, seed, imageSize, minFigurSize, shapes: Shapes) -> None:
         self.seed = seed
         self.image_size = imageSize
         self.min_figur_size = minFigurSize
@@ -34,4 +34,4 @@ class Configuration:
 def load() -> Configuration:
     with open(FILE_PATH) as config_file:
         content = json.load(config_file)
-        return Configuration(**content)
+        return Configuration(**content)  
