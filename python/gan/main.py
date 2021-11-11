@@ -16,7 +16,8 @@ BATCH_SIZE = 28 # increase this to maximum your gpu can handle
 
 dataset = preprocessing.image_dataset_from_directory(
     directory="data/training",
-    label_mode=None,
+    labels='inferred',
+    label_mode='int',
     color_mode='grayscale',
     image_size=(64, 64),
     batch_size=BATCH_SIZE,
