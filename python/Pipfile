@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tensorflow-gpu = "2.6"
+tensorflow = "2.6"
 pillow = "3.10"
 scikit-image = "0.18"
 tqdm="4.62"
