@@ -2,18 +2,34 @@ import json
 
 FILE_PATH = "test-data-generator/config.json"
 
+class Shape:
+
+    generate: bool
+    amount: int
+
+class Shapes:
+
+    triangle: Shape
+    rectangle: Shape
+    circle: Shape
+
+    def __init__(self, triangle, rectangle, circle) -> None:
+        self.triangle = triangle
+        self.rectangle = rectangle
+        self.circle = circle
+
 class Configuration:
 
     seed: int
     image_size: int
-    image_amount: int
     min_figur_size: int
+    shapes: Shapes
 
-    def __init__(self, seed, imageSize, imageAmount, minFigurSize) -> None:
+    def __init__(self, seed, imageSize, minFigurSize, shapes) -> None:
         self.seed = seed
         self.image_size = imageSize
-        self.image_amount = imageAmount
         self.min_figur_size = minFigurSize
+        self.shapes = shapes
 
 def load() -> Configuration:
     with open(FILE_PATH) as config_file:
