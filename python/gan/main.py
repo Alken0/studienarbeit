@@ -3,6 +3,8 @@ from tensorflow.keras import layers, Sequential, Input, optimizers, losses, prep
 import os
 from tqdm import tqdm
 
+from storage import Storage
+
 
 # largely inspired by this video: https://www.youtube.com/watch?v=eR5ZnFWekNQ
 
@@ -12,12 +14,18 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 physical_devices = tf.config.list_physical_devices("GPU")
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
-BATCH_SIZE = 28 # increase this to maximum your gpu can handle
+### VARIABLES ###
+BATCH_SIZE = 32 
+EPOCH_COUNT = 100
+
+LOAD_CHECKPOINT = True
+CHECKPOINT_DATE = "12-11-2021"
+SAVE_CHECKPOINT = True
+### VARIABLES ###
 
 dataset = preprocessing.image_dataset_from_directory(
     directory="data/training",
-    labels='inferred',
-    label_mode='int',
+    label_mode=None,
     color_mode='grayscale',
     image_size=(64, 64),
     batch_size=BATCH_SIZE,
@@ -60,12 +68,17 @@ generator = Sequential(
 )
 print(generator.summary())
 
+
+storage = Storage("data/neural_networks", "first_training")
+if LOAD_CHECKPOINT:
+    discriminator, generator = storage.load_checkpoint(discriminator, generator, CHECKPOINT_DATE)
+
 optimizer_generator = optimizers.Adam(1e-4)
 optimizer_discriminator = optimizers.Adam(1e-4)
 loss_function = losses.BinaryCrossentropy()
 
 
-for epoch in tqdm(range(100000)):
+for epoch in tqdm(range(EPOCH_COUNT)):
     for index, real in enumerate(dataset):
         batch_size = real.shape[0]
         random_latent_vectors = tf.random.normal(
@@ -105,3 +118,6 @@ for epoch in tqdm(range(100000)):
             loss_generator, generator.trainable_weights)
         optimizer_generator.apply_gradients(
             zip(gradients, generator.trainable_weights))
+
+if SAVE_CHECKPOINT:
+    storage.save_checkpoint(discriminator, generator)
