@@ -2,13 +2,13 @@ import json
 
 FILE_PATH = "test-data-generator/config.json"
 
-class Shape:
 
+class Shape:
     generate: bool
     amount: int
 
-class Shapes:
 
+class Shapes:
     triangle: Shape
     rectangle: Shape
     circle: Shape
@@ -18,8 +18,8 @@ class Shapes:
         self.rectangle = rectangle
         self.circle = circle
 
-class Configuration:
 
+class Configuration:
     seed: int
     image_size: int
     min_figur_size: int
@@ -31,7 +31,8 @@ class Configuration:
         self.min_figur_size = minFigurSize
         self.shapes = shapes
 
+
 def load() -> Configuration:
     with open(FILE_PATH) as config_file:
         content = json.load(config_file)
-        return Configuration(**content)  
+        return Configuration(**content)
