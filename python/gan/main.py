@@ -14,14 +14,19 @@ tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 BATCH_SIZE = 28  # increase this to maximum your gpu can handle
 
-dataset = preprocessing.image_dataset_from_directory(
+# load dataset
+dataset: tf.data.Dataset = preprocessing.image_dataset_from_directory(
     directory="data/training",
-    label_mode=None,
+    labels='inferred',
+    label_mode='int',
     color_mode='grayscale',
     image_size=(64, 64),
     batch_size=BATCH_SIZE,
     shuffle=True,
-).map(lambda x: x / 255.0)
+)
+
+# normalize images (range [0, 255] to [-1.0, 1.0])
+dataset = dataset.map(lambda img, label: ((img - 127.5)/127.0, label))
 
 discriminator = Sequential(
     layers=[
