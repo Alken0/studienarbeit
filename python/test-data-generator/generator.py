@@ -2,10 +2,9 @@ from typing import List
 import configuration as config
 import os
 import shutil
-import inspect
 from PIL import Image
 from skimage.draw import random_shapes
-from configuration import Shape
+
 
 class Generator:
     CONFIG = config.load()
@@ -34,19 +33,14 @@ class Generator:
 
     def generate(self) -> None:
         shapes = self.CONFIG.shapes
-        
+
         self.__cleanExportDir()
 
         for key in shapes:
-            shape = shapes.get(key) 
+            shape = shapes.get(key)
             if shape.get('generate'):
                 os.makedirs(f"{self.EXPORT_DIR}/{key}")
                 self.__generate_shape(key, shape.get('amount'))
-        
 
-       
-                
-       
-     
 
 Generator().generate()
