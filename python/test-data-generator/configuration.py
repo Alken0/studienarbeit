@@ -6,7 +6,14 @@ FILE_PATH = "test-data-generator/config.json"
 class Shape:
     generate: bool
     amount: int
+    min_size: int
+    max_size: int
 
+    def __init__(self,  generate: bool, amount: int, minSize: int, maxSize: int) -> None:
+        self.generate = generate
+        self.amount = amount
+        self.min_size = minSize
+        self.max_size = maxSize
 
 class Shapes:
     triangle: Shape
@@ -22,13 +29,11 @@ class Shapes:
 class Configuration:
     seed: int
     image_size: int
-    min_figur_size: int
     shapes: Shapes
 
-    def __init__(self, seed, imageSize, minFigurSize, shapes: Shapes) -> None:
+    def __init__(self, seed, imageSize, shapes: Shapes) -> None:
         self.seed = seed
         self.image_size = imageSize
-        self.min_figur_size = minFigurSize
         self.shapes = shapes
 
 

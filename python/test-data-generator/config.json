@@ -1,19 +1,24 @@
 {
     "seed": 123456789,
     "imageSize": 64,
-    "minFigurSize": 25,
     "shapes": {
         "triangle": {
             "generate": false,
-            "amount": 100
+            "amount": 100,
+            "minSize": 10,
+            "maxSize": 32
         },
         "rectangle": {
             "generate": true,
-            "amount": 100
+            "amount": 100,
+            "minSize": 10,
+            "maxSize": 32
         },
         "circle": {
             "generate": true,
-            "amount": 10
+            "amount": 100,
+            "minSize": 5,
+            "maxSize": 16
         }
     }
     
