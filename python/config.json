@@ -20,6 +20,9 @@
             "minSize": 10,
             "maxSize": 16
         }
+    },
+    "training": {
+        "epochs": 10000,
+        "batchSize": 28
     }
-    
 }

@@ -4,6 +4,7 @@ import os
 from tqdm import tqdm
 import numpy as np
 from storage import Storage
+from configuration import CONFIG
 
 
 # largely inspired by these tutorials:
@@ -17,17 +18,17 @@ physical_devices = tf.config.list_physical_devices("GPU")
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 ### VARIABLES ###
-EPOCHS = 10000
-BATCH_SIZE = 28
+EPOCHS = CONFIG.training.get("epochs")
+BATCH_SIZE = CONFIG.training.get("batchSize")
 LABEL_AMOUNT = 2
 LATENT_DIM = 100
-IMG_SIZE = 64
+IMG_SIZE = CONFIG.image_size
 IMG_CHANNELS = 1
 
-LOAD_CHECKPOINT = True
-CHECKPOINT_DATE = "12-11-2021"
+LOAD_CHECKPOINT = False
+CHECKPOINT_DATE = "29-11-2021"
 SAVE_CHECKPOINT = True
-### VARIABLES ### 
+### VARIABLES ###
 
 # load dataset
 dataset: tf.data.Dataset = preprocessing.image_dataset_from_directory(
@@ -182,7 +183,7 @@ def train(dataset: tf.data.Dataset, discriminator: models.Model, generator: mode
                     f"data/results/epoch_{epoch}_label_{labels[0]}.png")
 
     if SAVE_CHECKPOINT:
-        storage.save_checkpoint(discriminator, generator)            
+        storage.save_checkpoint(discriminator, generator)
 
 
 discriminator = define_discriminator(IMG_SIZE, IMG_CHANNELS, LABEL_AMOUNT)
@@ -190,7 +191,8 @@ generator = define_generator(LATENT_DIM, LABEL_AMOUNT)
 
 storage = Storage("data/neural_networks", "first_training")
 if LOAD_CHECKPOINT:
-    discriminator, generator = storage.load_checkpoint(discriminator, generator, CHECKPOINT_DATE)
+    discriminator, generator = storage.load_checkpoint(
+        discriminator, generator, CHECKPOINT_DATE)
 
 gan = define_gan(generator, discriminator)
 print(gan.summary())

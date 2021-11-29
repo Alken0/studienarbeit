@@ -27,15 +27,26 @@ class Shapes:
         self.circle = circle
 
 
+class Training:
+    epochs: int
+    batch_size: int
+
+    def __init__(self, epochs, batchSize) -> None:
+        self.epochs = epochs
+        self.batch_size = batchSize
+
+
 class Configuration:
     seed: int
     image_size: int
     shapes: Shapes
+    training: Training
 
-    def __init__(self, seed, imageSize, shapes: Shapes) -> None:
+    def __init__(self, seed, imageSize, shapes: Shapes, training: Training) -> None:
         self.seed = seed
         self.image_size = imageSize
         self.shapes = shapes
+        self.training = training
 
 
 def load() -> Configuration:
