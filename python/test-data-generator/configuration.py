@@ -42,3 +42,6 @@ def load() -> Configuration:
     with open(FILE_PATH) as config_file:
         content = json.load(config_file)
         return Configuration(**content)
+
+
+CONFIG = load()
