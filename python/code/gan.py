@@ -20,7 +20,7 @@ tf.config.experimental.set_memory_growth(physical_devices[0], True)
 ### VARIABLES ###
 EPOCHS = CONFIG.training.get("epochs")
 BATCH_SIZE = CONFIG.training.get("batchSize")
-LABEL_AMOUNT = 2
+LABEL_AMOUNT = 3
 LATENT_DIM = 100
 IMG_SIZE = CONFIG.image_size
 IMG_CHANNELS = 1
