@@ -1,6 +1,6 @@
 import json
 
-FILE_PATH = "test-data-generator/config.json"
+FILE_PATH = "config.json"
 
 
 class Shape:
@@ -14,6 +14,7 @@ class Shape:
         self.amount = amount
         self.min_size = minSize
         self.max_size = maxSize
+
 
 class Shapes:
     triangle: Shape

@@ -3,21 +3,21 @@
     "imageSize": 64,
     "shapes": {
         "triangle": {
-            "generate": false,
-            "amount": 100,
+            "generate": true,
+            "amount": 500,
             "minSize": 10,
             "maxSize": 32
         },
         "rectangle": {
             "generate": true,
-            "amount": 100,
+            "amount": 500,
             "minSize": 10,
             "maxSize": 32
         },
         "circle": {
             "generate": true,
-            "amount": 100,
-            "minSize": 5,
+            "amount": 500,
+            "minSize": 10,
             "maxSize": 16
         }
     }
