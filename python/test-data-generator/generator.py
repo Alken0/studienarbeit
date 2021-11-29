@@ -83,20 +83,21 @@ class Generator:
 
         self._cleanExportDir()
 
-        for key in shapes:
-            shape = shapes.get(key)
-            if shape.get('generate'):
-                os.makedirs(f"{self.EXPORT_DIR}/{key}")
-                # todo make this more beautiful
-                if key == 'rectangle':
-                    self._generate_rectangle(shape.get('amount'), int(
-                        shape.get('minSize')), int(shape.get('maxSize')))
-                if key == 'circle':
-                    self._generate_circle(shape.get('amount'), int(
-                        shape.get('minSize')), int(shape.get('maxSize')))
-                if key == 'triangle':
-                    self._generate_triangle(shape.get('amount'), int(
-                        shape.get('minSize')), int(shape.get('maxSize')))
+        self._generate_with_function(
+            self._generate_rectangle, shapes, 'rectangle')
+        self._generate_with_function(
+            self._generate_circle, shapes, 'circle')
+        self._generate_with_function(
+            self._generate_triangle, shapes, 'triangle')
+
+    def _generate_with_function(self, function, shapes, name):
+        shape = shapes.get(name)
+        amount = shape.get('amount')
+        min_size = int(shape.get('minSize'))
+        max_size = int(shape.get('maxSize'))
+
+        os.makedirs(f"{self.EXPORT_DIR}/{name}")
+        function(amount, min_size, max_size)
 
 
 Generator().generate()
