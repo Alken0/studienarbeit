@@ -1,48 +1,8 @@
-import tensorflow as tf
-from tensorflow.keras import layers, Sequential, Input, optimizers, losses, preprocessing, models
-import os
-from tqdm import tqdm
-import numpy as np
-from storage import Storage
-from configuration import CONFIG
-
+from tensorflow.keras import layers, Input, optimizers, losses, models
 
 # largely inspired by these tutorials:
 # https://www.youtube.com/watch?v=eR5ZnFWekNQ
 # https://machinelearningmastery.com/how-to-develop-a-conditional-generative-adversarial-network-from-scratch/
-
-
-#  some settings
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-physical_devices = tf.config.list_physical_devices("GPU")
-tf.config.experimental.set_memory_growth(physical_devices[0], True)
-
-### VARIABLES ###
-EPOCHS = CONFIG.training.get("epochs")
-BATCH_SIZE = CONFIG.training.get("batchSize")
-LABEL_AMOUNT = 3
-LATENT_DIM = 100
-IMG_SIZE = CONFIG.image_size
-IMG_CHANNELS = 1
-
-LOAD_CHECKPOINT = False
-CHECKPOINT_DATE = "29-11-2021"
-SAVE_CHECKPOINT = True
-### VARIABLES ###
-
-# load dataset
-dataset: tf.data.Dataset = preprocessing.image_dataset_from_directory(
-    directory="data/training",
-    labels='inferred',
-    label_mode='int',
-    color_mode='grayscale',
-    image_size=(IMG_SIZE, IMG_SIZE),
-    batch_size=BATCH_SIZE,
-    shuffle=True,
-)
-
-# normalize images (range [0, 255] to [-1.0, 1.0])
-dataset = dataset.map(lambda img, label: ((img - 127.5)/127.0, label))
 
 
 def define_discriminator(img_size: int, img_channels: int, label_amount: int) -> models.Model:
@@ -94,7 +54,7 @@ def define_generator(latent_dim: int, label_amount: int) -> models.Model:
     in_label = layers.Reshape((16, 16, 1))(in_label)
 
     # input random noise -> convert to 16x16x127
-    input_latent = Input(shape=(latent_dim,), name="random noise")
+    input_latent = Input(shape=(latent_dim,), name="random_noise")
     in_latent = layers.Dense(16*16*127)(input_latent)
     in_latent = layers.LeakyReLU(alpha=0.2)(in_latent)
     in_latent = layers.Reshape((16, 16, 127))(in_latent)
@@ -115,6 +75,8 @@ def define_generator(latent_dim: int, label_amount: int) -> models.Model:
 
     # model
     model = models.Model([input_latent, input_label], out)
+    print("Generator:")
+    model.summary()
     return model
 
 
@@ -136,65 +98,3 @@ def define_gan(generator: models.Model, discriminator: models.Model) -> models.M
         optimizer=optimizer,
     )
     return model
-
-
-def random_generator_input(batch_size: int, latent_dim: int, label_amount: int):
-    noise = np.random.randn(
-        latent_dim * batch_size).reshape(batch_size, latent_dim)
-    labels = np.random.randint(0, label_amount, batch_size)
-    return [noise, labels]
-
-
-def generate_fake_data(generator: models.Model, batch_size: int, latent_dim: int, label_amount: int):
-    noise, labels = random_generator_input(
-        batch_size, latent_dim, label_amount)
-    return [generator.predict([noise, labels]), labels]
-
-
-def train(dataset: tf.data.Dataset, discriminator: models.Model, generator: models.Model, gan: models.Model, epochs: int, latent_dim: int, label_amount: int):
-    for epoch in tqdm(range(epochs)):
-        for batch in dataset:
-            # cannot be set statically -> e.g. if dataset is not dividable by batch-size the last batch is smaller
-            batch_size = batch[0].shape[0]
-
-            # train discriminator
-            discriminator.train_on_batch(
-                batch,
-                tf.ones((batch_size, 1))
-            )
-            fake_data = generate_fake_data(
-                generator, batch_size, latent_dim, label_amount)
-            discriminator.train_on_batch(
-                fake_data,
-                tf.zeros((batch_size, 1))
-            )
-
-            # train generator through gan
-            gan.train_on_batch(
-                random_generator_input(batch_size, latent_dim, label_amount),
-                tf.ones((batch_size, 1))
-            )
-
-            # save some samples
-            if epoch % 100 == 0:
-                images, labels = fake_data
-                img = preprocessing.image.array_to_img(images[0])
-                img.save(
-                    f"data/results/epoch_{epoch}_label_{labels[0]}.png")
-
-    if SAVE_CHECKPOINT:
-        storage.save_checkpoint(discriminator, generator)
-
-
-discriminator = define_discriminator(IMG_SIZE, IMG_CHANNELS, LABEL_AMOUNT)
-generator = define_generator(LATENT_DIM, LABEL_AMOUNT)
-
-storage = Storage("data/neural_networks", "first_training")
-if LOAD_CHECKPOINT:
-    discriminator, generator = storage.load_checkpoint(
-        discriminator, generator, CHECKPOINT_DATE)
-
-gan = define_gan(generator, discriminator)
-print(gan.summary())
-
-train(dataset, discriminator, generator, gan, EPOCHS, LATENT_DIM, LABEL_AMOUNT)
