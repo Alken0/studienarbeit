@@ -40,22 +40,30 @@ dataset: tf.data.Dataset = preprocessing.image_dataset_from_directory(
 dataset = dataset.map(lambda img, label: ((img - 127.5)/127.0, label))
 
 
-def random_generator_input(batch_size: int, latent_dim: int, label_amount: int):
-    noise = np.random.randn(
-        latent_dim * batch_size).reshape(batch_size, latent_dim)
-    labels = np.random.randint(0, label_amount, batch_size)
+def generate_random_noise(batch_size: int, latent_dim: int):
+    return np.random.randn(latent_dim * batch_size).reshape(batch_size, latent_dim)
+
+
+def generate_random_input(batch_size: int, latent_dim: int, label_amount: int):
+    noise = generate_random_noise(batch_size, latent_dim)
+    labels = np.random.randint(low=0, high=label_amount, size=batch_size)
     return [noise, labels]
 
 
 def generate_fake_data(generator: models.Model, batch_size: int, latent_dim: int, label_amount: int):
-    noise, labels = random_generator_input(
-        batch_size, latent_dim, label_amount)
+    noise, labels = generate_random_input(batch_size, latent_dim, label_amount)
+    return [generator.predict([noise, labels]), labels]
+
+
+def generate_fake_data_by_label(generator: models.Model, batch_size: int, latent_dim: int, label: int):
+    noise = generate_random_noise(batch_size, latent_dim)
+    labels = np.full(batch_size, label)
     return [generator.predict([noise, labels]), labels]
 
 
 def train(dataset: tf.data.Dataset, discriminator: models.Model, generator: models.Model, gan: models.Model, epochs: int, latent_dim: int, label_amount: int):
     gan_logger = Logger("gan")
-    dis_logger = Logger("dis")
+    dis_logger = Logger("discriminator")
 
     for epoch in tqdm(range(epochs)):
         for batch in dataset:
@@ -67,16 +75,11 @@ def train(dataset: tf.data.Dataset, discriminator: models.Model, generator: mode
         discriminator.reset_metrics()
 
         # save some samples
-        if epoch % 100 == 0:
-            fake_data = generate_fake_data(
-                generator, 10, latent_dim, label_amount)
-            images, labels = fake_data
-            gan_logger.write_images(labels, images, epoch)
-            for index, image in enumerate(images):
-
-                file = preprocessing.image.array_to_img(image)
-                file.save(
-                    f"data/results/epoch_{epoch}_label_{labels[index]}_index_{index}.png")
+        if epoch % 5 == 0:
+            for label in range(label_amount):
+                images, _ = generate_fake_data_by_label(
+                    generator, 10, latent_dim, label)
+                gan_logger.write_images(label, images, epoch)
 
     if SAVE_MODEL:
         storage.save_model(MODEL_NAME, discriminator, generator)
@@ -106,7 +109,7 @@ def train_step(batch, latent_dim, label_amount):
 
     # train generator through gan
     gan.train_on_batch(
-        random_generator_input(batch_size, latent_dim, label_amount),
+        generate_random_input(batch_size, latent_dim, label_amount),
         tf.ones((batch_size, 1)),
         reset_metrics=False
     )

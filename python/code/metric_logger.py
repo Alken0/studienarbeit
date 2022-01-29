@@ -15,7 +15,7 @@ class Logger:
                 summary.scalar(
                     metric.name, metric.result(), epoch_no)
 
-    def write_images(self, labels, data, epoch_no):
+    def write_images(self, label, data, epoch_no):
         with self.summary_writer.as_default():
-            summary.image("test data", data,
+            summary.image(f"{label}", data,
                           max_outputs=len(data), step=epoch_no)
