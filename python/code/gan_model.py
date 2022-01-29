@@ -1,4 +1,4 @@
-from tensorflow.keras import layers, Input, optimizers, losses, models
+from tensorflow.keras import layers, Input, metrics, optimizers, losses, models
 
 # largely inspired by these tutorials:
 # https://www.youtube.com/watch?v=eR5ZnFWekNQ
@@ -37,10 +37,11 @@ def define_discriminator(img_size: int, img_channels: int, label_amount: int) ->
     model = models.Model([input_img, input_label], out)
     optimizer = optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
     loss_function = losses.BinaryCrossentropy()
+    discriminator_metrics = [metrics.SparseCategoricalAccuracy()]
     model.compile(
         loss=loss_function,
         optimizer=optimizer,
-        metrics=['accuracy']
+        metrics=discriminator_metrics
     )
     return model
 
@@ -93,8 +94,10 @@ def define_gan(generator: models.Model, discriminator: models.Model) -> models.M
     model = models.Model([gen_noise, gen_label], gan_output)
     optimizer = optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
     loss_function = losses.BinaryCrossentropy()
+    gan_metrics = [metrics.SparseCategoricalAccuracy()]
     model.compile(
         loss=loss_function,
         optimizer=optimizer,
+        metrics=gan_metrics
     )
     return model
