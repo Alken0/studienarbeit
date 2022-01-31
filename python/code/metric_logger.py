@@ -1,5 +1,8 @@
+import shutil
+import os
 from tensorflow import summary
-from tensorflow.keras import models, preprocessing
+from tensorflow.keras import models
+
 
 LOG_PATH = "./data/logs"
 
@@ -7,6 +10,8 @@ LOG_PATH = "./data/logs"
 class Logger:
 
     def __init__(self, name: str):
+        if os.path.exists(f"{LOG_PATH}/{name}"):
+            shutil.rmtree(f"{LOG_PATH}/{name}")
         self.summary_writer = summary.create_file_writer(f"{LOG_PATH}/{name}")
 
     def write_log(self, model: models.Model, epoch_no):
@@ -15,7 +20,7 @@ class Logger:
                 summary.scalar(
                     metric.name, metric.result(), epoch_no)
 
-    def write_images(self, label, data, epoch_no):
+    def write_image(self, tag, data, step):
         with self.summary_writer.as_default():
-            summary.image(f"{label}", data,
-                          max_outputs=len(data), step=epoch_no)
+            summary.image(f"{tag}", data,
+                          max_outputs=len(data), step=step)

@@ -101,3 +101,4 @@ class Generator:
 
 
 Generator().generate()
+print("succesfull generation")

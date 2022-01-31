@@ -37,7 +37,7 @@ def define_discriminator(img_size: int, img_channels: int, label_amount: int) ->
     model = models.Model([input_img, input_label], out)
     optimizer = optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
     loss_function = losses.BinaryCrossentropy()
-    discriminator_metrics = [metrics.SparseCategoricalAccuracy()]
+    discriminator_metrics = [metrics.Accuracy()]
     model.compile(
         loss=loss_function,
         optimizer=optimizer,
@@ -94,7 +94,7 @@ def define_gan(generator: models.Model, discriminator: models.Model) -> models.M
     model = models.Model([gen_noise, gen_label], gan_output)
     optimizer = optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
     loss_function = losses.BinaryCrossentropy()
-    gan_metrics = [metrics.SparseCategoricalAccuracy()]
+    gan_metrics = [metrics.Accuracy()]
     model.compile(
         loss=loss_function,
         optimizer=optimizer,

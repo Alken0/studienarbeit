@@ -1,3 +1,5 @@
+import io
+import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras import preprocessing, models
 import os
@@ -8,13 +10,20 @@ from configuration import CONFIG
 import gan_model
 from metric_logger import Logger
 
+
 ### VARIABLES ###
 EPOCHS = CONFIG.training.get("epochs")
 BATCH_SIZE = CONFIG.training.get("batchSize")
+
 LABEL_AMOUNT = 3
+LABEL_NAMES = ["circle", "rectangle", "triangle"]
+
 LATENT_DIM = 100
 IMG_SIZE = CONFIG.image_size
 IMG_CHANNELS = 1
+
+EPOCHS_PER_IMAGE_SAMPLE = 5
+IMAGES_PER_LABEL = 5
 
 LOAD_MODEL = False
 MODEL_NAME = "second_training"
@@ -61,6 +70,56 @@ def generate_fake_data_by_label(generator: models.Model, batch_size: int, latent
     return [generator.predict([noise, labels]), labels]
 
 
+def image_grid(data, labels, label_names):
+    # Data should be in (BATCH_SIZE, H, W, C)
+    assert data.ndim == 4
+
+    # invert image
+    data = 1 - data
+
+    figure = plt.figure(figsize=(10, 10))
+    num_images = data.shape[0]
+    size = int(np.ceil(np.sqrt(num_images)))
+
+    for i in range(data.shape[0]):
+        plt.subplot(size, size, i + 1, title=label_names[labels[i]])
+        plt.xticks([])
+        plt.yticks([])
+        plt.grid(False)
+
+        # if grayscale
+        if data.shape[3] == 1:
+            plt.imshow(data[i], cmap=plt.cm.binary)
+
+        else:
+            plt.imshow(data[i])
+
+    return figure
+
+# Stolen from tensorflow official guide: https://www.tensorflow.org/tensorboard/image_summaries
+
+
+def plot_to_image(figure):
+    """Converts the matplotlib plot specified by 'figure' to a PNG image and
+    returns it. The supplied figure is closed and inaccessible after this call."""
+
+    # Save the plot to a PNG in memory.
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
+
+    # Closing the figure prevents it from being displayed directly inside
+    # the notebook.
+    plt.close(figure)
+    buf.seek(0)
+
+    # Convert PNG buffer to TF image
+    image = tf.image.decode_png(buf.getvalue(), channels=4)
+
+    # Add the batch dimension
+    image = tf.expand_dims(image, 0)
+    return image
+
+
 def train(dataset: tf.data.Dataset, discriminator: models.Model, generator: models.Model, gan: models.Model, epochs: int, latent_dim: int, label_amount: int):
     gan_logger = Logger("gan")
     dis_logger = Logger("discriminator")
@@ -69,17 +128,47 @@ def train(dataset: tf.data.Dataset, discriminator: models.Model, generator: mode
         for batch in dataset:
             train_step(batch, latent_dim, label_amount)
 
+        # log metrics
         gan_logger.write_log(gan, epoch)
         dis_logger.write_log(discriminator, epoch)
         gan.reset_metrics()
         discriminator.reset_metrics()
 
-        # save some samples
-        if epoch % 5 == 0:
+        """
+        if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
+            images = np.empty((5, 64, 64, 1))
+            labels = np.empty((5,))
             for label in range(label_amount):
-                images, _ = generate_fake_data_by_label(
-                    generator, 10, latent_dim, label)
-                gan_logger.write_images(label, images, epoch)
+                curr_images, curr_labels = generate_fake_data_by_label(
+                    generator, IMAGES_PER_LABEL, latent_dim, label)
+                print(f"image shape: {curr_images.shape}")
+                print(f"labels shape: {curr_labels.shape}")
+                images = np.append(images, curr_images, axis=None)
+                lables = np.append(labels, curr_labels, axis=None)
+            print(f"image final: {images}")
+            print(f"labels final: {labels}")
+            figure = image_grid(images, labels, LABEL_NAMES)
+            image = plot_to_image(figure)
+            gan_logger.write_image("Composed Visualization", image, epoch)
+        """
+        # log Composed Visualization for each label
+        if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
+            for label in range(label_amount):
+                images, labels = generate_fake_data_by_label(
+                    generator, IMAGES_PER_LABEL, latent_dim, label)
+                figure = image_grid(images, labels, LABEL_NAMES)
+                image = plot_to_image(figure)
+                gan_logger.write_image(
+                    f"Composed_Visualization_{LABEL_NAMES[label]}", image, epoch)
+
+        # log Composed Visualization with random labels
+        if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
+            images, labels = generate_fake_data(
+                generator, (IMAGES_PER_LABEL*3), latent_dim, label_amount)
+            figure = image_grid(images, labels, LABEL_NAMES)
+            image = plot_to_image(figure)
+            gan_logger.write_image(
+                f"Composed_Visualization_Random_Labels", image, epoch)
 
     if SAVE_MODEL:
         storage.save_model(MODEL_NAME, discriminator, generator)
@@ -107,7 +196,7 @@ def train_step(batch, latent_dim, label_amount):
         reset_metrics=False
     )
 
-    # train generator through gan
+    # train generator through gan (discriminator is not trained!)
     gan.train_on_batch(
         generate_random_input(batch_size, latent_dim, label_amount),
         tf.ones((batch_size, 1)),
