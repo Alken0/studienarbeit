@@ -6,6 +6,31 @@ SEHR GUTE ARBEIT ZUM ORIENTIEREN (und kommt auch mit einem extrem viel kleineren
 
 \section{Allgemein GAN}
 
+Der Begriff GAN \textit{(General Adversarial Network)} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
+Das Wort bezeichnet ein Konstrukt aus 2 neuronalen Netzen, die sich gegenseitig trainieren.
+Durch das spezielle Training gelingt die Generierung von unechten aber realistischen Daten.
+Solche Daten können dann zum Beispiel für das Training anderer neuronalen Netze \cite{gan-application-augmenting-training-data}, Bildbearbeitung \cite{gan-application-upscaling, gan-application-blending} und vielen mehr verwendet werden \cite{gan-application-dna-optimizes-protein-functions, gan-application-audio-synthesis}.
+\newline
+
+Die beiden Netze werden in den Generator und den Discriminator unterschieden.
+Aufgabe des Generators ist die Generierung von unechten Daten.
+Dafür wandelt er eine zufälligen Eingabe in einen möglichst realistischen Output um.
+Die zufällige Eingabe dient dabei als Basis für die Ausgabedaten.
+Das ist notwendig, da der Umwandlungsprozess deterministisch ist, aber trotzdem eine Vielzahl an unterschiedlichen Daten generiert werden soll.
+
+Der Output des Generators wird dann vom Discriminator versucht zu falsifizieren.
+Dafür wird er sowohl auf die generierten Daten als auch einen Bestand an echten Daten trainiert.
+Sein Ziel ist es dann, die falschen Daten des Generators zu identifizieren.
+Ziel des Generators hingegen ist es, dass sich der Discriminator irrt und die generierten Daten als echt einstuft.
+
+Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei die Aussage des Discriminators die zu optimierende Größe ist. \cite{gan-minimax}
+\newline
+
+Für diese Arbeit werden zusätzlich Label eingeführt, um die generierten Daten beeinflussen zu können.
+Dazu bekommen der Generator und Discriminator das Label als zusätzlichen Input.
+So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
+Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
+
 \paragraph{Anwendung}
 \begin{itemize}
 	\item Viel bei Generierungsaufgaben
