@@ -5,13 +5,19 @@
 	titlepage
 ]{scrreprt}
 
-\input{core/infos}
-\input{core/packages}
-\input{core/commands}
+
+\input{core/core}
+		% <--- moved here for correct TexStudio sidebar-structure --->
+		% (you can't find references/glossaries otherwise)
+		\addbibresource{references.bib}
+		\input{glossaries}
+		\makeglossaries
+		% <--- end of package related stuff --->
+
 
 
 \begin{document}
-	\input{kapitel/0_offizielles/public.tex}
+	\input{kapitel/0_offizielles/offizielles.tex}
 
 	\tableofcontents
 	\printListOfFigures
@@ -22,13 +28,13 @@
 	\printglossary
 	
 	% <--- content start --->
-	\input{kapitel/1_einleitung/public.tex}
-	\input{kapitel/2_stand_der_technik/public.tex}
-	\input{kapitel/3_methodik/public.tex}
-	\input{kapitel/4_implementierung/public.tex}
-	\input{kapitel/5_ergebnisse/public.tex}
-	\input{kapitel/6_diskussion/public.tex}
-	\input{kapitel/7_zusammenfassung/public.tex}
+	\input{kapitel/1_einleitung/einleitung.tex}
+	\input{kapitel/2_stand_der_technik/stand_der_technik.tex}
+	\input{kapitel/3_methodik/methodik.tex}
+	\input{kapitel/4_implementierung/implementierung.tex}
+	\input{kapitel/5_ergebnisse/ergebnisse.tex}
+	\input{kapitel/6_diskussion/diskussion.tex}
+	\input{kapitel/7_zusammenfassung/zusammenfassung.tex}
 	% <---  content end  --->
 	
 	\printbibliography[heading=bibintoc]
