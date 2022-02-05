@@ -6,6 +6,8 @@ SEHR GUTE ARBEIT ZUM ORIENTIEREN (und kommt auch mit einem extrem viel kleineren
 
 \section{Allgemein GAN}
 
+\todo[inline,shadow]{Ausreichend mit Quellen hinterlegen...}
+
 Der Begriff GAN \textit{(General Adversarial Network)} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
 Das Wort bezeichnet ein Konstrukt aus 2 neuronalen Netzen, die sich gegenseitig trainieren.
 Durch das spezielle Training gelingt die Generierung von unechten aber realistischen Daten.
@@ -30,6 +32,9 @@ Für diese Arbeit werden zusätzlich Label eingeführt, um die generierten Daten
 Dazu bekommen der Generator und Discriminator das Label als zusätzlichen Input.
 So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
+\newline
+
+\todo[inline,shadow]{Bild von GAN zur Erklärung einfügen}
 
 \paragraph{Anwendung}
 \begin{itemize}
@@ -70,7 +75,56 @@ Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtige
 \end{itemize}
 
 \section{Hyperparameter}
-Beschreibung der zu untersuchenden Hyperparameter (Auswirkung auf den Lernerfolg/Was muss man dabei beachten/Wie wird das gemessen?/....)
+\todo[inline,shadow]{Quellen...}
+\todo[inline,shadow]{Überschriften hinzufügen...}
+\todo[inline,shadow]{müssen oder sollten Hyperparameter immer wieder neu bestimmt werden?}
+
+Hyperparameter sind Invarianten, die den Lernprozess beeinflussen.
+Dabei handelt es sich oft um Zahlenwerte, wie zum Beispiel die Lernrate.
+Aber auch die Anzahl an Nodes in einer bestimmten Schicht zählt zu den Hyperparametern.
+\newline
+
+\subsection{Einfluss von Hyperparametern}
+Hyperparameter haben einen sehr großen Einfluss auf das Training.
+Der Einfluss reicht so weit, dass bei sehr schlecht gesetzten Parametern das Training keine sinnvollen Resultate mehr erzielt.
+Zudem ändern sich die optimalen Hyperparameter bei unterschiedlichen Trainingsdaten oder auch einer anderen Architektur.
+Deshalb müssen sie immer wieder neu bestimmt werden.
+
+Obwohl Hyperparameter insgesamt einen großen Einfluss auf die Trainingsresultate haben, ist jedoch nicht jeder Parameter gleich bedeutsam.
+Vielmehr haben sie einen stark unterschiedlichen Einfluss.
+
+Zuletzt ist zu erwähnen, dass Hyperparameter nicht nur das Training beeinflussen sondern auch andere Hyperparameter.
+Das ist insbesondere ein Problem bei der Bestimmung geeigneter Verfahren zur Bestimmung optimaler Parameter, da eine Kombination immer als ganzes getestet werden muss.
+
+\subsection{Verfahren zur Bestimmung}
+Da Hyperparameter bei jedem neuen neuronalen Netzwerk neu optimiert werden müssen/können, gibt es bereits einige Verfahren zur Bestimmung die im Folgenden erläutert werden.
+\newline
+
+Zunächst ist es möglich die Hyperparameter manuell festzulegen.
+Das ist zwar sehr kostengünstig, da keine zusätzlichen Berechnungen durchgeführt werden müssten, allerdings werden so niemals optimale Parameter gefunden werden.
+\newline
+
+Eine weitere Variante trägt den Namen Gridsearch.
+Bei diesem Verfahren werden für alle gesuchten Hyperparameter mehrere Werte festgelegt.
+Danach wird das GAN auf die verschiedenen Kombinationen trainiert und die Resultate verglichen.
+Die Gridsearch ist damit je nach Anzahl an Möglichkeiten deutlich rechenaufwändiger als das manuelle Festlegen.
+Jedoch ist es möglich, gute Parameter oder Korrelationen beim Vergleich der Ergebnisse zu erkennen.
+\newline
+
+\todo[inline,shadow]{Mindestens noch eine Variante beschreiben}
+
+In dieser Arbeit wird die Gridsearch zur Anwendung kommen, da sie den besten Kompromiss zwischen benötigter Rechenleistung und Ergebnis bietet.
+Das liegt jedoch auch an der zur Verfügung stehenden Hardware.
+Bei unbeschränkteren Ressourcen, wären andere Varianten in Betracht zu ziehen.
+\newline
+
+\subsection{Auswahl zu bestimmender Hyperparameter}
+Zwar haben Hyperparameter insgesamt einen großen Einfluss auf das Training, jedoch nicht jeder einzelne gleich viel.
+Deshalb werden in dieser Arbeit auch nur eine Auswahl an Parametern analysiert, die in der Regel \todo{Begründung...} den größten Einfluss auf das Ergebnis haben.
+Die zu analysierenden Parameter werden im Folgenden genauer beschrieben.
+
+
+
 
 \subsection{Hyperparameter}
 \paragraph{Allgemein \cite{hyperparameters-search-in-machine-learning, hyperparameters-gan-using-genetic-algorithm}}
@@ -78,6 +132,10 @@ Beschreibung der zu untersuchenden Hyperparameter (Auswirkung auf den Lernerfolg
 	\item Parameter, die den Lernprozess definieren
 	\item Gegensatz wären z.B. weights, die beim Training bestimmt werden
 	\item schwierig festzulegen
+	\item Beschreibung der zu untersuchenden Hyperparameter
+	\item Auswirkung auf den Lernerfolg
+	\item Was muss man dabei beachten
+	\item Wie wird das gemessen?
 	\begin{itemize}
 		\item manuell (niemals optimal)
 		\item Gridsearch (sehr rechenaufwändig)  \cite{hyperparameters-grid-search}
