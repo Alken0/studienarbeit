@@ -1,7 +1,8 @@
+import datetime
 import io
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow.keras import preprocessing, models
+from tensorflow.keras import preprocessing, models, callbacks
 import os
 from tqdm import tqdm
 import numpy as np
@@ -121,8 +122,8 @@ def plot_to_image(figure):
 
 
 def train(dataset: tf.data.Dataset, discriminator: models.Model, generator: models.Model, gan: models.Model, epochs: int, latent_dim: int, label_amount: int):
-    gan_logger = Logger("gan")
-    dis_logger = Logger("discriminator")
+    gan_logger = Logger("gan", gan)
+    dis_logger = Logger("discriminator", discriminator)
 
     for epoch in tqdm(range(epochs)):
         for batch in dataset:

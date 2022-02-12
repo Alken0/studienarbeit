@@ -12,12 +12,12 @@ def define_discriminator(img_size: int, img_channels: int, label_amount: int) ->
 
     # input for label -> scale input for label to match dimensions of image
     # first layer is called differently because it's needed for model description
-    input_label = Input(shape=(1,))
+    input_label = Input(shape=(1,), name="label")
     in_label = layers.Embedding(label_amount, 50)(input_label)
     in_label = layers.Dense(img_as_nodes)(in_label)
     in_label = layers.Reshape(img_dimension)(in_label)
 
-    input_img = Input(shape=img_dimension)
+    input_img = Input(shape=img_dimension, name="image")
 
     # combine image and label input + extra layers
     merge = layers.Concatenate()([input_img, in_label])
@@ -34,7 +34,7 @@ def define_discriminator(img_size: int, img_channels: int, label_amount: int) ->
     out = layers.Dense(1, activation='sigmoid')(out)
 
     # model
-    model = models.Model([input_img, input_label], out)
+    model = models.Model([input_img, input_label], out, name = "discriminator")
     optimizer = optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
     loss_function = losses.BinaryCrossentropy()
     discriminator_metrics = [metrics.Accuracy()]
@@ -75,11 +75,10 @@ def define_generator(latent_dim: int, label_amount: int) -> models.Model:
     out = layers.Conv2D(1, (16, 16), activation='tanh', padding='same')(merge)
 
     # model
-    model = models.Model([input_latent, input_label], out)
+    model = models.Model([input_latent, input_label], out, name = "Generator")
     print("Generator:")
     model.summary()
     return model
-
 
 def define_gan(generator: models.Model, discriminator: models.Model) -> models.Model:
     # deactivate training of discriminator -> purpose of this network is to train generator
@@ -91,7 +90,7 @@ def define_gan(generator: models.Model, discriminator: models.Model) -> models.M
     gen_output = generator.output
     gan_output = discriminator([gen_output, gen_label])
 
-    model = models.Model([gen_noise, gen_label], gan_output)
+    model = models.Model([gen_noise, gen_label], gan_output, name="GAN")
     optimizer = optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
     loss_function = losses.BinaryCrossentropy()
     gan_metrics = [metrics.Accuracy()]
