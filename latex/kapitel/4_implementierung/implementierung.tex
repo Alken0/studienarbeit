@@ -1,15 +1,24 @@
 %!TEX root = ../../main.tex
 
 \chapter{Implementierung}
-\todo[inline, shadow]{@Markus Was genau soll hier rein, wo viel zu geschrieben werden kann?}
 
-Die Neuronalen Netze (inklusive Trainingsoperationen) wurden in Python mithilfe von Tensorflow \cite{tensorflow} entwickelt.
-Zur Leistungsoptimierung wurde die CUDA-GPU Konfiguration in Tensorflow vorgenommen.
-\newline
+\section{Umgebung}
+\begin{itemize}
+	\item Python Version
+	\item Tensorflow Version (+ CUDA)
+	\item Keras Version
+	\item pip-install erwähenen ? $\rightarrow$ wie setzt man das Projekt auf?
+	\item github
+\end{itemize}
 
-Sowohl die Generierung als auch die Bildvergleiche sind mittels der 'scikit-image' Bilbiothek in Python realisiert.
-\newline
+\section{Model}
+\begin{itemize}
+	\item Aufbau Generator + Discriminator (Bild)
+	\item Hyperparameter, die wir so gesetzt haben (Dropout, LeakyReLU, ?)
+\end{itemize}
 
-Der gesamte Quellcode ist öffentlich verfügbar:
-\newline
-\url{https://github.com/Alken0/studienarbeit/tree/main/python} 
+\section{Generierung von Trainingsdaten}
+\begin{itemize}
+	\item Datei zum Konfigurien erklären
+	\item Erklärung, was da drin ist (Datensatz-Generierung)
+\end{itemize}

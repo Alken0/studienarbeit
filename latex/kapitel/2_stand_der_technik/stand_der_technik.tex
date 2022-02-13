@@ -2,9 +2,7 @@
 
 \chapter{Stand der Technik}
 
-SEHR GUTE ARBEIT ZUM ORIENTIEREN (und kommt auch mit einem extrem viel kleineren netz aus...) \cite{gan-conditional}
-
-\section{Allgemein GAN}
+\section{General Adversarial Network}
 
 \todo[inline,shadow]{Ausreichend mit Quellen hinterlegen...}
 
@@ -14,21 +12,22 @@ Durch das spezielle Training gelingt die Generierung von unechten aber realistis
 Solche Daten können dann zum Beispiel für das Training anderer neuronalen Netze \cite{gan-application-augmenting-training-data}, Bildbearbeitung \cite{gan-application-upscaling, gan-application-blending} und vielen mehr verwendet werden \cite{gan-application-dna-optimizes-protein-functions, gan-application-audio-synthesis}.
 \newline
 
-Die beiden Netze werden in den Generator und den Discriminator unterschieden.
+Die beiden Netze eines GANs werden in den Generator und den Discriminator unterschieden.
 Aufgabe des Generators ist die Generierung von unechten Daten.
 Dafür wandelt er eine zufälligen Eingabe in einen möglichst realistischen Output um.
 Die zufällige Eingabe dient dabei als Basis für die Ausgabedaten.
-Das ist notwendig, da der Umwandlungsprozess deterministisch ist, aber trotzdem eine Vielzahl an unterschiedlichen Daten generiert werden soll.
+Das ist notwendig, da der Umwandlungsprozess selbst deterministisch ist, aber trotzdem eine Vielzahl an unterschiedlichen Daten generiert werden soll.
 
 Der Output des Generators wird dann vom Discriminator versucht zu falsifizieren.
 Dafür wird er sowohl auf die generierten Daten als auch einen Bestand an echten Daten trainiert.
 Sein Ziel ist es dann, die falschen Daten des Generators zu identifizieren.
 Ziel des Generators hingegen ist es, dass sich der Discriminator irrt und die generierten Daten als echt einstuft.
 
-Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei die Aussage des Discriminators die zu optimierende Größe ist. \cite{gan-minimax}
+Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei die Ausgabe des Discriminators die zu optimierende Größe ist.
+Das heißt, der Generator versucht diese zu verkleinern, während der Discriminator sie erhöhen möchte. \cite{gan-minimax} 
 \newline
 
-Für diese Arbeit werden zusätzlich Label eingeführt, um die generierten Daten beeinflussen zu können.
+Für diese Arbeit werden zusätzlich Label eingeführt, um die generierten Daten beeinflussen zu können. \todo{noch mehr begründen, wozu Labels gebraucht werden}
 Dazu bekommen der Generator und Discriminator das Label als zusätzlichen Input.
 So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
@@ -36,19 +35,8 @@ Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtige
 
 \todo[inline,shadow]{Bild von GAN zur Erklärung einfügen}
 
-\section{Schichten Neuronaler Netze}
 
-\section{Hyperparameter}
-\todo[inline,shadow]{Quellen...}
-\todo[inline,shadow]{Überschriften hinzufügen...}
-\todo[inline,shadow]{müssen oder sollten Hyperparameter immer wieder neu bestimmt werden?}
-
-Hyperparameter sind Invarianten, die den Lernprozess beeinflussen.
-Dabei handelt es sich oft um Zahlenwerte, wie zum Beispiel die Lernrate.
-Aber auch die Anzahl an Nodes in einer bestimmten Schicht zählt zu den Hyperparametern.
-\newline
-
-\subsection{Einfluss von Hyperparametern}
+\section{Einfluss von Hyperparametern}
 Hyperparameter haben einen sehr großen Einfluss auf das Training.
 Der Einfluss reicht so weit, dass bei sehr schlecht gesetzten Parametern das Training keine sinnvollen Resultate mehr erzielt.
 Zudem ändern sich die optimalen Hyperparameter bei unterschiedlichen Trainingsdaten oder auch einer anderen Architektur.
@@ -57,325 +45,117 @@ Deshalb müssen sie immer wieder neu bestimmt werden.
 Obwohl Hyperparameter insgesamt einen großen Einfluss auf die Trainingsresultate haben, ist jedoch nicht jeder Parameter gleich bedeutsam.
 Stattdessen sind manche Parameter sehr einflussreich während andere kaum Auswirkung auf das Ergebnis haben.
 
-Zuletzt ist zu erwähnen, dass Hyperparameter nicht nur das Training beeinflussen sondern auch andere Hyperparameter.
+Zusätzlich ist zu erwähnen, dass Hyperparameter nicht nur das Training beeinflussen sondern auch andere Hyperparameter.
 So können manche Parameter in bestimmten Kombinationen stark an Einfluss gewinnen, während andere unwichtiger werden.
 Das ist insbesondere bei den Verfahren zur Bestimmung der Hyperparameter ein Problem.
 Denn dadurch muss immer eine Kombination getestet und verglichen werden, was deutlich rechenaufwändiger ist, als die Parameter einzeln zu testen.
 
-\subsection{Verfahren zur Bestimmung}
+\section{Verfahren zur Bestimmung von Hyperparametern}
 Da Hyperparameter bei jedem neuen neuronalen Netzwerk neu optimiert werden müssen/können, gibt es bereits einige Verfahren zur Bestimmung die im Folgenden erläutert werden.
 \newline
 
+\subsection{Manuelle Suche}
 Zunächst ist es möglich die Hyperparameter manuell festzulegen.
-Das ist zwar sehr kostengünstig, da keine zusätzlichen Berechnungen durchgeführt werden müssten, allerdings werden so niemals optimale Parameter gefunden werden.
-\newline
+Zwar wird so sehr viel Rechenaufwand eingespart, da nur eine oder sehr wenige Konfigurationen getestet werden.
+Das System ist jedoch sehr aufwändig für die Person, die es konfiguriert.
+Zum einen müssen die Werte manuell geändert werden, zum anderen muss eine sehr bedachte Vorauswahl getroffen werden.
+Zusätzlich müssen die Ergebnisse auch manuell analysiert werden, um Patterns zu erkennen und so neue Durchläufe zu planen.
 
-Eine weitere Variante trägt den Namen Gridsearch.
+\subsection{Gridsearch}
+Eine weitere Variante trägt den Namen Gridsearch \cite{hyperparameters-grid-search}.
 Bei diesem Verfahren werden für alle gesuchten Hyperparameter mehrere Werte festgelegt.
-Danach wird das GAN auf die verschiedenen Kombinationen trainiert und die Resultate verglichen.
-Die Gridsearch ist damit je nach Anzahl an Möglichkeiten deutlich rechenaufwändiger als das manuelle Festlegen.
-Jedoch ist es möglich, gute Parameter oder Korrelationen beim Vergleich der Ergebnisse zu erkennen.
-\newline
+Es handelt sich also um eine automatisiertere manuelle Suche, die verhältnismäßig einfach zu implementieren ist.
+Die verschiedenen Kombinationen werden dann trainiert und die Resultate festgehalten.
+Die Suche übernimmt keinerlei Interpretation der Ergebnisse, diese müssen manuell analysiert werden.
+Ein Versuch mit der Gridsearch ist somit deutlich rechenaufwändiger als nur ein Parameterset, wie in der manuellen Suche, zu trainieren.
+Der exakte Aufwandsunterschied hängt von der festgelegten Anzahl und Variantenreiche der Parameter ab.
+Durch die Möglichkeit von Parallelisierung findet die Gridsearch in der Regel bessere Parameter als die sequentielle manuelle Suche in der gleichen Zeit \cite{hyperparameters-random-search}.
 
-\todo[inline,shadow]{Mindestens noch eine Variante beschreiben}
+\subsection{Random Search}
+Die Random Search \cite{hyperparameters-random-search} funktioniert im Training wie die Gridsearch, nur werden zufällige Werte statt dem festgelegten Grid erzeugt.
+Die zufälligen Werte haben den Vorteil, dass es weniger Werte-Überlagerungen im Vergleich zur Grid-Kombination gibt.
+Deswegen kann die zufällige Suche bei gleich vielen Durchläufen ein größeres Spektrum an Ergebnissen abdecken.
+Mittels Automatic Relevance Determination ist es dann möglich, den Einfluss und Wertebereich der einzelnen Hyperparameter darzustellen.
 
+\begin{figure}[H]
+	\includegraphics{kapitel/2_stand_der_technik/img/random-vs-grid-search.png}
+	\caption{Random Search vs Grid Search (Quelle \cite{hyperparameters-random-search})}
+\end{figure}
+
+Problem der Random Search ist vor allem, dass die Räume der guten Hyperparameter sehr klein sind.
+Dadurch ist nicht gewährleistet, dass ein zufälliger Wert auch den Raum trifft.
+Jedoch erzielen Optimierungen mittels Random Search in der Regel trotzdem gute Ergebnisse.
+Dem Grid-Search-Verfahren ist die Random-Search allerdings nicht prinzipiell überlegen \cite{hyperparameters-random-search}.
+
+\subsection{Bayessearch}
+\begin{itemize}
+	\item Ziel: Anzahl der Versuche reduzieren
+	\item Idee: Wiederverwendung von vorherigen Durchläufen
+	\item ??
+\end{itemize}
+
+\subsection{Zusammenfassung}
 In dieser Arbeit wird die Gridsearch zur Anwendung kommen, da sie den besten Kompromiss zwischen benötigter Rechenleistung und Ergebnis bietet.
 Das liegt jedoch auch an der zur Verfügung stehenden Hardware.
 Bei unbeschränkteren Ressourcen, wären andere Varianten in Betracht zu ziehen.
 
-\section{Auswahl zu bestimmender Hyperparameter}
-Zwar haben Hyperparameter insgesamt einen großen Einfluss auf das Training, jedoch nicht jeder einzelne gleich viel.
-Deshalb werden in dieser Arbeit auch nur eine Auswahl an Parametern analysiert, die in der Regel \todo{Begründung...} den größten Einfluss auf das Ergebnis haben.
-Die zu analysierenden Parameter werden im Folgenden genauer beschrieben.
 
-\subsection{Lossfunction}
-Die Lossfunction wird genutzt, um den Lernfortschritt von neuronalen Netzen zu bestimmen.
-Dafür wird beispielsweise der der Unterschied zwischen dem Erwartungswert und dem Ergebnis einer Klassifikation berechnet.
-\begin{itemize}
-	\item Absolute Value Loss: $L_1(y, \hat{y}) = |y - \hat{y}|$
-	\item Squared Error Loss: $L_2(y, \hat{y}) = (y - \hat{y})^2$
-\end{itemize}
 
-Bei den genannten Beispielen handelt es sich um sehr einfache Lossfunktionen.
-
-Zum einen gibt es \textins{Noise}, der die Verfälschung eines Datensatzes im Vergleich zum Optimum angibt.
-Das ist zum Beispiel der Fall, wenn im Bild ein Rauschen existiert.
-Durch das Rauschen kann dann der Erwartungswert nicht mehr exakt bestimmt werden, da das Ergebnis nicht mehr zu 100\% feststeht.
+\section{Related Work}
+Es gibt viele verschiedene Versuche und Varianten die Hyperparameter zu optimieren.
+Dementsprechend viele Papers und Artikel befassen sich damit.
+Einige dieser Arbeiten werden nachfolgend kurz vorgestellt.
 \newline
 
-Dann kann es sein, dass das Trainingsset zu klein ist.
-So ist eventuell das Optimum für das Training gar nicht durch die Trainingsdaten ableitbar.
-In diesem Fall müssen zwar die Daten angepasst werden, aber die Lossfunktion sollte eine solche Approximation in Betracht \todo{falsches Wort} ziehen. 
+\paragraphNewLine{Best Selection of Generative Adversarial Networks Hyper-Parameters Using Genetic Algorithm \cite{hyperparameters-genetic-algorithm}}
+Die Studie befasst sich mit Hyperparameter Optimierung auf Basis von genetischen Algorithmen.
+Genetische Algorithmen zeichnen sich unter anderem durch die verwendeten Operatoren Mutation, Kreuzung und Selektion aus \cite{genetic-algorithms}.
+Ziel der Studie war es, bestmögliche Hyperparameter für das MNIST Datenset zu finden \cite{dataset:mnist}.
+Dabei wurden die Hyperparameter \textit{learning-rate, dropout, batch-size und number of neurons in dense layer} betrachtet.
+Ergebnis war eine 100\% Genauigkeit im Vergleich zu 96\% des Vergleichsnetzes.
 \newline
 
-Zuletzt kann auch das Gegenteil der Fall sein, dass zu viele Daten existieren und gar nicht alle zum Training verwendet werden.
-Auch dann muss das Optimum wieder approximiert werden.
-Dieses Problem tritt im Verlauf dieser Arbeit allerdings nicht auf, da nicht genug Rechenleistung vorhanden wäre, um mit den Daten sinnvolle Ergebnisse zu erzielen.
+Zwar sind die Daten und die Herangehensweise nicht die selbe wie in dieser Arbeit, aber die untersuchten Hyperparameter.
+Diese können mit als Basis für die Untersuchung genommen werden.
+Zudem verdeutlicht die Arbeit noch einmal die große Auswirkung von Hyperparametern.
 
-\subsection{Learning Rate}
-Um den Fehler aus der Lossfunction auch zum Lernen zu verwenden wird eine zusätzlich die Lernrate eingeführt.
-Diese ist notwendig, was durch den Fall $Lernrate = 1$ veranschaulicht werden kann.
-
-Aufgrund der gewählten Lernrate würde das Netz auf jeden Datensatz trainiert werden, als ob es der optimale Fall ist.
-Problem daran ist, dass so nicht das Abstrahieren vermittelt wird.
-Das neuronale Netzwerk wird am Ende ein Datum (nämlich das zuletzt trainierte) genau erkennen können.
-Alle anderen Daten werden dann höchstens aufgrund ihrer Ähnlichkeit zum optimalen Datum erkannt.
+\paragraphNewLine{Unsupervised Representation Learning With Deep Convolutional Generative Adversarial Networks \cite{hyperparameters-convolutional-gan}}
+Ziel dieser Studie ist es allgemein gute Hyperparameter zu finden.
+Dafür wurden Bilder aus verschiedenen Datensets genommen (Large Scale Scene Understanding \cite{dataset:lsun}, Imagenet-1k \cite{dataset:image-net} und einem eigenen Datenset mit Gesichtern).
+Bei den Hyperparametern wurden diverse untersucht, zum Beispiel aber nicht ausschließlich die Lernrate, Momentum und Batch-Size.
+Im Ergebnis konnten für alle Werte gefunden werden, die über alle Datensets meistens stabil mit zufriedenstellenden Ergebnissen liefen.
+\todo{Hyperparameter: learning-rate 0.0002, momentum (beta1) zu 0.5, mini-batch size 128,... (Kapitel 4 Details of adversarial training)}
+Erkenntnis der Studie war auch, dass keine Hyperparameter Kombination gefunden werden konnte, die über alle Datensets 100\% stabil laufen konnte.
 \newline
 
-Aus diesem Grund wird eine Lernrate eingeführt, die den Lernprozess auf mehrere Datensätze aufteilt.
-Dadurch kann das neuronale Netzwerk dann theoretisch Korrelationen zwischen Daten erkennen und diese lernen.
-Als guter Standartwert wird oft $10^(-5)$ empfohlen. \todo{Quelle -> Zahl anpassen oder rausnehmen}
+Eine allgemeine Studie zum Thema Hyperparameter ist für die Arbeit sehr interessant, da sie gute Ausgangswerte bietet.
+Dass keine 100\% stabile Zusammenstellung gefunden werden konnte, verdeutlicht die Notwendigkeit der Feinanpassung an jedes Datenset.
+
+
+\paragraphNewLine{The GAN Landscape: Losses, Architectures, Regularization, And Normalization \cite{gan-landscape-losses-architectures-regularization-normalization}}
+Dieses Studie beschäftigt sich nicht ausschließlich mit Hyperparametertuning.
+Aber auch in dieser Studie werden allgemein GANs optimiert und die Erkenntnisse daraus können verwendet werden.
+In the GAN Landscape wird das GAN auf die Datensets CIFAR10 \cite{dataset:cifar10}, CELEBA-HQ-128 und LSUN-BEDROOM \cite{dataset:lsun}.
+Für das Training wurden dann ein DCGAN und ResNet verglichen.
+Dabei fand die Studie viele interssante Erkenntnisse heraus, zum Beispiel eine gute Updatequote von 5:1 zwischen Discriminator und Generator.
 \newline
 
-Da sowohl die Lernrate als auch die Lossfunction für den Lernprozess verwendet werden, ergibt sich dadurch unweigerlich ein Zusammenhang zwischen den Größen.
-\todo{Recherche - Abhängigkeit zwischen Lernrate und Lossfunction}
-\todo{wieder Bogen schließen zum Anfang, wo die Zusammenhänge zwichen den Parametern erklärt werden}
-\newline
+Besonders interessant bei dieser Arbeit ist die Bestimmung von anderen Methoden, wie das unterschiedliche Updaten von Discrimintaor und Generator.
+Wieder bietet die Arbeit eine gute Ausgangslage, aber keine Lösung für ein Datenset mit geometrischen Bildern.
 
-Durch die Lernrate kann vor allem die Lerngeschwindigkeit beeinflusst werden.
-Die sollte am Anfang relativ hoch sein und gegen Ende zur Feinjustierung abnehmen.
-\todo{deutlich mehr dazu schreiben}
-
-Außerdem wird in zwei Prinzipien für Lernraten unterschieden.
-Entweder exisitert eine Lernrate um das gesamte Netz zu trainieren, oder eine eigenständige Lernrate für jedes Neuron.
-Der zweite Fall ist zwar wieder aufwändiger, aber dafür kann so Gradientdescent verhindert werden.
-\todo{stimmt das? wo werden diese typischen Probleme gradientdescent,... von neuronalen netzen und auch speziell gans besprochen?}
-
-\subsection{Number of Units}
-Mit den Number of Units ist die Anzahl der Neuronen gemeint.
-Die Anzahl beeinflusst direkt die maximale Lernfähigkeit des Neuronalen Netzwerks.
-Denn je mehr Neuronen, desto mehr Parameter können gelernt werden und folglich feiner auf die Trainingsdaten abgestimmt werden.
-\newline
-
-Mehr Parameter für das Neuronale Netzwerk bedeutet aber auch ein höherer Lernaufwand.
-Deshalb ist es nicht ratsam, die Parameteranzahl beliebig zu erhöhen.
-Falls ein sehr großes Netz benötigt wird, existiert auch die Möglichkeit des Transferlearnings. 
-Hierfür wird ein Netzwerk auf Daten vortrainiert.
-Danach kann es dann für andere Datensätze verwendet werden und muss nur noch minimal nachtrainiert werden. \todo{Quelle, sinnvoll zu erwähnen?}
-\newline
-
-Bei der GAN-Architektur \todo{gan architektur vorher richtig beschreiben} eignet sich eine variable Anzahl an Neuronen vor allem in den letzten Layern des Discriminators.
-Dabei handelt es sich normalerweise um Dense-Layer. \todo{normalerweise -> durch unsere ersetzen?}
-Die theoretische Aufgabe der Dense-Layer ist dabei die Informationen aus den vorherigen Convolutional Layern zu extrahieren.
-Somit hat diese Schicht einen verhältnismäßig großen Einfluss auf den Erfolg des Discriminators und somit auch auf das GAN.
-
-
-\section{Stichpunkte}
-\subsection{GAN}
-\paragraph{Anwendung}
-\begin{itemize}
-	\item Viel bei Generierungsaufgaben
-	\item eignet sich immer bei Aufgaben, bei denen es keine klare Lösung gibt
-\end{itemize}
-
-
-\paragraph{Aufbau \cite{gan-original-paper, hyperparameters-gan-using-genetic-algorithm}}
-\begin{itemize}
-	\item 2 Neuronale Netze (Discriminator und Generator), die sich gegenseitig trainieren
-	\item Generator: ist für die Bildgenerierung zuständig
-	\item Discriminator: ist für die Bildverfizierung zuständig (echt oder fake)
-	\item nach dem Training ist in der Regel nur noch der Generator interessant
+\begin{comment}
 	
-	\item Training
-	\begin{itemize}
-		\item Generator generiert ein zufälliges Bild (kriegt dafür zufälligen Input)
-		\item Discriminator: kriegt ein "echtes" oder ein generierte Bild vorgelegt -> muss entscheiden, ob das Bild "echt" ist
-		\item Ziel Generator: Discriminator soll sich irren und sein generiertes Bild für echt halten
-		\item Ziel Discriminator: richtige Entscheidung treffen
-		\item dadurch, dass sich beide gegenseitig immer weiter verbessern, entstehen dann immer realistischere generierte Bilder
-	\end{itemize}
-	
-	\item Aufbau
-	\begin{itemize}
-		\item TODO Bild dazu erstellen (die haben ein Beispiel zur Orientierung: \cite{hyperparameters-gan-using-genetic-algorithm})
-		\item Discriminator wird einzeln trainiert
-		\item um Generator zu trainieren, wird er mit Discriminator gekoppelt
-	\end{itemize}
-	
-	\item mit Label
-	\begin{itemize}
-		\item Generator kriegt zusätzlich zum zufälligen Input noch das Label
-		\item Discriminator kriegt neben dem Bild auch das zugehörige Label
-		\item so kann dann später ein Label vorgegeben werden und dadurch ein spezielles zufälliges Bild generiert werden
-	\end{itemize}
-\end{itemize}
-
-\subsection{Aktivierungsfunktionen}
-\paragraph{Allgemein  \cite{activation-function}}
+\paragraph{Links}
 \begin{itemize}
-	\item Output von Neuron verändern
-\end{itemize}
-
-\paragraph{Eigenschaften}
-\begin{itemize}
-	\item Nonlinear
-	\item Range (z.b. 0-1)
-	\item Continuously differentiable (immer weiter ableitbar, will man haben für lernen)
-\end{itemize}
-
-\paragraph{Beispiele}
-\begin{itemize}
-	\item Sigmoid (vanishing/exploding(?) gradient problem)
-	\item tanh (besser als sigmoid, aber auch vanishing/exploding gradient problem)
-	\item (leaky-/...) ReLu (besser als die davor, asymetrisch: $ReLu=max(0, x)$ )
-	\item ELU (vielleicht für uns auch interessant? - wie leaky-Relu, bloss dass sich der 0 über $e^x - 1$ angenähert wird, wodurch der Übergang sanft ist; soll deutlich schneller und besser konvergiert)
-\end{itemize}
-
-\paragraph{LeakyReLu}
-\begin{itemize}
-	\item Vorteil: ableitbar und kein schlimmer Gradien descent
-	\item Todo bild von Neuron mit einbringen
+	\item Inception Score zum Rating von erzeugten Bildern (Salimans et al. 2016)
+	\item Frechet Inception Distance (Heusel et al. 2017)
+	\item stackoverflow \url{https://stackoverflow.com/questions/46386948/adjusting-gan-hyperparameters}
+	\item \url{https://openreview.net/pdf?id=rkGG6s0qKQ}
+	\item \url{https://arxiv.org/pdf/1511.06434.pdf%C3%AF%C2%BC%E2%80%B0}
+	\item Forget the Learning Rate, Decay Loss \url{https://arxiv.org/ftp/arxiv/papers/1905/1905.00094.pdf}
+	\item beste learningRate/Dropout/BatchSize/NumberOfNeuronsInDenseLayer mit evolutionären neuronalen netz für mnist 
+	\item zum orientieren ?? \cite{gan-conditional}
 \end{itemize}
 
 
-\subsection{Schichten}
-\begin{itemize}
-	\item Dense Layer
-	\begin{itemize}
-		\item jedes Neuron mit jeder Schicht davor verknüpft
-		\item sehr viele Parameter
-		\item sehr viel Information
-		\item sehr allgemein, keine spezielle Informationsextraktion - kann theoretisch alles lernen (mit erhöhtem Aufwand)
-		\item für uns am Ende des Discriminators zur Klassifikation interessant
-	\end{itemize}
-	\item Convolutional Layer
-	\begin{itemize}
-		\item downscaling (z.b. von Bildern)
-		\item soll Zusammenhänge benachbarter Inputs erkennen
-		\item relativ wenig zu lernende Parameter
-		\item wie ein Feld, das langsam rüber wandert (Bild zur Erklärung suchen...)
-		\item für uns im Discriminator interessant (am Anfang)
-	\end{itemize}
-	\item Convolutional Transpose Layer
-	\begin{itemize}
-		\item Gegenteil von Convolutional Layer -> upscaling
-		\item im Generator interessant
-		\item verhält sich ähnlich wie convolutional layer...
-	\end{itemize}
-\end{itemize}
-
-\subsection{Hyperparameter}
-\paragraph{Allgemein \cite{hyperparameters-search-in-machine-learning, hyperparameters-gan-using-genetic-algorithm}}
-\begin{itemize}
-	\item Parameter, die den Lernprozess definieren
-	\item Gegensatz wären z.B. weights, die beim Training bestimmt werden
-	\item schwierig festzulegen
-	\item Beschreibung der zu untersuchenden Hyperparameter
-	\item Auswirkung auf den Lernerfolg
-	\item Was muss man dabei beachten
-	\item Wie wird das gemessen?
-	\begin{itemize}
-		\item manuell (niemals optimal)
-		\item Gridsearch (sehr rechenaufwändig)  \cite{hyperparameters-grid-search}
-		\item Random search
-		\item Bayesian Optimization
-	\end{itemize}
-\end{itemize}
-
-\paragraph{Einfache Beispiele \cite{hyperparameters-gan-using-genetic-algorithm, hyperparameters-what-how}}
-\begin{itemize}
-	\item Lernrate
-	\item Dropout
-	\item Activation Function (+Momentum/...)
-	\item Batch size (good default: 32 -> die gehen eher hoch 32,64,128,...)
-	\item Anzahl Epochen
-	\item Number of layers
-	\item number of units in dense layer
-	\item loss function
-	\item Generator/Discriminator optimizer
-\end{itemize}
-
-\paragraph{Herausforderungen \cite{hyperparameters-search-in-machine-learning}}
-\begin{itemize}
-	\item Rechenaufwand
-	\item Zufall im Training
-	\item Stark unterschiedliche Auswirkung auf das Training für verschiedene Hyperparameter
-\end{itemize}
-
-\subsection{Lossfunction}
-\paragraph{Allgemein \cite{lossfunction-opportunities-and-challenges, common-loss, russel-norvig}}
-\begin{itemize}
-	\item Allgemein beschreibt eine Loss-Funktion den Unterschied zwischen Erwartungswert und Ergebnis
-	\item der Wert kann dann für das Training des Neuronalen Netzes verwendet werden
-	\item gibt verschiedene Ansätze zur Berechnung
-\end{itemize}
-
-\paragraph{Einfache Beispiele (wobei $y$ = Erwartungswert, $\hat{y}$ = Ergebnis) \cite{russel-norvig}}
-\begin{itemize}
-	\item Absolute Value Loss: $L_1(y, \hat{y}) = |y - \hat{y}|$
-	\item Squared Error Loss: $L_2(y, \hat{y}) = (y - \hat{y})^2$
-\end{itemize}
-
-\paragraph{Herausforderungen \cite[p. 710]{russel-norvig}}
-\begin{itemize}
-	\item \textit{Noise} 
-	Einzelne Datensätze spiegeln nicht den Optimalfall wieder
-	
-	\item \textit{Small Scale Learning} 
-	nur sehr begrenztes Trainingsset, wodurch das Optimum eventuell gar nicht durch die Daten abgebildet werden kann
-	
-	\item \textit{Large Scale Learning} 
-	zu viele Daten, wird zum Rechenproblem -> Ergebnis wird approximiert, wir haben sehr begrenzte Rechenleistung...
-\end{itemize}
-
-
-
-\subsection{Learning Rate}
-\paragraph{Allgemein \cite{learningrate-how-to-configure}}
-\begin{itemize}
-	\item Legt fest, wie stark sich das Neuronale Netzwerk nach jeder Lerniteration verändern soll.
-	\item Beeinflusst die Geschwindigkeit, in der das Neuronale Netzwerk lernt
-	\item lässt sich nur über trial and error bestimmen, aber normalerweise zwischen 1 und $10^{-6}$ => default bei etwa 0.01
-	\item kleinere Batch-Sizes sind besser bei kleineren Lernraten
-	\textit{'Further, smaller batch sizes are better suited to smaller learning rates given the noisy estimate of the error gradient.' \cite{learningrate-how-to-configure}}
-\end{itemize}
-
-\paragraph{Arten \cite{learningrate-understanding}}
-\begin{itemize}
-	\item \textit{Fester Wert} 
-	siehe Beispiele
-	
-	\item \textit{Decay}
-	verhindert, dass über 'Täler' hinübergesprungen wird
-	
-	\item \textit{Momentum}
-	falls sich das Neuronale Netz lange in die gleiche Richtung entwickelt wird die Lernrate erhöht. (Analogie: Ball der einen Berg hinunter rollt und dabei kleinere Täler überspringt)
-	
-	\item \textit{Step Based}
-	wird anhand des steps verändert (sinnloses Beispiel: $LearningRate = Step/100$)
-	
-	\item \textit{Adaptiv}
-	zum Beispiel $Adam$ (nutzen wir) \cite{adam}
-	
-	\begin{itemize}
-		\item suggested as default optimization
-		\item Normalerweise wird eine Lernrate auf alle Weights angewendet
-		\item bei Adam gibt es: ProParameterLearningrate und MomentumProParameter
-	\end{itemize}
-\end{itemize}
-
-
-\subsection{Num Units}
-\paragraph{Allgemein \cite{nodes-how-to-configure}}
-\begin{itemize}
-	\item unit = ein Neuron in einem dense-layer
-	\item dense layer kann beliebig viele Neuronen haben, ohne die Netzarchitektur zu brechen
-	\item folglich kann das frei gewählt werden
-	\item mehr units => viel mehr zu trainierende Parameter => viel mehr Rechenkapazität
-	\item mehr units => bessere Generalisierung =>? bessere Ergebnisse
-	\item Paper von 2009: 2n+1 und 2 hidden layer (n=Anzahl input-neuronen) als default? -> könnten wir auch ausprobieren/Orientierung nehmen? (wobei input dann das runtergescalete sein müsste und nicht die original Bilder, sonst wären das sehr sehr viele Neuronen...) \cite{nodes-hiddenlayers-how-many}
-\end{itemize}
-
-\paragraph{Arten (der Bestimmung optimaler Node-Anzahl) \cite{nodes-how-to-configure, nodes-hiddenlayers-how-many}}
-\begin{itemize}
-	\item Random
-	\item Grid -> unsere Variante
-	\item Heuristic
-	\item Exhaustive
-\end{itemize}
-
-
-\section{Noch Interessant}
-\subsection{Wasserstein GAN}
-Verbesserung bei mehreren Probleme von GANs (Uninformative Loss, Mode Collapse, Unstable Training).
-Nicht allzu schwer nachzuimplementieren, aber nochmal genau informieren?
+\end{comment}
