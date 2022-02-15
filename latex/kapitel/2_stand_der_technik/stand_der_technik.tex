@@ -4,8 +4,6 @@
 
 \section{General Adversarial Network}
 
-\todo[inline,shadow]{Ausreichend mit Quellen hinterlegen...}
-
 Der Begriff GAN \textit{(General Adversarial Network)} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
 Das Wort bezeichnet ein Konstrukt aus 2 neuronalen Netzen, die sich gegenseitig trainieren.
 Durch das spezielle Training gelingt die Generierung von unechten aber realistischen Daten.
@@ -18,87 +16,118 @@ Dafür wandelt er eine zufälligen Eingabe in einen möglichst realistischen Out
 Die zufällige Eingabe dient dabei als Basis für die Ausgabedaten.
 Das ist notwendig, da der Umwandlungsprozess selbst deterministisch ist, aber trotzdem eine Vielzahl an unterschiedlichen Daten generiert werden soll.
 
-Der Output des Generators wird dann vom Discriminator versucht zu falsifizieren.
+Der Output des Generators wird dann vom Discriminator klassifiziert.
 Dafür wird er sowohl auf die generierten Daten als auch einen Bestand an echten Daten trainiert.
 Sein Ziel ist es dann, die falschen Daten des Generators zu identifizieren.
 Ziel des Generators hingegen ist es, dass sich der Discriminator irrt und die generierten Daten als echt einstuft.
 
 Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei die Ausgabe des Discriminators die zu optimierende Größe ist.
 Das heißt, der Generator versucht diese zu verkleinern, während der Discriminator sie erhöhen möchte. \cite{gan-minimax} 
-\newline
 
-Für diese Arbeit werden zusätzlich Label eingeführt, um die generierten Daten beeinflussen zu können. \todo{noch mehr begründen, wozu Labels gebraucht werden}
-Dazu bekommen der Generator und Discriminator das Label als zusätzlichen Input.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{kapitel/2_stand_der_technik/img/GAN.png}
+	\label{img:gan}
+	\caption{Generative Adversarial Network (Bild von Thalles Silva \cite{img-gan})}
+\end{figure}
+
+Für diese Arbeit werden zusätzlich Label eingeführt, um die generierten Daten beeinflussen zu können. 
+Diese Art von GAN nennt sich CGAN oder Conditional GAN \cite{gan-conditional}.
+Dazu erhalten der Generator und Discriminator das Datenlabel als einen weiteren Input.
 So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
-\newline
-
-\todo[inline,shadow]{Bild von GAN zur Erklärung einfügen}
-
 
 \section{Einfluss von Hyperparametern}
-Hyperparameter haben einen sehr großen Einfluss auf das Training.
-Der Einfluss reicht so weit, dass bei sehr schlecht gesetzten Parametern das Training keine sinnvollen Resultate mehr erzielt.
-Zudem ändern sich die optimalen Hyperparameter bei unterschiedlichen Trainingsdaten oder auch einer anderen Architektur.
-Deshalb müssen sie immer wieder neu bestimmt werden.
+Hyperparameter werden genutzt, um neuronale Netze statisch zu konfigurieren.
+Im Gegensatz zu den Parametern, die im Trainingsprozess gelernt werden, ändern sie sich nicht.
+Bei den Hyperparametern handelt es sich zum Beispiel um die Lernrate, Anzahl an Neuronen in bestimmten Schichten, Lossfunktion und viele andere \cite{hyperparameters-gan-using-genetic-algorithm}.
+\newline
 
-Obwohl Hyperparameter insgesamt einen großen Einfluss auf die Trainingsresultate haben, ist jedoch nicht jeder Parameter gleich bedeutsam.
-Stattdessen sind manche Parameter sehr einflussreich während andere kaum Auswirkung auf das Ergebnis haben.
+Das setzen der Hyperparameter ist essentiell für den Trainingserfolg, weshalb es diverse Studien zur Bestimmung optimaler Hyperparameter gibt \cite{hyperparameters-gan-using-genetic-algorithm, hyperparameters-using-genetic-algorithm-2, hyperparameters-grid-search}. \todo{Quellen verwenden, die nicht noch einmal benutzt werden}
+Aber nicht jeder Hyperparameter hat einen gleich großen Auswirkung auf den Trainingserfolg \cite{hyperparameters-search-in-machine-learning}.
+Ein Beispiel für einen sehr einflussreichen Hyperparameter wäre zum Beispiel die Lernrate, deren Optimierung immer zumindest in Betracht gezogen werden sollte \cite{learning-rate-most-important}.
+\newline
 
-Zusätzlich ist zu erwähnen, dass Hyperparameter nicht nur das Training beeinflussen sondern auch andere Hyperparameter.
+\todo{keine Belege gefunden - stimmt das?}
+Zusätzlich ist zu erwähnen, dass Hyperparameter nicht nur das Training beeinflussen sondern auch andere Hyperparameter. 
 So können manche Parameter in bestimmten Kombinationen stark an Einfluss gewinnen, während andere unwichtiger werden.
 Das ist insbesondere bei den Verfahren zur Bestimmung der Hyperparameter ein Problem.
 Denn dadurch muss immer eine Kombination getestet und verglichen werden, was deutlich rechenaufwändiger ist, als die Parameter einzeln zu testen.
 
+
 \section{Verfahren zur Bestimmung von Hyperparametern}
-Da Hyperparameter bei jedem neuen neuronalen Netzwerk neu optimiert werden müssen/können, gibt es bereits einige Verfahren zur Bestimmung die im Folgenden erläutert werden.
-\newline
+\url{https://towardsdatascience.com/understanding-hyperparameters-and-its-optimisation-techniques-f0debba07568}
+Die Optimierung von Hyperparametern ist ein bekanntes Problem bei dem bereits mehrere Lösungsverfahren entwickelt wurden.
+Einige Verfahren werden im Folgenden näher erläutert.
 
 \subsection{Manuelle Suche}
-Zunächst ist es möglich die Hyperparameter manuell festzulegen.
+Zunächst ist es möglich die Hyperparameter manuell festzulegen 
 Zwar wird so sehr viel Rechenaufwand eingespart, da nur eine oder sehr wenige Konfigurationen getestet werden.
 Das System ist jedoch sehr aufwändig für die Person, die es konfiguriert.
 Zum einen müssen die Werte manuell geändert werden, zum anderen muss eine sehr bedachte Vorauswahl getroffen werden.
 Zusätzlich müssen die Ergebnisse auch manuell analysiert werden, um Patterns zu erkennen und so neue Durchläufe zu planen.
 
-\subsection{Gridsearch}
-Eine weitere Variante trägt den Namen Gridsearch \cite{hyperparameters-grid-search}.
-Bei diesem Verfahren werden für alle gesuchten Hyperparameter mehrere Werte festgelegt.
-Es handelt sich also um eine automatisiertere manuelle Suche, die verhältnismäßig einfach zu implementieren ist.
-Die verschiedenen Kombinationen werden dann trainiert und die Resultate festgehalten.
-Die Suche übernimmt keinerlei Interpretation der Ergebnisse, diese müssen manuell analysiert werden.
-Ein Versuch mit der Gridsearch ist somit deutlich rechenaufwändiger als nur ein Parameterset, wie in der manuellen Suche, zu trainieren.
-Der exakte Aufwandsunterschied hängt von der festgelegten Anzahl und Variantenreiche der Parameter ab.
+\subsection{Gridsearch - Rastersuche}
+Bei der Rastersuche handelt es sich um eine sehr traditionelle Technik und ist gut mit einem Brute-Force Ansatz vergleichbar \cite{hyperparameters-grid-search}.
+Zunächst wird werden die zu untersuchenden Hyperparameter ausgewählt.
+Danach erfolgt die Definition eines Suchintervalls inklusive Intervallschritten für jeden Hyperparameter.
+Schließlich wird das neuronale Netzwerk für jede Kombination trainiert und die Ergebnisse der einzelnen Durchläufe festgehalten.
+\newline
+
+Im nächsten Schritt ist es dann möglich, die einzelnen Ergebnisse zu vergleichen.
+Dabei können dann Schemata erkannt und Kombinationen aussortiert werden.
+Es ist dann möglich die erfolgversprechendsten Netze weiter zu trainieren, oder direkt eine zufriedenstellende Kombination auszuwählen.
+\newline
+
+Insgesamt ist Gridsearch sehr simpel zu implementieren, aber auch sehr ressourcenaufwändig.
+Der exakte Aufwand hängt dabei stark von der Anzahl der möglichen Kombinationen der Hyperparameterwerte ab.
+Weil es sich bei den Kombinationen um ein ein Kreuzprodukt handelt, wächst der Aufwand mit der Anzahl an Werten auch sehr stark an.
 Durch die Möglichkeit von Parallelisierung findet die Gridsearch in der Regel bessere Parameter als die sequentielle manuelle Suche in der gleichen Zeit \cite{hyperparameters-random-search}.
 
 \subsection{Random Search}
-Die Random Search \cite{hyperparameters-random-search} funktioniert im Training wie die Gridsearch, nur werden zufällige Werte statt dem festgelegten Grid erzeugt.
-Die zufälligen Werte haben den Vorteil, dass es weniger Werte-Überlagerungen im Vergleich zur Grid-Kombination gibt.
+Die Random Search \cite{hyperparameters-random-search} funktioniert ähnlich wie die Gridsearch, nur werden zufällige Werte statt einem festgelegten Werteraster erzeugt \cref{img:random-search}.
+Die zufälligen Werte haben den Vorteil, dass es weniger Werte-Überlagerungen im Vergleich zur den Raster-Kombinationen gibt.
 Deswegen kann die zufällige Suche bei gleich vielen Durchläufen ein größeres Spektrum an Ergebnissen abdecken.
-Mittels Automatic Relevance Determination ist es dann möglich, den Einfluss und Wertebereich der einzelnen Hyperparameter darzustellen.
+Mittels \textit{Automatic Relevance Determination} \cite{automatic-relevance-determination} ist es dann möglich, den Einfluss und Wertebereich der einzelnen Hyperparameter darzustellen.
 
 \begin{figure}[H]
 	\includegraphics{kapitel/2_stand_der_technik/img/random-vs-grid-search.png}
 	\caption{Random Search vs Grid Search (Quelle \cite{hyperparameters-random-search})}
+	\label{img:random-search}
 \end{figure}
 
-Problem der Random Search ist vor allem, dass die Räume der guten Hyperparameter sehr klein sind.
+Problem der Random Search ist vor allem, dass die Räume der guten Hyperparameter (\textit{Search Space}) sehr klein sind.
 Dadurch ist nicht gewährleistet, dass ein zufälliger Wert auch den Raum trifft.
-Jedoch erzielen Optimierungen mittels Random Search in der Regel trotzdem gute Ergebnisse.
+Jedoch erzielen Optimierungen mittels Random Search in der Regel trotzdem (sehr) gute Ergebnisse.
 Dem Grid-Search-Verfahren ist die Random-Search allerdings nicht prinzipiell überlegen \cite{hyperparameters-random-search}.
 
+\subsection{Genetic Algorithm - Evolutionäre Suche}
+\todo[inline,shadow]{mehr belegen}
+Das evolutionäre Suchverfahren wandelt die Hyperparametersuche in einen evolutinären Entwicklungsprozess um.
+Die 'Evolution' des Algorithmus ist eine Anlehnung an die natürliche Entwicklung in der Natur.
+Diese Entwicklung zeichnet sich durch die Operatoren Selektion, Kombination und Mutation aus, die auch der Algorithmus verwendet. \cite{hyperparameters-search-comparison-focus-genetic, hyperparameters-genetic-algorithm}
+\newline
+
+Für den Optimierungsprozess werden am Anfang mehrere zufällige Hyperparameterinstanzen erzeugt.
+Die Instanzen werden dann trainiert und stehen im Wettbewerb um das beste Ergebnis.
+Nach der Auswertung der Trainingsergebnisse werden die besten Instanzen selektiert und miteinander gekreuzt und oder mutiert.
+\newline
+
+Die evolutionäre Suche eignet sich besonders gut bei sehr vielen Hyperparametern.
+Im Gegensatz zur Grid-Search werden nicht immer alle Kombinationen ausprobiert, sondern nur einzelne, die sich bereits zuvor als vielversprechend herausgestellt haben.
+Dadurch kann mit sehr großen Mengen an Hyperparametern umgegangen werden.
+
+Allerdings ist die evolutionäre Suche vergleichsweise langsam, da die Evolutionsschritte sequentiell ablaufen müssen.
+Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum wird die Grid-Search dann so langsam, dass sich die evolutionäre Suche lohnt \cite{hyperparameters-search-comparison-focus-genetic}.
+
+
 \subsection{Bayessearch}
+\todo[inline,shadow]{noch beschreiben, irgendwie kompliziert...}
 \begin{itemize}
 	\item Ziel: Anzahl der Versuche reduzieren
 	\item Idee: Wiederverwendung von vorherigen Durchläufen
 	\item ??
 \end{itemize}
-
-\subsection{Zusammenfassung}
-In dieser Arbeit wird die Gridsearch zur Anwendung kommen, da sie den besten Kompromiss zwischen benötigter Rechenleistung und Ergebnis bietet.
-Das liegt jedoch auch an der zur Verfügung stehenden Hardware.
-Bei unbeschränkteren Ressourcen, wären andere Varianten in Betracht zu ziehen.
-
 
 
 \section{Related Work}
@@ -142,6 +171,9 @@ Dabei fand die Studie viele interssante Erkenntnisse heraus, zum Beispiel eine g
 
 Besonders interessant bei dieser Arbeit ist die Bestimmung von anderen Methoden, wie das unterschiedliche Updaten von Discrimintaor und Generator.
 Wieder bietet die Arbeit eine gute Ausgangslage, aber keine Lösung für ein Datenset mit geometrischen Bildern.
+
+\paragraphNewLine{Tunability: Importance of Hyperparameters of Machine Learning Algorithms}
+\url{https://www.jmlr.org/papers/volume20/18-444/18-444.pdf}
 
 \begin{comment}
 	
