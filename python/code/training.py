@@ -2,6 +2,7 @@ import datetime
 import io
 import matplotlib.pyplot as plt
 import tensorflow as tf
+from gan_model import HP_DIS_DROPOUT, HP_DIS_LR, HP_GAN_LR
 from tensorflow.keras import preprocessing, models, callbacks
 import os
 from tqdm import tqdm
@@ -121,61 +122,64 @@ def plot_to_image(figure):
     return image
 
 
-def train(dataset: tf.data.Dataset, discriminator: models.Model, generator: models.Model, gan: models.Model, epochs: int, latent_dim: int, label_amount: int):
-    gan_logger = Logger("gan", gan)
-    dis_logger = Logger("discriminator", discriminator)
+def log_epoch_metrics(discriminator, generator, gan, dis_logger, gan_logger, epoch, latent_dim, label_amount, hparams):
+    gan_logger.write_log(gan, epoch, hparams)
+    dis_logger.write_log(discriminator, epoch, hparams)
+    gan.reset_metrics()
+    discriminator.reset_metrics()
 
-    for epoch in tqdm(range(epochs)):
-        for batch in dataset:
-            train_step(batch, latent_dim, label_amount)
-
-        # log metrics
-        gan_logger.write_log(gan, epoch)
-        dis_logger.write_log(discriminator, epoch)
-        gan.reset_metrics()
-        discriminator.reset_metrics()
-
-        """
-        if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
-            images = np.empty((5, 64, 64, 1))
-            labels = np.empty((5,))
-            for label in range(label_amount):
-                curr_images, curr_labels = generate_fake_data_by_label(
-                    generator, IMAGES_PER_LABEL, latent_dim, label)
-                print(f"image shape: {curr_images.shape}")
-                print(f"labels shape: {curr_labels.shape}")
-                images = np.append(images, curr_images, axis=None)
-                lables = np.append(labels, curr_labels, axis=None)
-            print(f"image final: {images}")
-            print(f"labels final: {labels}")
-            figure = image_grid(images, labels, LABEL_NAMES)
-            image = plot_to_image(figure)
-            gan_logger.write_image("Composed Visualization", image, epoch)
-        """
-        # log Composed Visualization for each label
-        if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
-            for label in range(label_amount):
-                images, labels = generate_fake_data_by_label(
-                    generator, IMAGES_PER_LABEL, latent_dim, label)
-                figure = image_grid(images, labels, LABEL_NAMES)
-                image = plot_to_image(figure)
-                gan_logger.write_image(
-                    f"Composed_Visualization_{LABEL_NAMES[label]}", image, epoch)
-
-        # log Composed Visualization with random labels
-        if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
-            images, labels = generate_fake_data(
-                generator, (IMAGES_PER_LABEL*3), latent_dim, label_amount)
+    """
+    if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
+        images = np.empty((5, 64, 64, 1))
+        labels = np.empty((5,))
+        for label in range(label_amount):
+            curr_images, curr_labels = generate_fake_data_by_label(
+                generator, IMAGES_PER_LABEL, latent_dim, label)
+            print(f"image shape: {curr_images.shape}")
+            print(f"labels shape: {curr_labels.shape}")
+            images = np.append(images, curr_images, axis=None)
+            lables = np.append(labels, curr_labels, axis=None)
+        print(f"image final: {images}")
+        print(f"labels final: {labels}")
+        figure = image_grid(images, labels, LABEL_NAMES)
+        image = plot_to_image(figure)
+        gan_logger.write_image("Composed Visualization", image, epoch)
+    """
+    # log Composed Visualization for each label
+    if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
+        for label in range(label_amount):
+            images, labels = generate_fake_data_by_label(
+                generator, IMAGES_PER_LABEL, latent_dim, label)
             figure = image_grid(images, labels, LABEL_NAMES)
             image = plot_to_image(figure)
             gan_logger.write_image(
-                f"Composed_Visualization_Random_Labels", image, epoch)
+                f"Composed_Visualization_{LABEL_NAMES[label]}", image, epoch)
 
+    # log Composed Visualization with random labels
+    if epoch % EPOCHS_PER_IMAGE_SAMPLE == 0:
+        images, labels = generate_fake_data(
+            generator, (IMAGES_PER_LABEL*3), latent_dim, label_amount)
+        figure = image_grid(images, labels, LABEL_NAMES)
+        image = plot_to_image(figure)
+        gan_logger.write_image(
+            f"Composed_Visualization_Random_Labels", image, epoch)
+
+
+
+def train_model(dataset: tf.data.Dataset, discriminator: models.Model, generator: models.Model, gan: models.Model, epochs: int, latent_dim: int, label_amount: int, hparams):
+    gan_logger = Logger("gan", gan, hparams)
+    dis_logger = Logger("discriminator", discriminator, hparams)
+
+    for epoch in tqdm(range(epochs)):
+        for batch in dataset:
+            train_step(discriminator, generator, gan, batch, latent_dim, label_amount)
+        log_epoch_metrics(discriminator, generator, gan, dis_logger, gan_logger, epoch, latent_dim, label_amount, hparams)
+       
     if SAVE_MODEL:
         storage.save_model(MODEL_NAME, discriminator, generator)
 
 
-def train_step(batch, latent_dim, label_amount):
+def train_step(discriminator, generator, gan, batch, latent_dim, label_amount):
     # cannot be set statically -> e.g. if dataset is not dividable by batch-size the last batch is smaller
     batch_size = batch[0].shape[0]
 
@@ -204,15 +208,28 @@ def train_step(batch, latent_dim, label_amount):
         reset_metrics=False
     )
 
+def train_all_hparams():
+    for dis_lr in HP_DIS_LR.domain.values:
+        for gan_lr in HP_GAN_LR.domain.values:
+            for dis_drop in HP_DIS_DROPOUT.domain.values:
+                hparams = {
+                    HP_DIS_LR: dis_lr,
+                    HP_GAN_LR: gan_lr,
+                    HP_DIS_DROPOUT: dis_drop,
+                }
 
-discriminator = gan_model.define_discriminator(
-    IMG_SIZE, IMG_CHANNELS, LABEL_AMOUNT)
-generator = gan_model.define_generator(LATENT_DIM, LABEL_AMOUNT)
+                discriminator = gan_model.define_discriminator(
+                    IMG_SIZE, IMG_CHANNELS, LABEL_AMOUNT, hparams)
+                generator = gan_model.define_generator(LATENT_DIM, LABEL_AMOUNT, hparams)
 
-if LOAD_MODEL:
-    discriminator, generator = storage.load_model(MODEL_NAME)
+                if LOAD_MODEL:
+                    discriminator, generator = storage.load_model(MODEL_NAME)
 
-gan = gan_model.define_gan(generator, discriminator)
-print(gan.summary())
+                gan = gan_model.define_gan(generator, discriminator, hparams)
+                print(gan.summary())
 
-train(dataset, discriminator, generator, gan, EPOCHS, LATENT_DIM, LABEL_AMOUNT)
+                train_model(dataset, discriminator, generator, gan, EPOCHS, LATENT_DIM, LABEL_AMOUNT, hparams)
+
+
+
+train_all_hparams()

@@ -1,11 +1,20 @@
 from tensorflow.keras import layers, Input, metrics, optimizers, losses, models
+from tensorboard.plugins.hparams import api as hp 
 
 # largely inspired by these tutorials:
 # https://www.youtube.com/watch?v=eR5ZnFWekNQ
 # https://machinelearningmastery.com/how-to-develop-a-conditional-generative-adversarial-network-from-scratch/
 
+### HYPER PARAMS ###
+# HP_DIS_NUM_UNITS = hp.HParam("DIS: num units", hp.Discrete([32, 64, 128]))
+HP_DIS_DROPOUT = hp.HParam("DIS: dropout", hp.Discrete([0.1, 0.2, 0.3, 0.5]))
+HP_DIS_LR = hp.HParam("DIS: learning_rate", hp.Discrete([1e-3, 1e-4, 1e-5]))
 
-def define_discriminator(img_size: int, img_channels: int, label_amount: int) -> models.Model:
+# HP_GAN_NUM_UNITS = hp.HParam("GAN: num units", hp.Discrete([32, 64, 128]))
+HP_GAN_LR = hp.HParam("GAN: learning_rate", hp.Discrete([1e-3, 1e-4, 1e-5]))
+### HYPER PARAMS ###
+
+def define_discriminator(img_size: int, img_channels: int, label_amount: int, hparams) -> models.Model:
     # helpers
     img_dimension = (img_size, img_size, img_channels)
     img_as_nodes = img_size * img_size * img_channels
@@ -30,14 +39,14 @@ def define_discriminator(img_size: int, img_channels: int, label_amount: int) ->
 
     # output including downsizing model
     out = layers.Flatten()(merge)
-    out = layers.Dropout(0.4)(out)
+    out = layers.Dropout(hparams[HP_DIS_DROPOUT])(out)
     out = layers.Dense(1, activation='sigmoid')(out)
 
     # model
     model = models.Model([input_img, input_label], out, name = "discriminator")
-    optimizer = optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
+    optimizer = optimizers.Adam(learning_rate=hparams[HP_DIS_LR], beta_1=0.5)
     loss_function = losses.BinaryCrossentropy()
-    discriminator_metrics = [metrics.Accuracy()]
+    discriminator_metrics = [metrics.Accuracy(name="dis_acc")]
     model.compile(
         loss=loss_function,
         optimizer=optimizer,
@@ -46,7 +55,7 @@ def define_discriminator(img_size: int, img_channels: int, label_amount: int) ->
     return model
 
 
-def define_generator(latent_dim: int, label_amount: int) -> models.Model:
+def define_generator(latent_dim: int, label_amount: int, hparams) -> models.Model:
     # input label -> convert to 16*16*1
     input_label = Input(shape=(1,), name="label")
     in_label = layers.Embedding(
@@ -80,7 +89,7 @@ def define_generator(latent_dim: int, label_amount: int) -> models.Model:
     model.summary()
     return model
 
-def define_gan(generator: models.Model, discriminator: models.Model) -> models.Model:
+def define_gan(generator: models.Model, discriminator: models.Model, hparams) -> models.Model:
     # deactivate training of discriminator -> purpose of this network is to train generator
     discriminator.trainable = False
 
@@ -91,9 +100,9 @@ def define_gan(generator: models.Model, discriminator: models.Model) -> models.M
     gan_output = discriminator([gen_output, gen_label])
 
     model = models.Model([gen_noise, gen_label], gan_output, name="GAN")
-    optimizer = optimizers.Adam(learning_rate=2e-4, beta_1=0.5)
+    optimizer = optimizers.Adam(learning_rate=hparams[HP_GAN_LR], beta_1=0.5)
     loss_function = losses.BinaryCrossentropy()
-    gan_metrics = [metrics.Accuracy()]
+    gan_metrics = [metrics.Accuracy(name="gan_acc")]
     model.compile(
         loss=loss_function,
         optimizer=optimizer,
