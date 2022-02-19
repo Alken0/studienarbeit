@@ -37,7 +37,14 @@ Dazu erhalten der Generator und Discriminator das Datenlabel als einen weiteren 
 So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
 
-\section{Einfluss von Hyperparametern}
+\section{Hyperparameter}
+Hyperparameter sind Invarianten, die den Lernprozess beeinflussen.
+Es handelt sich um Invarianten, da sie beim Training im Gegensatz zu Parametern unveränderlich bleiben.
+Hyperparameter sind sehr wichtig, das sie einen starken Einfluss auf den Trainingsprozess haben (\cref{chapter:hyperparameter-einfluss}).
+Beispiele für Hyperparameter wären zum Beispiel Lernrate oder Dropout (\cref{chapter:hyperparameter-arten}).
+
+\subsection{Einfluss von Hyperparametern}
+\label{chapter:hyperparameter-einfluss}
 Hyperparameter werden genutzt, um neuronale Netze statisch zu konfigurieren.
 Im Gegensatz zu den Parametern, die im Trainingsprozess gelernt werden, ändern sie sich nicht.
 Bei den Hyperparametern handelt es sich zum Beispiel um die Lernrate, Anzahl an Neuronen in bestimmten Schichten, Lossfunktion und viele andere \cite{hyperparameters-gan-using-genetic-algorithm}.
@@ -55,19 +62,19 @@ Das ist insbesondere bei den Verfahren zur Bestimmung der Hyperparameter ein Pro
 Denn dadurch muss immer eine Kombination getestet und verglichen werden, was deutlich rechenaufwändiger ist, als die Parameter einzeln zu testen.
 
 
-\section{Verfahren zur Bestimmung von Hyperparametern}
+\subsection{Verfahren zur Bestimmung von Hyperparametern}
 \url{https://towardsdatascience.com/understanding-hyperparameters-and-its-optimisation-techniques-f0debba07568}
 Die Optimierung von Hyperparametern ist ein bekanntes Problem bei dem bereits mehrere Lösungsverfahren entwickelt wurden.
 Einige Verfahren werden im Folgenden näher erläutert.
 
-\subsection{Manuelle Suche}
+\paragraphNewLine{Manuelle Suche}
 Zunächst ist es möglich die Hyperparameter manuell festzulegen 
 Zwar wird so sehr viel Rechenaufwand eingespart, da nur eine oder sehr wenige Konfigurationen getestet werden.
 Das System ist jedoch sehr aufwändig für die Person, die es konfiguriert.
 Zum einen müssen die Werte manuell geändert werden, zum anderen muss eine sehr bedachte Vorauswahl getroffen werden.
 Zusätzlich müssen die Ergebnisse auch manuell analysiert werden, um Patterns zu erkennen und so neue Durchläufe zu planen.
 
-\subsection{Gridsearch - Rastersuche}
+\paragraphNewLine{Gridsearch - Rastersuche}
 Bei der Rastersuche handelt es sich um eine sehr traditionelle Technik und ist gut mit einem Brute-Force Ansatz vergleichbar \cite{hyperparameters-grid-search}.
 Zunächst wird werden die zu untersuchenden Hyperparameter ausgewählt.
 Danach erfolgt die Definition eines Suchintervalls inklusive Intervallschritten für jeden Hyperparameter.
@@ -84,8 +91,8 @@ Der exakte Aufwand hängt dabei stark von der Anzahl der möglichen Kombinatione
 Weil es sich bei den Kombinationen um ein ein Kreuzprodukt handelt, wächst der Aufwand mit der Anzahl an Werten auch sehr stark an.
 Durch die Möglichkeit von Parallelisierung findet die Gridsearch in der Regel bessere Parameter als die sequentielle manuelle Suche in der gleichen Zeit \cite{hyperparameters-random-search}.
 
-\subsection{Random Search}
-Die Random Search \cite{hyperparameters-random-search} funktioniert ähnlich wie die Gridsearch, nur werden zufällige Werte statt einem festgelegten Werteraster erzeugt \cref{img:random-search}.
+\paragraphNewLine{Random Search}
+Die Random Search \cite{hyperparameters-random-search} funktioniert ähnlich wie die Gridsearch, nur werden zufällige Werte statt einem festgelegten Werteraster erzeugt (\cref{img:random-search}).
 Die zufälligen Werte haben den Vorteil, dass es weniger Werte-Überlagerungen im Vergleich zur den Raster-Kombinationen gibt.
 Deswegen kann die zufällige Suche bei gleich vielen Durchläufen ein größeres Spektrum an Ergebnissen abdecken.
 Mittels \textit{Automatic Relevance Determination} \cite{automatic-relevance-determination} ist es dann möglich, den Einfluss und Wertebereich der einzelnen Hyperparameter darzustellen.
@@ -101,7 +108,7 @@ Dadurch ist nicht gewährleistet, dass ein zufälliger Wert auch den Raum trifft
 Jedoch erzielen Optimierungen mittels Random Search in der Regel trotzdem (sehr) gute Ergebnisse.
 Dem Grid-Search-Verfahren ist die Random-Search allerdings nicht prinzipiell überlegen \cite{hyperparameters-random-search}.
 
-\subsection{Genetic Algorithm - Evolutionäre Suche}
+\paragraphNewLine{Genetic Algorithm - Evolutionäre Suche}
 \todo[inline,shadow]{mehr belegen}
 Das evolutionäre Suchverfahren wandelt die Hyperparametersuche in einen evolutinären Entwicklungsprozess um.
 Die 'Evolution' des Algorithmus ist eine Anlehnung an die natürliche Entwicklung in der Natur.
@@ -121,13 +128,93 @@ Allerdings ist die evolutionäre Suche vergleichsweise langsam, da die Evolution
 Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum wird die Grid-Search dann so langsam, dass sich die evolutionäre Suche lohnt \cite{hyperparameters-search-comparison-focus-genetic}.
 
 
-\subsection{Bayessearch}
+\paragraphNewLine{Bayessearch}
 \todo[inline,shadow]{noch beschreiben, irgendwie kompliziert...}
 \begin{itemize}
 	\item Ziel: Anzahl der Versuche reduzieren
 	\item Idee: Wiederverwendung von vorherigen Durchläufen
 	\item ??
 \end{itemize}
+
+\subsection{Auswahl bestimmter Hyperparameter}
+\label{chapter:hyperparameter-arten}
+Zwar haben Hyperparameter insgesamt einen großen Einfluss auf das Training, jedoch nicht jeder einzelne gleich viel (\cref{chapter:hyperparameter-einfluss}).
+Deshalb werden in dieser Arbeit auch nur eine Auswahl an Parametern analysiert, die in der Regel einen großen Einfluss auf das Ergebnis haben. \todo{Quelle oder andere Begründung}
+Die zu analysierenden Parameter werden im Folgenden genauer beschrieben.
+
+\paragraphNewLine{Lossfunction}
+Die Lossfunction wird genutzt, um den Lernfortschritt von neuronalen Netzen zu bestimmen.
+Dafür wird der Unterschied zwischen dem Erwartungswert und dem Ergebnis berechnet.
+Einfache Beispiele sind der \textit{Absolute Value Loss} und \textit{Squared Error Loss}:
+\begin{itemize}
+	\item Absolute Value Loss: $L_1(y, \hat{y}) = |y - \hat{y}|$
+	\item Squared Error Loss: $L_2(y, \hat{y}) = (y - \hat{y})^2$
+\end{itemize}
+
+Bei der Interpretation des Wertes gibt es jedoch einige Aspekte zu beachten.
+
+Zum einen gibt es \textit{Noise}, der die Verfälschung eines Datensatzes im Vergleich zum Optimum angibt.
+Das ist zum Beispiel der Fall, wenn im Bild ein Rauschen existiert.
+Durch das Rauschen kann dann der Erwartungswert nicht mehr exakt bestimmt werden, da das Ergebnis nicht mehr zu 100\% feststeht.
+
+Dann kann es sein, dass das Trainingsset zu klein ist.
+So ist eventuell das Optimum gar nicht durch die Trainingsdaten ableitbar.
+In diesem Fall müssen zwar die Daten angepasst werden, aber die Lossfunktion sollte eine solche Approximation in Betracht \todo{bitte was?} ziehen. 
+
+Zuletzt kann auch das Gegenteil der Fall sein, dass zu viele Daten existieren und gar nicht alle zum Training verwendet werden.
+Auch dann muss das Optimum wieder approximiert werden.
+
+Insgesamt sollte die Lossfunction also nur als Fehler für ein Datum und nicht den Datensatz angenommen werden.
+Um den Loss für alle Daten zu errechnen, lohnt es sich einen Batch zu nehmen und diesen dann für den Datensatz zu interpolieren.
+
+\paragraphNewLine{Learning Rate}
+Um den Fehler aus der Lossfunction auch zum Lernen zu verwenden wird eine zusätzlich die Lernrate eingeführt.
+Diese ist notwendig, was durch den Fall $Lernrate = 1$ veranschaulicht werden kann.
+
+Aufgrund der gewählten $Lernrate = 1$ würde das Netz auf jeden Datensatz trainiert werden, als ob es der optimale Fall ist.
+Problem daran ist, dass so nicht das Abstrahieren erlernt wird.
+Das neuronale Netzwerk wird am Ende ein Datum (und zwar das zuletzt trainierte) genau erkennen können.
+Alle anderen Daten werden dann höchstens aufgrund ihrer Ähnlichkeit zum optimalen Datum erkannt.
+\newline
+
+Aus diesem Grund wird eine Lernrate eingeführt, die den Lernprozess auf mehrere Datensätze aufteilt.
+Dadurch kann das neuronale Netzwerk dann theoretisch Korrelationen zwischen Daten erkennen und diese lernen.
+Als guter Standartwert wird oft $10^(-5)$ empfohlen. \todo{Quelle -> Zahl anpassen oder rausnehmen}
+\newline
+
+Da sowohl die Lernrate als auch die Lossfunction für den Lernprozess verwendet werden, ergibt sich dadurch unweigerlich ein Zusammenhang zwischen den Größen.
+\todo{Recherche - Abhängigkeit zwischen Lernrate und Lossfunction}
+\todo{wieder Bogen schließen zum Anfang, wo die Zusammenhänge zwichen den Parametern erklärt werden}
+\newline
+
+Durch die Lernrate kann vor allem die Lerngeschwindigkeit beeinflusst werden.
+Die sollte am Anfang relativ hoch sein und gegen Ende zur Feinjustierung abnehmen.
+\todo{deutlich mehr dazu schreiben}
+
+Außerdem wird in zwei Prinzipien für Lernraten unterschieden.
+Entweder exisitert eine Lernrate um das gesamte Netz zu trainieren, oder eine eigenständige Lernrate für jedes Neuron.
+Der zweite Fall ist zwar wieder aufwändiger, aber dafür kann so Gradientdescent verhindert werden.
+\todo{stimmt das? wo werden diese typischen Probleme gradientdescent,... von neuronalen netzen und auch speziell gans besprochen?}
+
+Manche Quellen bezeichnen die Lernrate als wichtigsten Hyperparameter, der immer angepasst werden sollte \cite{learning-rate-most-important}
+
+\paragraphNewLine{Number of Units}
+Mit den Number of Units ist die Anzahl der Neuronen gemeint.
+Die Anzahl beeinflusst direkt die maximale Lernfähigkeit des Neuronalen Netzwerks.
+Denn je mehr Neuronen, desto mehr Parameter können gelernt werden und folglich feiner auf die Trainingsdaten abgestimmt werden.
+\newline
+
+Mehr Parameter für das Neuronale Netzwerk bedeutet aber auch ein höherer Lernaufwand.
+Deshalb ist es nicht ratsam, die Parameteranzahl beliebig zu erhöhen.
+Falls ein sehr großes Netz benötigt wird, existiert auch die Möglichkeit des Transferlearnings. 
+Hierfür wird ein Netzwerk auf Daten vortrainiert.
+Danach kann es dann für andere Datensätze verwendet werden und muss nur noch minimal nachtrainiert werden. \todo{Quelle, sinnvoll zu erwähnen?}
+\newline
+
+Bei der GAN-Architektur \todo{gan architektur vorher richtig beschreiben} eignet sich eine variable Anzahl an Neuronen vor allem in den letzten Layern des Discriminators.
+Dabei handelt es sich normalerweise um Dense-Layer. \todo{normalerweise -> durch unsere ersetzen?}
+Die theoretische Aufgabe der Dense-Layer ist dabei die Informationen aus den vorherigen Convolutional Layern zu extrahieren.
+Somit hat diese Schicht einen verhältnismäßig großen Einfluss auf den Erfolg des Discriminators und somit auch auf das GAN.
 
 
 \section{Related Work}
