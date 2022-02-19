@@ -22,7 +22,7 @@
         }
     },
     "training": {
-        "epochs": 10000,
-        "batchSize": 28
+        "epochs": 500,
+        "batchSize": 8
     }
 }

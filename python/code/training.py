@@ -28,8 +28,8 @@ EPOCHS_PER_IMAGE_SAMPLE = 5
 IMAGES_PER_LABEL = 5
 
 LOAD_MODEL = False
-MODEL_NAME = "second_training"
-SAVE_MODEL = False
+MODEL_NAME = "coolv2"
+SAVE_MODEL = True
 ### VARIABLES ###
 
 #  some settings
@@ -170,6 +170,8 @@ def train_model(dataset: tf.data.Dataset, discriminator: models.Model, generator
     gan_logger = Logger("gan", gan, hparams)
     dis_logger = Logger("discriminator", discriminator, hparams)
 
+    
+
     for epoch in tqdm(range(epochs)):
         for batch in dataset:
             train_step(discriminator, generator, gan, batch, latent_dim, label_amount)
@@ -226,7 +228,7 @@ def train_all_hparams():
                     discriminator, generator = storage.load_model(MODEL_NAME)
 
                 gan = gan_model.define_gan(generator, discriminator, hparams)
-                print(gan.summary())
+
 
                 train_model(dataset, discriminator, generator, gan, EPOCHS, LATENT_DIM, LABEL_AMOUNT, hparams)
 
