@@ -2,7 +2,7 @@ import datetime
 import io
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from gan_model import HP_DIS_DROPOUT, HP_DIS_LR, HP_GAN_LR
+from gan_model import HP_DIS_DROPOUT, HP_DIS_LR, HP_GAN_LR, HP_EMBEDDING_SIZE, HP_GAN_LABEL_DENSE
 from tensorflow.keras import preprocessing, models, callbacks
 import os
 from tqdm import tqdm
@@ -88,7 +88,7 @@ def image_grid(data, labels, label_names):
         plt.xticks([])
         plt.yticks([])
         plt.grid(False)
-
+        
         # if grayscale
         if data.shape[3] == 1:
             plt.imshow(data[i], cmap=plt.cm.binary)
@@ -176,6 +176,7 @@ def train_model(dataset: tf.data.Dataset, discriminator: models.Model, generator
         for batch in dataset:
             train_step(discriminator, generator, gan, batch, latent_dim, label_amount)
         log_epoch_metrics(discriminator, generator, gan, dis_logger, gan_logger, epoch, latent_dim, label_amount, hparams)
+        plt.cla()
        
     if SAVE_MODEL:
         storage.save_model(MODEL_NAME, discriminator, generator)
@@ -192,7 +193,7 @@ def train_step(discriminator, generator, gan, batch, latent_dim, label_amount):
         reset_metrics=False
     )
 
-    # generate fake data
+    # generate halfe amount fake data
     fake_data = generate_fake_data(
         generator, batch_size, latent_dim, label_amount)
 
@@ -203,34 +204,38 @@ def train_step(discriminator, generator, gan, batch, latent_dim, label_amount):
         reset_metrics=False
     )
 
-    # train generator through gan (discriminator is not trained!)
+    # train double amount of batch size generator through gan (discriminator is not trained!)
     gan.train_on_batch(
-        generate_random_input(batch_size, latent_dim, label_amount),
-        tf.ones((batch_size, 1)),
+        generate_random_input(batch_size * 2, latent_dim, label_amount),
+        tf.ones((batch_size * 2, 1)),
         reset_metrics=False
     )
 
 def train_all_hparams():
-    for dis_lr in HP_DIS_LR.domain.values:
-        for gan_lr in HP_GAN_LR.domain.values:
-            for dis_drop in HP_DIS_DROPOUT.domain.values:
-                hparams = {
-                    HP_DIS_LR: dis_lr,
-                    HP_GAN_LR: gan_lr,
-                    HP_DIS_DROPOUT: dis_drop,
-                }
+    for embed_size in HP_EMBEDDING_SIZE.domain.values:
+        for gan_label_dense in HP_GAN_LABEL_DENSE.domain.values:
+            for dis_lr in HP_DIS_LR.domain.values:
+                for gan_lr in HP_GAN_LR.domain.values:
+                    for dis_drop in HP_DIS_DROPOUT.domain.values:
+                        hparams = {
+                            HP_DIS_LR: dis_lr,
+                            HP_GAN_LR: gan_lr,
+                            HP_DIS_DROPOUT: dis_drop,
+                            HP_EMBEDDING_SIZE: embed_size,
+                            HP_GAN_LABEL_DENSE: gan_label_dense
+                        }
 
-                discriminator = gan_model.define_discriminator(
-                    IMG_SIZE, IMG_CHANNELS, LABEL_AMOUNT, hparams)
-                generator = gan_model.define_generator(LATENT_DIM, LABEL_AMOUNT, hparams)
+                        discriminator = gan_model.define_discriminator(
+                            IMG_SIZE, IMG_CHANNELS, LABEL_AMOUNT, hparams)
+                        generator = gan_model.define_generator(LATENT_DIM, LABEL_AMOUNT, hparams)
 
-                if LOAD_MODEL:
-                    discriminator, generator = storage.load_model(MODEL_NAME)
+                        if LOAD_MODEL:
+                            discriminator, generator = storage.load_model(MODEL_NAME)
 
-                gan = gan_model.define_gan(generator, discriminator, hparams)
+                        gan = gan_model.define_gan(generator, discriminator, hparams)
 
 
-                train_model(dataset, discriminator, generator, gan, EPOCHS, LATENT_DIM, LABEL_AMOUNT, hparams)
+                        train_model(dataset, discriminator, generator, gan, EPOCHS, LATENT_DIM, LABEL_AMOUNT, hparams)
 
 
 

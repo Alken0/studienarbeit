@@ -1,28 +1,28 @@
 {
     "seed": 123456789,
-    "imageSize": 64,
+    "imageSize": 28,
     "shapes": {
         "triangle": {
             "generate": true,
             "amount": 500,
-            "minSize": 10,
-            "maxSize": 32
+            "minSize": 5,
+            "maxSize": 16
         },
         "rectangle": {
             "generate": true,
             "amount": 500,
-            "minSize": 10,
-            "maxSize": 32
+            "minSize": 5,
+            "maxSize": 16
         },
         "circle": {
             "generate": true,
             "amount": 500,
-            "minSize": 10,
-            "maxSize": 16
+            "minSize": 5,
+            "maxSize": 10
         }
     },
     "training": {
-        "epochs": 500,
-        "batchSize": 8
+        "epochs": 100,
+        "batchSize": 32
     }
 }
