@@ -1,6 +1,6 @@
 {
     "seed": 123456789,
-    "imageSize": 28,
+    "imageSize": 32,
     "shapes": {
         "triangle": {
             "generate": true,
@@ -23,6 +23,6 @@
     },
     "training": {
         "epochs": 100,
-        "batchSize": 32
+        "batchSize": 16
     }
 }

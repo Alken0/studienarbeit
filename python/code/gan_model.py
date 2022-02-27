@@ -1,4 +1,4 @@
-from tensorflow.keras import layers, Input, metrics, optimizers, losses, models
+from tensorflow.keras import layers, Input, metrics, optimizers, losses, models, activations
 from tensorboard.plugins.hparams import api as hp 
 
 # largely inspired by these tutorials:
@@ -6,14 +6,14 @@ from tensorboard.plugins.hparams import api as hp
 # https://machinelearningmastery.com/how-to-develop-a-conditional-generative-adversarial-network-from-scratch/
 
 ### HYPER PARAMS ###
-HP_EMBEDDING_SIZE = hp.HParam("Embedding Size", hp.Discrete([50]))
+HP_EMBEDDING_SIZE = hp.HParam("Embedding Size", hp.Discrete([30,50]))
 
 # HP_DIS_NUM_UNITS = hp.HParam("DIS: num units", hp.Discrete([32, 64, 128]))
 HP_DIS_DROPOUT = hp.HParam("DIS: dropout", hp.Discrete([0.4]))
-HP_DIS_LR = hp.HParam("DIS: learning_rate", hp.Discrete([2e-4]))
+HP_DIS_LR = hp.HParam("DIS: learning_rate", hp.Discrete([2e-4, 2e-3]))
 
 # HP_GAN_NUM_UNITS = hp.HParam("GAN: num units", hp.Discrete([32, 64, 128]))
-HP_GAN_LR = hp.HParam("GAN: learning_rate", hp.Discrete([ 2e-4]))
+HP_GAN_LR = hp.HParam("GAN: learning_rate", hp.Discrete([2e-4, 2e-3]))
 HP_GAN_LABEL_DENSE =  hp.HParam("GAN: label_dense", hp.Discrete([1]))
 ### HYPER PARAMS ###
 
@@ -24,10 +24,11 @@ def define_discriminator(img_size: int, img_channels: int, label_amount: int, hp
 
     # input for label -> scale input for label to match dimensions of image
     # first layer is called differently because it's needed for model description
-    input_label = Input(shape=(1,), name="label_input")
+    input_label = Input(shape=(3,), name="label_input")
     in_label = layers.Embedding(label_amount, hparams[HP_EMBEDDING_SIZE])(input_label)
-    in_label = layers.Dense(4*4)(in_label)
-    in_label = layers.Reshape((4,4,1), name="label_reshape")(in_label)
+    in_label = layers.Flatten()(in_label)
+    in_label = layers.Dense(4*4*1)(in_label)
+    in_label = layers.Reshape((4,4, 1), name="label_reshape")(in_label)
 
     # input for image
     # layers for feature extraction
@@ -62,34 +63,39 @@ def define_discriminator(img_size: int, img_channels: int, label_amount: int, hp
 
 
 def define_generator(latent_dim: int, label_amount: int, hparams) -> models.Model:
-    # input label -> convert to 16*16*1
-    input_label = Input(shape=(1,), name="label_input")
+    # input label 
+    input_label = Input(shape=(3,), name="label_input")
     in_label = layers.Embedding(
         input_dim=label_amount, output_dim=hparams[HP_EMBEDDING_SIZE],  name="label_embedding")(input_label)
-    in_label = layers.Dense(7 * 7 * hparams[HP_GAN_LABEL_DENSE],  name="label_dense")(in_label)
-    in_label = layers.Reshape((7, 7, hparams[HP_GAN_LABEL_DENSE]),  name="label_reshape")(in_label)
+    in_label = layers.Flatten()(in_label)    
+    in_label = layers.Dense(4 * 4 * hparams[HP_GAN_LABEL_DENSE],  name="label_dense")(in_label)
+    in_label = layers.Reshape((4, 4, hparams[HP_GAN_LABEL_DENSE]),  name="label_reshape")(in_label)
 
-    # input random noise -> convert to 16x16x127
+    # input random noise 
     input_latent = Input(shape=(latent_dim,), name="noise_input")
-    in_latent = layers.Dense(7*7*(128-hparams[HP_GAN_LABEL_DENSE]), name="noise_dense")(input_latent)
+    in_latent = layers.Dense(4*4*(128-hparams[HP_GAN_LABEL_DENSE]), name="noise_dense")(input_latent)
     in_latent = layers.LeakyReLU(alpha=0.2, name="noise_reLu")(in_latent)
-    in_latent = layers.Reshape((7, 7, (128-hparams[HP_GAN_LABEL_DENSE])), name="noise_reshape")(in_latent)
+    in_latent = layers.Reshape((4, 4, (128-hparams[HP_GAN_LABEL_DENSE])), name="noise_reshape")(in_latent)
 
-    # merge to shape with dimensions: 16x16x128
+
     merge = layers.Concatenate()([in_latent, in_label])
-    # convert to 32x32x128
+
     merge = layers.Conv2DTranspose(
         128, (4, 4), strides=(2, 2), padding='same')(merge)
+    merge = layers.BatchNormalization()(merge)
     merge = layers.LeakyReLU(alpha=0.2)(merge)
-    # convert to 64x64x128
+
     merge = layers.Conv2DTranspose(
         128, (4, 4), strides=(2, 2), padding='same')(merge)
+    merge = layers.BatchNormalization()(merge)
     merge = layers.LeakyReLU(alpha=0.2)(merge)
 
-    # out -> downsize to 64x64x1
-    out = layers.Conv2D(1, (7, 7), activation='tanh', padding='same')(merge)
+    merge = layers.Conv2DTranspose(
+        1, (4, 4), strides=(2, 2), padding='same')(merge)
+    merge = layers.BatchNormalization()(merge)
 
-    # model
+    out = activations.tanh(merge)
+
     model = models.Model([input_latent, input_label], out, name = "Generator")
     model.summary()
     return model
