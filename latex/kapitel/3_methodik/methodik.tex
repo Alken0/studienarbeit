@@ -114,6 +114,57 @@ All diese Kriterien werden durch eine manuelle Überprüfung evaluiert werden.
 	\item Frechet Inception Distance (Heusel et al. 2017)
 \end{itemize}
 
+\section{Verfahren zur Hyperparametersuche}
+Zur Auswahl von Hyperparametern gibt es verschiedene Verfahren.
+Dazu gehören unter anderem die Manuelle Suche, Gridsearch, Random Search und Genetic Algorithms.
+Die Verfahren sind jeweils im Stand der Technik erklärt (siehe \cref{chapter:verfahrenBestimmungHyperparameter}).
+In diesem Abschnitt werden die verschiedenen Verfahren verglichen und zusätzliche Anpassungen erläutert.
+
+\subsection{Vergleich}
+In der Studienarbeit wird ausschließlich die Gridsearch zur Bestimmung der Hyperparameter zur Anwendung kommen.
+Die Entscheidung ist mit den nachfolgenden Punkten begründet.
+
+\paragraphNewLine{Manuelle Suche}
+Die ausschließlich manuelle Suche ist zwar sehr flexibel \todo{anderes wort}, aber zu aufwändig.
+Eine weitreichende Suche mit ständiger Neuevaluierung der Trainingsergebnisse ist für den kurzen Zeitraum der Studienarbeit nicht verhältnismäßig.
+Zudem ist das Verfahren für eine komplexe Hyperparametersuche nicht mehr zeitgemäß.
+Die anderen vorgestellten Verfahren sind der manuellen Suche immer überlegen.
+
+\paragraphNewLine{Zufallssuche}
+Die Zufallssuche ist der Gridsearch sehr ähnlich.
+Statt festgelegten Zahlen werden Zufallszahlen verwendet.
+Dadurch wird ein größeres Spektrum an Kombinationen abgedeckt.
+Allerdings führt das Verfahren in der Praxis nicht unbedingt zu besseren Ergebnissen als die Gridsearch.
+Zusätzlich führt es zu einem größeren Implementierungsaufwand und wieder mehr Hyperparametern als die Gridsearch.
+Der erhöhte Implementierungsaufwand ist durch eine zusätzliche Zufallsfunktion zu begründen.
+Die Funktion wird benötigt, um die alle Kombinationen anzupassen.
+Im Vergleich dazu kann bei der Gridsearch pro Hyperparameter ein Array mit verschiedenen Werten übergeben werden.
+Die zusätzlichen Hyperparameter hängen auch mit der Zufallsfunktion zusammen.
+Denn der zufällige Abstand zum Originalwert muss in einem sinnvollen Intervall liegen.
+Die Bestimmung der Grenzen des Intervalls benötigt zusätzliche Anpassungen und Training.
+
+\paragraphNewLine{Evolutionäre Suche}
+Die evolutionäre Suche ist sowohl mit einem hohen Implementierungs-, als auch Rechenaufwand verbunden.
+Dafür ist es möglich, sehr viele Hyperparameter auf ihre Zusammenhänge zu untersuchen.
+Jedoch reduzieren wir die Hyperparameter auf eine kleine Auswahl, weswegen der Aufwand nicht gerechtfertigt ist.
+
+\paragraphNewLine{Gridsearch}
+Die Gridsearch ist für die Arbeit am besten geeignet, da sie zum einen einen sehr geringen Implementierungsaufwand mit sich bringt.
+Es müssen nur die Hyperparameter festgelegt werden, der Suchprozess kann dann mithilfe von Tensorboard grafisch veranschaulicht werden.
+
+\subsection{Anpassung an Gridsearch}
+Zwar findet die Gridsearch in keiner intelligenten Weise die optimalen Hyperparameter, aber durch kurze Trainings- und Validierungsintervalle können schlecht trainierende Kombinationen schnell aussortiert werden.
+Dafür können am Anfang $n$ GANs auf $m$ Generationen trainiert werden.
+Nach dem Training werden die Ergebnisse evaluiert und die Hälfte der GANs aussortiert 
+Im Gegenzug wird die Anzahl der zu trainierenden Generationen verdoppelt.
+So bleibt der Aufwand für das Training, bei deutlich erhöhter Intensität, der gleiche.
+Es ist anzumerken, dass die neuronalen Netze weitertrainiert werden und der vorhandene Lernfortschritt nicht zurückgesetzt wird.
+Der Prozess wird beliebig oft wiederholt und es können zu jedem Zeitpunkt Zusammenhänge zwischen den verbliebenen GANs analysiert werden.
+
+
+
+
+
 \begin{comment}
 
 Die Korrektheit bezieht sich dabei auf die generierte Figur im Bild oder auch umliegende Bildpunkte.
