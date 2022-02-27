@@ -9,6 +9,9 @@ pillow = "3.10"
 scikit-image = "0.18"
 tqdm="4.62"
 numpy="1.21"
+ipython = "*"
+matplotlib = "*"
+imageio = "*"
 
 [dev-packages]
 autopep8 = "*"
