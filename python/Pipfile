@@ -12,6 +12,7 @@ numpy="1.21"
 ipython = "*"
 matplotlib = "*"
 imageio = "*"
+keras = "*"
 
 [dev-packages]
 autopep8 = "*"
