@@ -30,8 +30,8 @@ Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden k
 \end{figure}
 
 \subsection{Bildeigenschaften}
-Auch die Bildeigenschaften sind ein wichtiger Bestandteil des Datensatzes.
-Mit Bildeigenschaften sind dabei nicht Inhalte, sondern allgemeinere Merkmale gemeint.
+Die Bildeigenschaften sind ein wichtiger Bestandteil des Datensatzes.
+Mit Bildeigenschaften sind dabei nicht Inhalte, sondern allgemeine Merkmale, wie Größe oder Farbe gemeint.
 Durch die Merkmale werden vor allem die benötigten Rechenkapazitäten zum Trainieren des GANs beeinflusst.
 So können Trainingszeiten durch kleinere Bilder verkürzt werden, da mehr Bilder auf einmal in den Grafikspeicher der GPU geladen werden können.
 Als Folge können mehr Konfigurationen ausprobiert werden
@@ -49,7 +49,7 @@ Die Qualität der Bilder muss allerdings immer hoch genug bleiben, dass eine Erk
 
 \subsection{Eigenschaften der Figuren}
 Die Trainingsbilder für das GAN stellen jeweils eine geometrische Form dar.
-Bei den Formen handelt es sich um Kreise, Dreiecke und Rechtecke, die von Bild zu Bild unterschiedlich sind.
+Bei den Formen handelt es sich um Kreise, Dreiecke und Quadrate, die von Bild zu Bild unterschiedlich sind.
 Die Bilder unterscheiden sich in mehreren Aspekten:
 \begin{description}[style=nextline]
 	\item[Position]
@@ -61,27 +61,31 @@ Die Bilder unterscheiden sich in mehreren Aspekten:
 	\item[Größe und Form]
 	Die Formen sind unterschiedlich groß, besitzen aber eine minimale und maximale Größe.
 	So ist gewährleistet, dass Bilder nicht einfarbig erscheinen und die Form immer erkennbar bleibt.
-	
-	Während sich Rechtecke durch unterschiedliche Seitenlängen stark voneinander unterscheiden können, werden Dreiecke und Kreise unter gleichbleibenden Seitenverhältnissen skaliert.
+	Die Minimalgröße beträgt bei den Formen 10 Pixel und Maximalgröße 32 Pixel.
+	Die Figuren werden bei unterschiedlichen Größen unter gleichbleibenden Seitenverhältnissen skaliert.
 \end{description}
 
 
 \section{Training}
-Der Vergleich von GANs ist ein schwieriges Unterfangen \cite{are-gans-created-equally}.
-So gibt es nicht nur viele sehr sensible Konfigurationsmöglichkeiten, sie beeinflussen sich auch gegenseitig.
-Zudem starten Neuronale Netze vor dem Training in der Regel in einem zufälligen Ausgangszustand, weswegen auch gleiche Trainingsbedingungen zu leicht unterschiedlichen Resultaten führen können.
-Im Folgenden werden die Schwierigkeiten und angewendete 'Lösungen' für einen möglichst objektiven Vergleich aufgezeigt.
+Im Trainingsprozess sollen verschiedene Architekturen mit unterschiedlichen Hyperparametern getestet werden.
+Die ausgewählten Architekturen orientieren sich an bereits existierender Forschung zu möglichst allgemeingültigen Architekturen (siehe \cref{chapter:related-work}).
+Für jede Architektur wird außerdem eine Hyperparameteroptimierung von ausgewählten Hyperparametern durchgeführt.
+Dadurch ist gewährleistet, dass tatsächlich die Architektur und nicht die Hyperparameter ausschlaggebend für die Ergebnisse sind.
 
-\subsection{Vorauswahl von Hyperparamtern}
-Zunächst ist anzumerken, dass es nicht möglich ist, alle Konfigurationen durchzuprobieren.
-Dafür würden zu hohe Rechenkapazitäten benötigt, die selbst große Unternehmen wie Google nicht immer aufbieten wollen/können \cite{are-gans-created-equally}.
-Deshalb muss eine 'sinnvolle' Vorauswahl an Konfigurationen getroffen werden, wodurch das Ergebnis schon einer gewissen Voreingenommenheit unterliegt.
-Somit wird die finale Entscheidung für die (möglichst) optimalen Konfigurationen des GANs immer subjektiv geprägt sein.
 
-\subsection{Analyse von Hyperparametern}
-Einige Hyperparameter können auch systematisch bestimmt werden.
-Dabei handelt es sich um die Lossfunction, Learning Rate und Number of Units.
-Mithilfe dieser 3 Hyperparameter soll dann der Trainingserfolg analyiert werden.
+\subsection{Auswahl zu optimierender Hyperparameter}
+Es ist nicht möglich, alle möglichen Hyperparameter zu optimieren.
+Eine solche Optimierung benötigt zu viele Ressourcen, die im Rahmen der Studienarbeit nicht vorhanden sind.
+Es wurde deshalb eine Vorauswahl getroffen, die im Folgenden erläutert wird.
+\newline
+
+\todo[inline, shadow]{Erläuterung hinzufügen}
+\begin{itemize}
+	\item Learning-Rate Generator
+	\item Learning-Rate Discriminator
+	\item Dropout Discriminator
+	\item NumUnits in bestimmten Layern
+\end{itemize}
 
 \section{Erfolgskriterien}
 Damit die Konfigurationen treffend vorausgewählt werden könne, müssen die Kriterien für ein erfolgreich trainiertes GAN klar definiert werden.
@@ -117,7 +121,7 @@ All diese Kriterien werden durch eine manuelle Überprüfung evaluiert werden.
 \section{Verfahren zur Hyperparametersuche}
 Zur Auswahl von Hyperparametern gibt es verschiedene Verfahren.
 Dazu gehören unter anderem die Manuelle Suche, Gridsearch, Random Search und Genetic Algorithms.
-Die Verfahren sind jeweils im Stand der Technik erklärt (siehe \cref{chapter:verfahrenBestimmungHyperparameter}).
+Die Verfahren sind jeweils im Stand der Technik erklärt (siehe \cref{chapter:verfahren-bestimmung-hyperparameter}).
 In diesem Abschnitt werden die verschiedenen Verfahren verglichen und zusätzliche Anpassungen erläutert.
 
 \subsection{Vergleich}
@@ -125,7 +129,7 @@ In der Studienarbeit wird ausschließlich die Gridsearch zur Bestimmung der Hype
 Die Entscheidung ist mit den nachfolgenden Punkten begründet.
 
 \paragraphNewLine{Manuelle Suche}
-Die ausschließlich manuelle Suche ist zwar sehr flexibel \todo{anderes wort}, aber zu aufwändig.
+Die ausschließlich manuelle Suche ist zwar sehr flexibel\todo{anderes wort}, aber zu aufwändig.
 Eine weitreichende Suche mit ständiger Neuevaluierung der Trainingsergebnisse ist für den kurzen Zeitraum der Studienarbeit nicht verhältnismäßig.
 Zudem ist das Verfahren für eine komplexe Hyperparametersuche nicht mehr zeitgemäß.
 Die anderen vorgestellten Verfahren sind der manuellen Suche immer überlegen.
