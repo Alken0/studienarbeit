@@ -1,63 +1,60 @@
 %!TEX root = ../main.tex
 
 \newcommand{\Titel}{1. Protokoll}
-\newcommand{\Teilnehmer}{Jonas Bürgel, Patrick Welter, Markus Reischl}
-\newcommand{\DatumUndZeit}{15.09.2021 14:00-14:30}
-\newcommand{\Ort}{Zoom Meeting}
-\newcommand{\Thema}{Projekt aufsetzen und Thema einreichen}
+\newcommand{\Teilnehmer}{Jonas Bürgel, Patrick Welter}
+\newcommand{\DatumUndZeit}{18.10.2021 20:00-20:15}
+\newcommand{\Ort}{Discord Meeting}
+\newcommand{\Thema}{Literaturrecherche}
 \input{protokolle/Titelseite}
 
-\section{Anforderungsanalyse}
+\section{Aufgaben der letzten Besprechung}
 \begin{description}
-	\item[Geometrische Formen] \hfill \\
-	Auf den Trainings- und generierten Daten sollen geometrische Formen abgebildet sein. Die Formen unterscheiden sich in Art, Größe und Position.
-	
-	\item[Labels für Bilder] \hfill \\
-	Die Bilder sollen gelabelt sein. Durch die Labels ist es später möglich, dem GAN mitzuteilen, es soll zum Beispiel ein Rechteck oder ein Kreis erzeugen.
-\end{description}
-
-\section{Organisatorisches}
-\begin{description}
-	\item[Projektmanagemente] \hfill \\
-	Nutzung von einem SCRUM ähnlichen Prinzip mit wöchentlichen Sprints. Es existiert ein Issue-Board in GitHub, das die Aufgaben für jede Woche enthält.
-	
-	\item[Versionsverwaltung] \hfill \\
-	Verwendung von GitHub. Markus Reischl hat kein Interesse an Repository, fertige PDFs werden per Email an ihn gesendet.
-	
-	\item[Treffen] \hfill \\
-	Treffen mit Betreuer finden auf Nachfrage statt. Es gibt einen regelmäßigen Arbeitstermin jeden Donnerstag, der auch für Sprintplanung genutzt wird.
+	\item[Thema] Thema ausformulieren und einreichen. \todoperson{Jonas, Patrick} \fullcheck
+	\item[Latex] Latex-Dokument nach Vorlage aufsetzen. \todoperson{Jonas, Patrick} \fullcheck
+	\item[Tensorflow] Für GPU-Betrieb installieren. \todoperson{Jonas, Patrick} \fullcheck
+	\item[Protokoll] \todoperson{Jonas} \fullcheck
 \end{description}
 
 \section{Beschlüsse und Anmerkungen}
-\begin{description}
-	\item[Zeitplan] \hfill \\
-	Bis Ende November soll bereits ein funktionierender Prototyp existieren. Zudem soll bereits ein großer Teil der Studienarbeit verfasst sein.
-	\item[Synthetische Trainingsbilder] \hfill \\
-	Die Trainingsbilder sollen synthetisch sein. Auf den gelabelten Bildern sollen zufällige geometrische Figuren abgebildet sein.
+\begin{description}[style=nextline]
+	\item[Recherche]
+	Es ist nur sehr wenig Wissen im Bereich Neuronale Netze oder GANs im Team vorhanden.
+	Deshalb wird sich zunächst auf eine Grundlagenrecherche konzentriert.
 \end{description}
 %Meilensteine
 %Besondere Erkenntnisse der letzten Woche
 %Beschlüsse, Änderungen, Vorgaben
 %Kritische Probleme 
 
-\section{Aufgabenverteilung und weiteres Vorgehen}
-\begin{description}
-	\item[Thema] \hfill \todoperson{Jonas, Patrick}\\ 
-	Thema ausformulieren und einreichen. Bevor die Einreichung erfolgt, noch einmal per Email Rücksprache mit Markus Reischl halten.
+\section{Qualitätssichernde Maßnahmen}
+Besprechung möglicher auftretender Risiken und Absicherung der Qualitätssichernden Maßnahmen
+\begin{description}[style=nextline]
+	\item[Review und Dokumentation \hfill \fullcheck]
+	Der nächste Sprint wurde gemäß des Zeitplans geplant und alle Beschlüsse dokumentiert. Der aktuelle Zeitplan kann eingehalten werden.
+	%Überprüfung und ggf. Anpassung des Zeitplans und der Meilensteine. Dokumentation des aktuellen Stands und detaillierte Planung des nächsten Sprints.
+	\item[Risikoanalyse \hfill \fullcheck]
+	Während der Recherche ist das Risiko \textit{Komplexität} aufgetreten.
+	Es stellt derzeit kein kritisches Problem dar.
+	Durch zusätzlich zukünftige Recherchen kann es minimiert werden.
+	%wöchentliche Analyse der definierten Risiken. Frühzeitiges Erkennen und Bekämpfen aufkommender Probleme.
+	\item[Tests/Kontrollen \hfill \fullcheck]
+	Tests sind bisher noch nicht notwendig.
+	%Durchführung von Unit-Tests und Integration-Tests. Implementierung und Nutzung einer Testumgebung (Nutzeroberfläche) zur Darstellung von Ergebnissen.
 	
-	\item[Latex] \hfill \todoperson{Jonas, Patrick}\\
-	Markus Reischl hat eine Vorlage mit Überschrift gesendet. Diese sollen in ein Latex-Dokument übernommen werden. Außerdem muss eine Struktur für die Studienarbeit geschaffen werden, die es erlaubt, simultan zu schreiben. 
-	
-	\item[Tensorflow] \hfill \todoperson{Jonas, Patrick}\\
-	Für GPU-Betrieb installieren.
-	
-	\item[GAN + Synthetische Bilder] \hfill \todoperson{Jonas, Patrick}\\
-	Erste Prototypen erstellen. Dafür sollen gelabelte und deterministisch zufällige Bilder in einen Ordner generiert werden. Die Bilder sollen zufällige geometrische Formen enthalten, die sich an unterschiedlichen Positionen befinden sollen.
-	
-	\item[Protokoll] \hfill \todoperson{Jonas}\\ 
-	Aktuelles Protokoll verfassen und abschicken.
-	
-	\item[Nächstes Treffen] Sprint Planning \& Review am Donnerstag, 21.10.2021 um 10 Uhr 
 \end{description}
 
+\section{Aufgabenverteilung und weiteres Vorgehen}
+\begin{description}[style=nextline]
+	\item[Testdatengenerator \todoperson{Jonas, Patrick}] 
+	Weitere Informationen über GANs sammeln.
+	
+	\item[Projekt Aufsetzen \todoperson{Jonas, Patrick}] 
+	Zwar ist Tensorflow schon installiert, aber es muss noch ein Workspace für den Code und die Latex-Dokumente erstellt werden.
+	
+	\item[Protokoll \todoperson{Jonas}]
+	Aktuelles Protokoll verfassen und abschicken.
+\end{description}
+\begin{description}
+	\item[Nächstes Treffen] Sprint Planning \& Review am 01.11.2021
+\end{description}
 
