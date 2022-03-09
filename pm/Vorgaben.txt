@@ -1,0 +1,31 @@
+Aufgabenstellung
+- Ziele
+- Randbedingungen
+
+
+Projektdefinition
+- Aufwand
+- Dauer (kann Termine haben, muss nicht)
+- Funktionen
+- Optional: Andenken von Risikobetrachtung
+
+Projektplanung
+- Temrinplan
+- Meilensteine
+- QS-Maßnahmen
+- Zulieferung
+
+Risikobetrachtung
+- Anzahl
+- Gegenmaßnahmen
+
+Qualitätstsicherung
+- Dokumentation (Qualitätsmaßnahme: Protokolle - mit Beschlüssen/...)
+
+Durchführung
+- Dokumentation
+
+Abschluss
+- Produktübergabe (Bestätigung abspeicher, moodle-email reicht)
+- Dokumentation
+- Erfahrungssicherung
