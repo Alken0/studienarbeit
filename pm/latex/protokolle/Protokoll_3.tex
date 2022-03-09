@@ -4,7 +4,7 @@
 \newcommand{\Teilnehmer}{Jonas Bürgel, Patrick Welter}
 \newcommand{\DatumUndZeit}{15.11.2021 20:00-20:15}
 \newcommand{\Ort}{Discord Meeting}
-\newcommand{\Thema}{Literaturrecherche}
+\newcommand{\Thema}{Entwicklung Testdatengenerator}
 \input{protokolle/Titelseite}
 
 \section{Aufgaben der letzten Besprechung}
@@ -19,17 +19,20 @@
 	\item[Pair-Programming]
 	Für diese Arbeit muss nur sehr wenig programmiert werden.
 	Deshalb macht es Sinn, wenn der Programmierteil gemeinsam erledigt wird.
-	Dadurch ist auch eine zusätzliche Kontrolle durch das jeweilige Teammitglied gewährleistet.
+	
+	Dadurch ist auch eine zusätzliche Kontrolle durch das jeweils andere Teammitglied gewährleistet.
+	Das Schreiben von sehr schlechten Code kann so verhindert werden.
+	
+	\item[Schwierigkeiten mit Python]
+	Die Programmiersprache Python ist keinem Teammitglied bekannt, aber Standard für die Implementierung von neuronalen Netzen.
+	Das Erlernen ist etwas schwieriger als erwartet, aber vor allem durch Pair-Programming keine große Herausforderung.
 \end{description}
 
 \section{Meilensteine}
 \begin{description}[style=nextline]
-	\item[Aneignung von Grundlagen zu Neuronalen Netzen und GANs \hfill \halfcheck]
-	Grundlagen konnten sich angeeignet werden, aber das Thema ist deutlich komplexer als erwartet.
-	
-	
-	\item[Aufsetzen einer Entwicklungsumgebung \hfill \fullcheck]
-	Es existiert eine funktionierende Entwicklungsumgebung bei allen Teammitgliedern.
+	\item[Grundimplementierung des Testdatengenerators \hfill \fullcheck]
+	Es können Bilder generiert werden, die den Anforderungen für das Projekt entsprechen.
+	Die Formen auf den Bildern sind teilweise konfigurierbar und teilweise zufallsgesteuert.
 \end{description}
 %Meilensteine
 %Besondere Erkenntnisse der letzten Woche
@@ -41,29 +44,28 @@ Besprechung möglicher auftretender Risiken und Absicherung der Qualitätssicher
 \begin{description}[style=nextline]
 	\item[Review und Dokumentation \hfill \fullcheck]
 	Der nächste Sprint wurde gemäß des Zeitplans geplant und alle Beschlüsse dokumentiert.
-	Es könnten in Zukunft Zeitprobleme aufgrund zusätzlicher Literaturrecherchen entstehen.
-	Der zusätzliche Zeitaufwand sollte allerdings nicht kritisch sein, weshalb der aktuelle Zeitplan eingehalten werden kann.
+	Es könnten in Zukunft Zeitprobleme aufgrund von Python entstehen, das wäre aber sehr unwahrscheinlich.
+	Das Wissen zu neuronalen Netzen ist bis jetzt ausreichend und es werden zunächst keine weiteren Recherchen benötigt.
+
 	%Überprüfung und ggf. Anpassung des Zeitplans und der Meilensteine. Dokumentation des aktuellen Stands und detaillierte Planung des nächsten Sprints.
 	\item[Risikoanalyse \hfill \fullcheck]
-	Während der Recherche ist das Risiko \textit{Komplexität} aufgetreten.
-	Es stellt derzeit kein kritisches Problem dar.
-	Durch zusätzlich zukünftige Recherchen kann es minimiert werden.
+	Keins der beschriebenen Risiken stellt zu diesem Zeitpunkt ein Problem dar.
+	
 	%wöchentliche Analyse der definierten Risiken. Frühzeitiges Erkennen und Bekämpfen aufkommender Probleme.
 	\item[Tests/Kontrollen \hfill \fullcheck]
-	Die Entwicklungsumgebung wurde durch das Ausführen eines Beispiels aus dem Internet getestet.
-	Damit wurde die korrekte Pythoninstallation und Einrichtung von Tensorflow überprüft.
+	Es wurden Tests geschrieben und durch Pair-Programming der Code bereits beim Schreiben durch das 4-Augen Prinzip validiert.
 	%Durchführung von Unit-Tests und Integration-Tests. Implementierung und Nutzung einer Testumgebung (Nutzeroberfläche) zur Darstellung von Ergebnissen.
 	
 \end{description}
 
 \section{Aufgabenverteilung und weiteres Vorgehen}
 \begin{description}[style=nextline]
-	\item[Implementierung Testdatengenerator \todoperson{Jonas, Patrick}] 
-	Ein Generator zur Erzeugung von Bilder für das Training des GANs.
+	\item[Entwicklung GAN \todoperson{Jonas, Patrick}] 
+	Eine erste Implementierung eines GANs.
 	
 	\item[Dokumentation \todoperson{Jonas, Patrick}]
 	Übertragung der bisher gesammelten Erkenntnisse in das Latex-Dokument.
-	Dabei handelt es sich insbesondere um das Kapitel \textit{Stand der Technik}.
+	Dabei handelt es sich insbesondere um die Kapitel \textit{Stand der Technik- Methodik}.
 	
 	\item[Protokoll \todoperson{Jonas}]
 	Aktuelles Protokoll verfassen und abschicken.
