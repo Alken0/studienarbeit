@@ -2,7 +2,7 @@ import shutil
 import os
 from tensorflow import summary
 from gan_model import HP_DIS_DROPOUT, HP_DIS_LR, HP_GAN_LR
-from tensorflow.keras import models
+from keras import models
 import tensorflow as tf
 from tensorboard.plugins.hparams import api as hp 
 

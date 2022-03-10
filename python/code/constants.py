@@ -1,3 +1,7 @@
+import tensorflow as tf
+
+MODEL_NAME="models.densegan"
+
 NUM_CLASSES = 3
 LATENT_DIM = 100
 IMG_SIZE = 28
@@ -10,23 +14,7 @@ SMOOTH = 0.1
 IMG_SEED = 123456789
 IMG_DIR = "data/training"
 
-
-import tensorflow as tf
-import os
-
-BUFFER_SIZE = 60000
-NUM_EXAMPLES_PER_CLASSES = 3
-NUM_EXAMPLES = NUM_CLASSES * NUM_EXAMPLES_PER_CLASSES
-
-# You will reuse this seed overtime (so it's easier)
-# to visualize progress in the animated GIF)
-LOG_SEED = tf.random.normal([NUM_EXAMPLES, LATENT_DIM])
-
-LOG_ROOT_DIR = './logs'
-LOG_IMG_DIR = os.path.join(LOG_ROOT_DIR, "img")
-CHECKPOINT_DIR = os.path.join(LOG_ROOT_DIR, 'checkpoints')
-CHECKPOINT_PREFIX = os.path.join(CHECKPOINT_DIR, "ckpt")
-
+LOG_PATH = "data/logs"
 
 SHAPE_RECTANGLE_NAME = "rectangle"
 SHAPE_RECTANGLE_AMOUNT = 500
