@@ -1,4 +1,5 @@
-%!TEX root = ../main.tex
+% !TEX root = ../main.tex
+% !TeX spellcheck = de_DE
 
 % character encoding
 \usepackage[utf8]{inputenc}
@@ -61,8 +62,10 @@
 \usepackage[
 	backend=biber,
 	sorting=none,
+	citestyle = numeric-comp
 ]{biblatex}
-\addbibresource{references.bib}
+%moved to main because TexStudio doesn't show it in sidebar otherwise:
+  %\addbibresource{references.bib}
 
 %%%% have to be last and in this order %%%%
 \usepackage{hyperref}
@@ -71,5 +74,8 @@
 	toc, 
 	acronym,
 ]{glossaries}
-\input{glossaries}
-\makeglossaries
+%moved to main because TexStudio doesn't show it in sidebar otherwise:
+  %\input{glossaries}
+  %\makeglossaries
+
+\usepackage[german]{cleveref}
