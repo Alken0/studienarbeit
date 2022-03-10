@@ -1,0 +1,77 @@
+%!TEX root = ../main.tex
+
+\newcommand{\Titel}{4. Protokoll}
+\newcommand{\Teilnehmer}{Jonas Bürgel, Patrick Welter}
+\newcommand{\DatumUndZeit}{29.11.2021 20:00-20:15}
+\newcommand{\Ort}{Discord Meeting}
+\newcommand{\Thema}{Entwicklung GAN}
+\input{protokolle/Titelseite}
+
+\section{Aufgaben der letzten Besprechung}
+\begin{description}
+	\item[Entwicklung GAN] \todoperson{Jonas, Patrick} \fullcheck
+	\item[Dokumentation] S.d.T., Methodik, Implementierung \todoperson{Jonas, Patrick} \halfcheck
+	\item[Protokoll] \todoperson{Jonas} \fullcheck
+\end{description}
+
+\section{Beschlüsse und Anmerkungen}
+\begin{description}[style=nextline]
+	\item[Pair-Programming]
+	Pair-Programming hat sich auch bei der GAN-Implementierung als sehr vorteilhaft erwiesen.
+	Viele Probleme konnten so schneller gelöst werden.
+	
+	\item[GAN-Tutorials]
+	Es gibt sehr viele Tutorials zu GANs im Internet, die den Einstieg stark erleichtern.
+	Diese können auch für andere Projekte verwendet werden und funktionieren verhältnismäßig gut.
+\end{description}
+
+\section{Meilensteine}
+\begin{description}[style=nextline]
+	\item[Einfacher Trainingsworkflow mit Testdaten und Generierung \hfill \fullcheck]
+	Es konnten bereits seit dem Letzten Meilenstein Testbilder für das Training des GANs generiert werden.
+	Nun ist es auch möglich, mithilfe der Bilder das GAN zu trainieren.
+	
+	Dadurch ist ein erster einfacher Ablauf vorhanden.
+\end{description}
+%Meilensteine
+%Besondere Erkenntnisse der letzten Woche
+%Beschlüsse, Änderungen, Vorgaben
+%Kritische Probleme 
+
+\section{Qualitätssichernde Maßnahmen}
+Besprechung möglicher auftretender Risiken und Absicherung der Qualitätssichernden Maßnahmen
+\begin{description}[style=nextline]
+	\item[Review und Dokumentation \hfill \fullcheck]
+	Die Dokumentation erfolgt, die Kapitel sind allerdings noch nicht abgeschlossen.
+	
+	%Überprüfung und ggf. Anpassung des Zeitplans und der Meilensteine. Dokumentation des aktuellen Stands und detaillierte Planung des nächsten Sprints.
+	\item[Risikoanalyse \hfill \fullcheck]
+	Keins der beschriebenen Risiken stellt zu diesem Zeitpunkt ein Problem dar.
+	
+	\item[Pair-Programming \hfill \fullcheck]
+	Mithilfe von Pair-Programming wurde der Code durch das 4-Augen-Prinzip überprüft.
+	
+	%wöchentliche Analyse der definierten Risiken. Frühzeitiges Erkennen und Bekämpfen aufkommender Probleme.
+	\item[Tests/Kontrollen \hfill \fullcheck]
+	Es können zwar die generierten Bilder des GANs händisch kontrolliert werden, aber keine Tests geschrieben werden, da es keine klare Abtrennung zwischen 'gut' und 'schlecht' gibt.
+	Deshalb wurden die Bilder manuell durchgegangen und ausgewertet.
+	%Durchführung von Unit-Tests und Integration-Tests. Implementierung und Nutzung einer Testumgebung (Nutzeroberfläche) zur Darstellung von Ergebnissen.
+	
+\end{description}
+
+\section{Aufgabenverteilung und weiteres Vorgehen}
+\begin{description}[style=nextline]
+	\item[Erweiterung des Testdatengenerators mit gelabelten Daten \todoperson{Jonas, Patrick}] 
+	Generierung der Formen: Dreieck, Quadrat und Kreis in einer Ordnerstruktur, die das automatische Einlesen gelabelter Daten erlaubt.
+	
+	\item[Dokumentation \todoperson{Jonas, Patrick}]
+	Übertragung der bisher gesammelten Erkenntnisse in das Latex-Dokument.
+	Dabei handelt es sich insbesondere um die Kapitel \textit{Methodik} und \textit{Implementierung}.
+	
+	\item[Protokoll \todoperson{Jonas}]
+	Aktuelles Protokoll verfassen und abschicken.
+\end{description}
+\begin{description}
+	\item[Nächstes Treffen] Sprint Planning \& Review am 13.12.2021
+\end{description}
+
