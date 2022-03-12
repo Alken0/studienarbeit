@@ -8,13 +8,11 @@ import sys
 from datetime import datetime
 import tensorflow as tf
 from keras import metrics
-from keras.losses import BinaryCrossentropy
 import tensorflow as tf
-import numpy as np
 
 # Adds higher directory to python modules path.
 sys.path.append(".")
-from constants import LOG_PATH, MODEL_NAME, BATCH_SIZE, LATENT_DIM, NUM_CLASSES
+from constants import LOG_PATH, MODEL_NAME, LOSS_FUNCTION
 
 def get_log_dir(name: str) -> str:
     timestamp = datetime.now().strftime(f"%Y-%m-%d_%H-%M-%S")
@@ -33,7 +31,7 @@ class MetricLogger:
         self.log_dir = get_log_dir(name)
 
         discriminator.compile(
-            loss=BinaryCrossentropy(),
+            loss=LOSS_FUNCTION,
             metrics = [
                 metrics.BinaryAccuracy()
             ]

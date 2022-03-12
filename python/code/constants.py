@@ -1,9 +1,10 @@
-import tensorflow as tf
+from keras.losses import BinaryCrossentropy
 
 MODEL_NAME="models.densegan"
 
-NUM_CLASSES = 3
 CLASS_NAMES = ["circle", "rectangle", "triangle"]
+NUM_CLASSES = len(CLASS_NAMES)
+
 LATENT_DIM = 100
 IMG_SIZE = 28
 IMG_DIM = IMG_SIZE * IMG_SIZE
@@ -11,11 +12,13 @@ LEARNING_RATE = 0.002
 EPOCHS = 100
 BATCH_SIZE = 64
 SMOOTH = 0.1
+LOSS_FUNCTION = BinaryCrossentropy(from_logits=True)
 
 IMG_SEED = 123456789
 IMG_DIR = "data/training"
 
 LOG_PATH = "data/logs"
+LOG_IMG_PER_LABEL = 3
 
 SHAPE_RECTANGLE_NAME = "rectangle"
 SHAPE_RECTANGLE_AMOUNT = 500

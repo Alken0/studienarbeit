@@ -2,7 +2,6 @@ from .base import MetricLogger
 import tensorflow as tf
 import sys
 from keras.models import Model
-import numpy as np
 from .util.log_image import image_grid, plot_to_image
 from .util.generate import generate_fake_data, generate_labels_evenly, generate_random_labels, generate_random_noise
 from tensorflow import summary
@@ -10,7 +9,7 @@ import matplotlib.pyplot as plt
 
 # Adds higher directory to python modules path.
 sys.path.append(".")
-from constants import BATCH_SIZE, LATENT_DIM, NUM_CLASSES, CLASS_NAMES
+from constants import BATCH_SIZE, NUM_CLASSES, CLASS_NAMES, LOG_IMG_PER_LABEL
 
 class FakeDataMetricLogger(MetricLogger):
     def __init__(self, discriminator: Model, generator: Model):
@@ -41,10 +40,10 @@ class FakeDataMetricLogger(MetricLogger):
         self._write_log(self.discriminator, epoch)
 
     def _write_image(self, epoch):
-        imgs_per_label = 3 * NUM_CLASSES
+        img_amount = LOG_IMG_PER_LABEL * NUM_CLASSES
 
-        noise = generate_random_noise(imgs_per_label)
-        labels = generate_labels_evenly(imgs_per_label)
+        noise = generate_random_noise(img_amount)
+        labels = generate_labels_evenly(img_amount)
         images = generate_fake_data(self.generator, noise, labels)
 
         figure = image_grid(images, labels, CLASS_NAMES)

@@ -1,4 +1,3 @@
-import tensorflow as tf
 from keras.preprocessing.image_dataset import image_dataset_from_directory
 from constants import IMG_SIZE, BATCH_SIZE, IMG_DIR
 

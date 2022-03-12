@@ -1,8 +1,10 @@
 import tensorflow as tf
-from keras.losses import BinaryCrossentropy
+import sys
 
+# Adds higher directory to python modules path.
+sys.path.append(".")
 # This method returns a helper function to compute cross entropy loss
-cross_entropy = BinaryCrossentropy(from_logits=True)
+from constants import LOSS_FUNCTION as cross_entropy
 
 def discriminator_loss(real_output, fake_output):
     real_loss = cross_entropy(tf.ones_like(real_output), real_output)
