@@ -20,4 +20,5 @@ def train(generator: Model, discriminator: Model, dataset_train: tf.data.Dataset
         
         # logging
         logger_real.log(discriminator, dataset_test, epoch)
+        logger_fake.log_with_generated_data(discriminator, generator, dataset_test, epoch)
         print(f'Time for epoch {epoch + 1} is {time.time()-start} sec')
