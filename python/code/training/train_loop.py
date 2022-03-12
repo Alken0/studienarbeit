@@ -7,11 +7,11 @@ from .train_step import train_step
 # Adds higher directory to python modules path.
 sys.path.append(".")
 from constants import EPOCHS
-from logger import MetricLogger
+from logger import RealDataMetricLogger, FakeDataMetricLogger
 
 def train(generator: Model, discriminator: Model, dataset_train: tf.data.Dataset, dataset_test: tf.data.Dataset):
-    logger_real = MetricLogger("real-data", discriminator)
-    logger_fake = MetricLogger("fake-data", discriminator)
+    logger_real = RealDataMetricLogger(discriminator, generator)
+    logger_fake = FakeDataMetricLogger(discriminator, generator)
 
     for epoch in range(EPOCHS):
         start = time.time()
@@ -19,6 +19,6 @@ def train(generator: Model, discriminator: Model, dataset_train: tf.data.Dataset
             train_step(generator, discriminator, image_batch)
         
         # logging
-        logger_real.log(discriminator, dataset_test, epoch)
-        logger_fake.log_with_generated_data(discriminator, generator, dataset_test, epoch)
+        logger_real.log(dataset_test, epoch)
+        logger_fake.log(dataset_test, epoch)
         print(f'Time for epoch {epoch + 1} is {time.time()-start} sec')
