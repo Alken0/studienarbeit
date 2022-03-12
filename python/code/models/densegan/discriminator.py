@@ -2,13 +2,11 @@ from keras import Sequential
 from keras.layers import *
 from keras.models import Model
 from keras.initializers.initializers_v2 import RandomNormal
-from keras import metrics
-from keras.losses import BinaryCrossentropy
 
 import sys
 # Adds higher directory to python modules path.
 sys.path.append(".")
-from constants import NUM_CLASSES, IMG_DIM, IMG_SIZE
+from constants import NUM_CLASSES, IMG_DIM, IMG_SIZE, DROPOUT
 
 def make_discriminator_model() -> Model:
     input_label = Input(shape=(1,), dtype='int32')
@@ -42,6 +40,9 @@ def discriminator() -> Model:
         # hidden layer 2
         Dense(512, name="hidden2"),
         LeakyReLU(alpha=0.2),
+
+        Flatten(),
+        Dropout(DROPOUT),
 
         # output
         Dense(1, name="output"),

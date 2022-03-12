@@ -3,11 +3,12 @@ import numpy as np
 from keras.models import Model
 from .loss import generator_loss, discriminator_loss
 from .optimizer import discriminator_optimizer, generator_optimizer
+from keras.optimizer_v2.adam import Adam
 
 import sys
 # Adds higher directory to python modules path.
 sys.path.append(".")
-from constants import BATCH_SIZE, LATENT_DIM, NUM_CLASSES
+from constants import BATCH_SIZE, LATENT_DIM, NUM_CLASSES, LEARNING_RATE_DISCRIMINATOR, LEARNING_RATE_GENERATOR
 
 # Notice the use of `tf.function`
 # This annotation causes the function to be "compiled".
