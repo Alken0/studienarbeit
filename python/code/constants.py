@@ -3,6 +3,7 @@ import tensorflow as tf
 MODEL_NAME="models.densegan"
 
 NUM_CLASSES = 3
+CLASS_NAMES = ["circle", "rectangle", "triangle"]
 LATENT_DIM = 100
 IMG_SIZE = 28
 IMG_DIM = IMG_SIZE * IMG_SIZE

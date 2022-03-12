@@ -65,10 +65,3 @@ class MetricLogger:
                 hp.hparams(hparams)
                 summary.scalar(
                     metric.name, metric.result(), epoch_no)
-
-    def _write_image(self, tag, data, step):
-        with self.summary_writer.as_default():
-            summary.image(f"{tag}", data,
-                          max_outputs=len(data), step=step)
-
-
