@@ -1,7 +1,9 @@
 from keras.preprocessing.image_dataset import image_dataset_from_directory
-from constants import IMG_SIZE, BATCH_SIZE, IMG_DIR
+import tensorflow as tf
 
-def make_dataset():
+def make_dataset() -> tuple[tf.data.Dataset, tf.data.Dataset]:
+    from constants import IMG_SIZE, BATCH_SIZE, IMG_DIR
+
     # https://keras.io/examples/vision/image_classification_from_scratch/
     
     dataset_train = image_dataset_from_directory(
@@ -30,5 +32,4 @@ def make_dataset():
         subset="validation"
     ).map(lambda img, label: ((img - 127.5)/127.0, label))
     
-
     return dataset_train, dataset_test

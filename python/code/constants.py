@@ -1,6 +1,4 @@
 from keras.losses import BinaryCrossentropy
-from tensorboard.plugins.hparams import api as hp 
-
 
 MODEL_NAME="models.densegan"
 
@@ -14,7 +12,7 @@ EMBEDDING_SIZE = "set by hyperparameters"
 LEARNING_RATE_DISCRIMINATOR = "set by hyperparameters"
 LEARNING_RATE_GENERATOR = "set by hyperparameters"
 DROPOUT = "set by hyperparameters"
-EPOCHS = 2
+EPOCHS = 100
 BATCH_SIZE = 64
 SMOOTH = "set by hyperparameters"
 LOSS_FUNCTION = BinaryCrossentropy(from_logits=True)

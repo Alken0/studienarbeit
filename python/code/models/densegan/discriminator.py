@@ -2,13 +2,14 @@ from keras import Sequential
 from keras.layers import *
 from keras.models import Model
 from keras.initializers.initializers_v2 import RandomNormal
-
 import sys
+
 # Adds higher directory to python modules path.
 sys.path.append(".")
-from constants import NUM_CLASSES, IMG_DIM, IMG_SIZE, DROPOUT
 
 def make_discriminator_model() -> Model:
+    from constants import NUM_CLASSES, IMG_DIM, IMG_SIZE
+
     input_label = Input(shape=(1,), dtype='int32')
     in_label = Embedding(NUM_CLASSES, IMG_DIM)(input_label)
     in_label = Flatten()(in_label)
@@ -22,12 +23,12 @@ def make_discriminator_model() -> Model:
 
     model = Model([input_img, input_label], validity, name="Discriminator_Input")
 
-    model.summary()
-
     return model
 
 
 def discriminator() -> Model:
+    from constants import IMG_DIM, DROPOUT, EMBEDDING_SIZE
+
     model = Sequential([
         # input
         Dense(128, input_shape=(IMG_DIM,), kernel_initializer=RandomNormal(stddev=0.02), name="input"),
@@ -47,7 +48,5 @@ def discriminator() -> Model:
         # output
         Dense(1, name="output"),
     ], name="Discriminator_Layers")
-
-    model.summary()
 
     return model
