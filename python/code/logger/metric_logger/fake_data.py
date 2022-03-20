@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 # Adds higher directory to python modules path.
 sys.path.append(".")
-from constants import BATCH_SIZE, NUM_CLASSES, CLASS_NAMES, LOG_IMG_PER_LABEL
+from constants import BATCH_SIZE, NUM_CLASSES, CLASS_NAMES, LOG_IMG_PER_LABEL_TO_TB
 
 class FakeDataMetricLogger(MetricLogger):
     def __init__(self, discriminator: Model, generator: Model):
@@ -40,7 +40,7 @@ class FakeDataMetricLogger(MetricLogger):
         self._write_log(self.discriminator, epoch)
 
     def _write_image(self, epoch):
-        img_amount = LOG_IMG_PER_LABEL * NUM_CLASSES
+        img_amount = LOG_IMG_PER_LABEL_TO_TB * NUM_CLASSES
 
         noise = generate_random_noise(img_amount)
         labels = generate_labels_evenly(img_amount)
