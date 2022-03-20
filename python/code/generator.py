@@ -92,6 +92,3 @@ class Generator:
             SHAPE_TRIANGLE_MIN_SIZE,
             SHAPE_TRIANGLE_MAX_SIZE
         )
-
-Generator().generate()
-print("succesfull generation")

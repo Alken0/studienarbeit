@@ -19,6 +19,17 @@ train_step gets compiled in train - once compiled it cannot be changed during py
 that's why hyperparameters need to be passed as arguments to the function (multiline lambda/... is not supported by python)
 '''
 
+from generator import Generator
+import metrics
+
+GENERATE_IMAGES = True
+
+if GENERATE_IMAGES:
+    Generator().generate()
+    metrics.precalc()
+    print("successfully generated")
+
+
 import hyperparameters as hp
 
 for params in hp.iterator():
