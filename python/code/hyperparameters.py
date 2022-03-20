@@ -6,9 +6,9 @@ HP_BATCH_SIZE = hp.HParam("BatchSize", hp.Discrete([64]))
 
 HP_EMBEDDING_SIZE = hp.HParam("Embedding Size", hp.Discrete([50]))
 
-HP_DIS_DROPOUT = hp.HParam("DIS: dropout", hp.Discrete([0.4]))
+HP_DIS_DROPOUT = hp.HParam("DIS: dropout", hp.Discrete([0.0, 0.1, 0.2]))
 HP_DIS_LR = hp.HParam("DIS: learning_rate", hp.Discrete([2e-4, 3e-4]))
-HP_DIS_SMOOTH = hp.HParam("DIS: smoothness", hp.Discrete([0, 0.1, 0.2]))
+HP_DIS_SMOOTH = hp.HParam("DIS: smoothness", hp.Discrete([0.0, 0.1, 0.2]))
 
 HP_GEN_LR = hp.HParam("GEN: learning_rate", hp.Discrete([2e-4, 3e-4]))
 
