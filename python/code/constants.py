@@ -12,16 +12,18 @@ EMBEDDING_SIZE = "set by hyperparameters"
 LEARNING_RATE_DISCRIMINATOR = "set by hyperparameters"
 LEARNING_RATE_GENERATOR = "set by hyperparameters"
 DROPOUT = "set by hyperparameters"
-EPOCHS = 100
-BATCH_SIZE = 64
 SMOOTH = "set by hyperparameters"
+EPOCHS = 10
+BATCH_SIZE = 64
 LOSS_FUNCTION = BinaryCrossentropy(from_logits=True)
 
 IMG_SEED = 123456789
 IMG_DIR = "data/training"
+IMG_RESULT_DIR = "data/result"
 
 LOG_PATH = "data/logs"
-LOG_IMG_PER_LABEL = 3
+LOG_IMG_PER_LABEL_TO_TB = 3
+LOG_IMG_PER_LABEL_TO_OS = 1000
 
 SHAPE_RECTANGLE_NAME = "rectangle"
 SHAPE_RECTANGLE_AMOUNT = 500

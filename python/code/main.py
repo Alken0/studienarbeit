@@ -22,7 +22,7 @@ that's why hyperparameters need to be passed as arguments to the function (multi
 from generator import Generator
 import metrics
 
-GENERATE_IMAGES = True
+GENERATE_IMAGES = False
 
 if GENERATE_IMAGES:
     Generator().generate()
@@ -38,6 +38,7 @@ for params in hp.iterator():
     hp.update(params)
 
     from constants import MODEL_NAME
+    from logger import image_logger
     from training import train
     from dataset import make_dataset
 
@@ -48,3 +49,5 @@ for params in hp.iterator():
     discriminator = models.make_discriminator_model()
 
     train(generator, discriminator, dataset_train, dataset_test)
+
+    image_logger.write_image(generator)

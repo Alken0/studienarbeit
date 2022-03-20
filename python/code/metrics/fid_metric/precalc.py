@@ -11,7 +11,7 @@ import sys
 sys.path.append(".")
 
 def _calc_and_save_for_path(data_path: str) -> None:
-    output_path = f"${data_path}/fid_stats.npz"
+    output_path = f"{data_path}/fid_stats.npz"
 
     # if you have downloaded and extracted
     #   http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz

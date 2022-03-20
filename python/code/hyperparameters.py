@@ -38,3 +38,8 @@ def update(element):
     smooth: {constants.SMOOTH}
     lr_gen: {constants.LEARNING_RATE_GENERATOR}
     """)
+
+def to_string():
+    from constants import EMBEDDING_SIZE, LEARNING_RATE_DISCRIMINATOR, LEARNING_RATE_GENERATOR, DROPOUT, SMOOTH
+    return f"ES-{EMBEDDING_SIZE}_LRD-{LEARNING_RATE_DISCRIMINATOR}_LRG-{LEARNING_RATE_GENERATOR}_DR-{DROPOUT}_SM-{SMOOTH}"
+
