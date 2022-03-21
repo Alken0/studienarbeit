@@ -13,7 +13,7 @@ HP_DIS_SMOOTH = hp.HParam("DIS: smoothness", hp.Discrete([0.0, 0.1, 0.2]))
 HP_GEN_LR = hp.HParam("GEN: learning_rate", hp.Discrete([2e-4, 3e-4]))
 
 def iterator():
-    return product(
+    hp_product = product(
         HP_BATCH_SIZE.domain.values, 
         HP_EMBEDDING_SIZE.domain.values, 
         HP_DIS_DROPOUT.domain.values, 
@@ -21,6 +21,7 @@ def iterator():
         HP_DIS_SMOOTH.domain.values, 
         HP_GEN_LR.domain.values
     )
+    return hp_product
 
 def update(element):
     constants.BATCH_SIZE = element[0]
@@ -40,6 +41,16 @@ def update(element):
     """)
 
 def to_string():
-    from constants import EMBEDDING_SIZE, LEARNING_RATE_DISCRIMINATOR, LEARNING_RATE_GENERATOR, DROPOUT, SMOOTH
-    return f"ES-{EMBEDDING_SIZE}_LRD-{LEARNING_RATE_DISCRIMINATOR}_LRG-{LEARNING_RATE_GENERATOR}_DR-{DROPOUT}_SM-{SMOOTH}"
+    from constants import BATCH_SIZE, EMBEDDING_SIZE, LEARNING_RATE_DISCRIMINATOR, LEARNING_RATE_GENERATOR, DROPOUT, SMOOTH
+    return f"BS-{BATCH_SIZE}_ES-{EMBEDDING_SIZE}_LRD-{LEARNING_RATE_DISCRIMINATOR}_LRG-{LEARNING_RATE_GENERATOR}_DR-{DROPOUT}_SM-{SMOOTH}"
 
+def to_tf_hp():
+    from constants import BATCH_SIZE, EMBEDDING_SIZE, LEARNING_RATE_DISCRIMINATOR, LEARNING_RATE_GENERATOR, DROPOUT, SMOOTH
+    return {
+        HP_BATCH_SIZE: BATCH_SIZE,
+        HP_EMBEDDING_SIZE: EMBEDDING_SIZE,
+        HP_DIS_LR: LEARNING_RATE_DISCRIMINATOR,
+        HP_GEN_LR: LEARNING_RATE_GENERATOR,
+        HP_DIS_DROPOUT: DROPOUT,
+        HP_DIS_SMOOTH: SMOOTH
+    }

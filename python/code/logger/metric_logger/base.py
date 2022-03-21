@@ -13,6 +13,7 @@ import tensorflow as tf
 # Adds higher directory to python modules path.
 sys.path.append(".")
 from constants import LOG_PATH, MODEL_NAME, LOSS_FUNCTION
+import hyperparameters
 
 def get_log_dir(name: str) -> str:
     timestamp = datetime.now().strftime(f"%Y-%m-%d_%H-%M-%S")
@@ -46,8 +47,8 @@ class MetricLogger:
         self.summary_writer = summary.create_file_writer(self.log_dir)
     
         # todo: callback liest nur den konzept graph, nicht den echten
-        tb_callback = TensorBoard(self.log_dir)
-        tb_callback.set_model(discriminator)
+        #tb_callback = TensorBoard(self.log_dir)
+        #tb_callback.set_model(discriminator)
 
     def log(self, dataset: tf.data.Dataset, epoch):
         raise NotImplementedError
@@ -55,11 +56,5 @@ class MetricLogger:
     def _write_log(self, model: Model, epoch_no):
         with self.summary_writer.as_default():
             for metric in model.metrics:
+                hp.hparams(hyperparameters.to_tf_hp())
                 summary.scalar(metric.name, metric.result(), epoch_no)
-
-    def _write_log_original(self, model: Model, epoch_no, hparams):
-        with self.summary_writer.as_default():
-            for metric in model.metrics:
-                hp.hparams(hparams)
-                summary.scalar(
-                    metric.name, metric.result(), epoch_no)

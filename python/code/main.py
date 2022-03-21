@@ -1,3 +1,4 @@
+import matplotlib
 import tensorflow as tf
 import os
 import importlib
@@ -8,6 +9,8 @@ import importlib
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 physical_devices = tf.config.list_physical_devices("GPU")
 tf.config.experimental.set_memory_growth(physical_devices[0], True)
+
+matplotlib.use('Agg')
 
 '''
 ATTENTION
@@ -32,13 +35,14 @@ if GENERATE_IMAGES:
 
 import hyperparameters as hp
 
+print(f"hp combinations: {len(list(hp.iterator()))}")
+
 for params in hp.iterator():
     print("\n\n#####   new training   #####")
 
     hp.update(params)
 
     from constants import MODEL_NAME
-    from logger import image_logger
     from training import train
     from dataset import make_dataset
 
@@ -50,4 +54,3 @@ for params in hp.iterator():
 
     train(generator, discriminator, dataset_train, dataset_test)
 
-    image_logger.write_image(generator)
