@@ -54,3 +54,5 @@ for params in hp.iterator():
 
     train(generator, discriminator, dataset_train, dataset_test)
 
+    tf.keras.backend.clear_session()
+
