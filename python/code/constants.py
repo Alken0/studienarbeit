@@ -13,7 +13,7 @@ LEARNING_RATE_DISCRIMINATOR = "set by hyperparameters"
 LEARNING_RATE_GENERATOR = "set by hyperparameters"
 DROPOUT = "set by hyperparameters"
 SMOOTH = "set by hyperparameters"
-EPOCHS = 10
+EPOCHS = 100
 BATCH_SIZE = 64
 LOSS_FUNCTION = BinaryCrossentropy(from_logits=True)
 

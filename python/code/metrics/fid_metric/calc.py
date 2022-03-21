@@ -6,7 +6,7 @@ import numpy as np
 import metrics.fid_metric.script as fid
 from imageio import imread
 import tensorflow as tf
-from python.code.logger.metric_logger.fid import FIDMetricLogger
+from logger.metric_logger.fid import FIDMetricLogger
 
 from constants import CLASS_NAMES, IMG_DIR, IMG_RESULT_DIR, EPOCHS
 

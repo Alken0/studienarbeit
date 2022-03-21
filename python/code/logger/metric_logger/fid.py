@@ -1,4 +1,4 @@
-from python.code.logger.metric_logger.base import MetricLogger
+from logger.metric_logger.base import MetricLogger
 from tensorboard.plugins.hparams import api as hp 
 import sys
 from keras.models import Model
