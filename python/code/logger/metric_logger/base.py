@@ -16,9 +16,9 @@ from constants import LOG_PATH, MODEL_NAME, LOSS_FUNCTION
 import hyperparameters
 
 def get_log_dir(name: str) -> str:
-    timestamp = datetime.now().strftime(f"%Y-%m-%d_%H-%M-%S")
+    import hyperparameters
     path = f"{LOG_PATH}/{MODEL_NAME}"
-    return f"{path}/{timestamp}/{name}"
+    return f"{path}/{hyperparameters.to_string()}/{name}"
 
 
 class MetricLogger:

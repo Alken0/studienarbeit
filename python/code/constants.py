@@ -8,13 +8,14 @@ NUM_CLASSES = len(CLASS_NAMES)
 LATENT_DIM = 100
 IMG_SIZE = 28
 IMG_DIM = IMG_SIZE * IMG_SIZE
+IMG_CHANNELS = 1
 EMBEDDING_SIZE = "set by hyperparameters"
 LEARNING_RATE_DISCRIMINATOR = "set by hyperparameters"
 LEARNING_RATE_GENERATOR = "set by hyperparameters"
 DROPOUT = "set by hyperparameters"
 SMOOTH = "set by hyperparameters"
-EPOCHS = 100
-BATCH_SIZE = 64
+EPOCHS = 1000
+BATCH_SIZE = "set by hyperparameters"
 LOSS_FUNCTION = BinaryCrossentropy(from_logits=True)
 
 IMG_SEED = 123456789
