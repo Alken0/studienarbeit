@@ -8,4 +8,6 @@
 # Local History for Visual Studio Code
 .history/
 
-data
+data/logs
+data/result
+data/training
