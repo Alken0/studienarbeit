@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 # Adds higher directory to python modules path.
 sys.path.append(".")
-from constants import BATCH_SIZE, NUM_CLASSES, CLASS_NAMES, LOG_IMG_PER_LABEL_TO_TB
+from constants import NUM_CLASSES, CLASS_NAMES, LOG_IMG_PER_LABEL_TO_TB
 
 class FakeDataMetricLogger(MetricLogger):
     def __init__(self, discriminator: Model, generator: Model):
@@ -17,6 +17,8 @@ class FakeDataMetricLogger(MetricLogger):
         super().__init__(name, discriminator, generator)
 
     def log(self, dataset: tf.data.Dataset, epoch):
+        from constants import BATCH_SIZE
+
         self.discriminator.reset_metrics()
 
         # the following is returning 14 instead of the correct number...

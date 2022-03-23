@@ -1,6 +1,6 @@
 from keras.losses import BinaryCrossentropy
 
-MODEL_NAME="models.densegan"
+MODEL_NAME="models.dcgan"
 
 CLASS_NAMES = ["circle", "rectangle", "triangle"]
 NUM_CLASSES = len(CLASS_NAMES)
@@ -14,7 +14,7 @@ LEARNING_RATE_DISCRIMINATOR = "set by hyperparameters"
 LEARNING_RATE_GENERATOR = "set by hyperparameters"
 DROPOUT = "set by hyperparameters"
 SMOOTH = "set by hyperparameters"
-EPOCHS = 1000
+EPOCHS = 100
 BATCH_SIZE = "set by hyperparameters"
 LOSS_FUNCTION = BinaryCrossentropy(from_logits=True)
 
