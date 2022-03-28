@@ -2,13 +2,13 @@ from tensorboard.plugins.hparams import api as hp
 from itertools import product
 import constants
 
-HP_BATCH_SIZE = hp.HParam("BatchSize", hp.Discrete([32, 64]))
+HP_BATCH_SIZE = hp.HParam("BatchSize", hp.Discrete([16,32]))
 
 HP_EMBEDDING_SIZE = hp.HParam("Embedding Size", hp.Discrete([50]))
 
 HP_DIS_DROPOUT = hp.HParam("DIS: dropout", hp.Discrete([0.3, 0.4]))
 HP_DIS_LR = hp.HParam("DIS: learning_rate", hp.Discrete([2e-3,2e-4, 3e-4]))
-HP_DIS_SMOOTH = hp.HParam("DIS: smoothness", hp.Discrete([0.0, 0.1]))
+HP_DIS_SMOOTH = hp.HParam("DIS: smoothness", hp.Discrete([0.0]))
 
 HP_GEN_LR = hp.HParam("GEN: learning_rate", hp.Discrete([2e-3,2e-4, 3e-4]))
 

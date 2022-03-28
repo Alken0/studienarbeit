@@ -15,11 +15,9 @@ def make_discriminator_model() -> Model:
     # input for label -> scale input for label to match dimensions of image
     # first layer is called differently because it's needed for model description
     input_label = Input(shape=(1,), name="label_input")
-    in_label = Embedding(NUM_CLASSES, EMBEDDING_SIZE)(input_label)
-    in_label = Flatten()(in_label)
-    in_label = Dense(14*14*1)(in_label)
-    in_label = Reshape((14,14, 1), name="label_reshape")(in_label)
-    in_label = Dropout(DROPOUT)(in_label)
+    in_label = Embedding(1, EMBEDDING_SIZE)(input_label)
+    in_label = Dense(4*4*1)(in_label)
+    in_label = Reshape((4,4, 1), name="label_reshape")(in_label)
 
     # input for image
     # layers for feature extraction
@@ -29,12 +27,16 @@ def make_discriminator_model() -> Model:
     in_img = LeakyReLU()(in_img)
     in_img = Dropout(DROPOUT)(in_img)
 
-    in_img = Conv2D(128, (5, 5), strides=(2, 2), padding='same')(input_img)
+    in_img = Conv2D(128, (5, 5), strides=(2, 2), padding='same')(in_img)
+    in_img = LeakyReLU()(in_img)
+    in_img = Dropout(DROPOUT)(in_img)
+
+    in_img = Conv2D(256, (5, 5), strides=(2, 2), padding='same')(in_img)
     in_img = LeakyReLU()(in_img)
     in_img = Dropout(DROPOUT)(in_img)
 
     # combine image and label input
-    merge = Concatenate()([in_img, in_label])
+    merge = Multiply()([in_img, in_label])
 
      # output including downsizing model
     out = Flatten()(merge)
@@ -42,5 +44,4 @@ def make_discriminator_model() -> Model:
 
     # model
     model = Model([input_img, input_label], out, name = "discriminator")
-
     return model
