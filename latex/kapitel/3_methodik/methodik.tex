@@ -6,11 +6,25 @@ In diesem Kapitel werden zunächst Eigenschaften der Trainingsdaten erläutert.
 Dabei wird auf die Bildeigenschaften und Besonderheiten der dargestellten Figuren in den Bildern eingegangen.
 Danach erfolgt eine Festlegung der Kriterien für ein erfolgreiche trainiertes 'GAN', das Grundlage für spätere Vergleiche von Trainingserfolgen sein wird.
 
-\section{Trainingsdaten}
-Bei den Trainingsdaten handelt es sich um synthetisch generierte Bilder mit geometrischen Figuren.
-Zwar gibt es bereits Datensätze mit solchen Bildern \cite{dataset:four-shapes, dataset:2d-geometric-shapes-dataset}, im Rahmen der Studienarbeit werden jedoch keine vorgefertigten Datensätze verwendet.
-Denn die Generierung eigener Bilder erlaubt eine größere Kontrolle über Eigenschaften der Bilder und Inhalte, als vorgefertigte Sets.
-Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden kann, wird die Generierung deterministisch reproduzierbar und dokumentiert sein.
+\section{Dataset}
+Das Dataset wurde im Rahmen der Studienarbeit generiert und besteht für das Training aus 1500 Bildern.
+Die 1500 Bilder teilen sich dabei in jeweils 500 Bilder pro Formklasse (Dreieck, Kreis, Quadrat) auf.
+Alle Bilder haben eine Größe von 28x28 Pixel und sind Schwarz-Weiß kodiert.
+Der Grauwert jedes Pixels wird durch einen Channel angegeben, dessen Werte durch eine Zahl im ganzzahligen Intervall $[0; 255]$ festgelegt ist.
+Dabei entspricht die Zahl 0 einem schwarzen Pixel und die Zahl 255 repräsentiert einen weißen Pixel.
+
+Auf jedem Bild ist eine geometrische Form abgebildet.
+Bei den geometrischen Formen handelt es sich um gleichseitige Dreiecke, Quadrate und Kreise.
+Die Formen unterscheiden sich in Größe und Position auf dem Bild.
+Andere Transformationen, wie beispielsweise Rotationen, werden nicht angewendet.
+
+Die Quadrate und gleichseitigen Dreiecke sind zwischen 5 und 16 Pixel groß.
+Die Größe bezieht sich dabei auf die Seitenlänge der Seiten.
+Die Kreise sind zwischen 5 und 10 Pixel groß.
+Hierbei gibt der Wert den Radius des Kreises an.
+
+Die Formen sind so im Bild positioniert, dass sie Seitenränder touchieren können.
+Allerdings ist eine Form immer vollständig im Bild abgebildet und wird vom Bildrand nicht geschnitten.
 
 \newcommand{\trainDataImage}[1]{\subfloat{\fbox{\includegraphics[width=.29\linewidth]{#1}}}}
 \begin{figure}
@@ -29,63 +43,51 @@ Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden k
 	\caption{Auswahl an zufällig generierten Trainingsbilder}
 \end{figure}
 
-\subsection{Bildeigenschaften}
-Die Bildeigenschaften sind ein wichtiger Bestandteil des Datensatzes.
-Mit Bildeigenschaften sind dabei nicht Inhalte, sondern allgemeine Merkmale, wie Größe oder Farbe gemeint.
-Durch die Merkmale werden vor allem die benötigten Rechenkapazitäten zum Trainieren des GANs beeinflusst.
-So können Trainingszeiten durch kleinere Bilder verkürzt werden, da mehr Bilder auf einmal in den Grafikspeicher der GPU geladen werden können.
-Als Folge können mehr Konfigurationen ausprobiert werden
-Die Qualität der Bilder muss allerdings immer hoch genug bleiben, dass eine Erkennbarkeit der Formen gewährleisten ist.
+\section{Architekturen}
+\subsection{API}
+Um alle möglichen Architekturen in das Training einbinden zu können müssen sie die gleichen Ein- und Ausgaben besitzen.
+Die Anforderungen an die Ein- und Ausgabe wie folgt definiert.
+\newline
 
-\begin{description}
-	\item[Farbe]
-	Die Bilder sind grau-skaliert, das heißt ein Pixel entspricht einer Zahl zwischen 0 (schwarz) und 255 (weiß).
-	
-	\item[Größe]
-	Alle Bilder benötigen die gleiche Größe, um zur späteren GAN-Architektur zu passen.
-	Damit die geometrischen Formen auch erkennbar sind, dürfen sie jedoch nicht zu klein sein, wohingegen zu große Bilder Trainingszeiten unnötig verlängern.
-	Die Bilder sind 64x64 Pixel groß, was einen Kompromiss darstellt.
-\end{description}
+Der Generator erhält als Eingabe einen 100 Stellen langes Array mit Zufallszahlen (Latent-Dimension) und eine Zahl zwischen 0 und 2, die das Label repräsentiert.
+Die Ausgabe des Generators ist ein Array mit den gleichen Dimensionen, wie ein Bild (28x28x1).
 
-\subsection{Eigenschaften der Figuren}
-Die Trainingsbilder für das GAN stellen jeweils eine geometrische Form dar.
-Bei den Formen handelt es sich um Kreise, Dreiecke und Quadrate, die von Bild zu Bild unterschiedlich sind.
-Die Bilder unterscheiden sich in mehreren Aspekten:
-\begin{description}[style=nextline]
-	\item[Position]
-	Die Formen sind zufällig auf dem Bild positioniert.
-	Allerdings sind sie immer vollständig abgebildet, das heißt, die Kanten des Bildes schneiden die Form nicht.
-	%Formen erstrecken sich nicht über Ränder und erscheinen auf der anderen Seite wieder?
-	Je nach Größe der Form muss so die Position treffend gewählt werden.
-	
-	\item[Größe und Form]
-	Die Formen sind unterschiedlich groß, besitzen aber eine minimale und maximale Größe.
-	So ist gewährleistet, dass Bilder nicht einfarbig erscheinen und die Form immer erkennbar bleibt.
-	Die Minimalgröße beträgt bei den Formen 10 Pixel und Maximalgröße 32 Pixel.
-	Die Figuren werden bei unterschiedlichen Größen unter gleichbleibenden Seitenverhältnissen skaliert.
-\end{description}
-
+Der Discriminator erhält als Eingabe ein Bild als Array und zusätzlich ein Label als Zahl.
+Die Ausgabe ist eine Zahl zwischen 1 und -1, die die vorhergesagte Echtheit angibt.
 
 \section{Training}
-Im Trainingsprozess sollen verschiedene Architekturen mit unterschiedlichen Hyperparametern getestet werden.
-Die ausgewählten Architekturen orientieren sich an bereits existierender Forschung zu möglichst allgemeingültigen Architekturen (siehe \cref{chapter:related-work}).
-Für jede Architektur wird außerdem eine Hyperparameteroptimierung von ausgewählten Hyperparametern durchgeführt.
-Dadurch ist gewährleistet, dass tatsächlich die Architektur und nicht die Hyperparameter ausschlaggebend für die Ergebnisse sind.
+Im Trainingsprozess werden verschiedene Architekturen mit unterschiedlichen Hyperparametern getestet.
+Die ausgewählten Architekturen orientieren sich an bereits existierender Forschung und Tutorials (siehe \cref{chapter:related-work}).
+Insbesondere aufgrund der Label-Abhängigkeit (im Rahmen der Studienarbeit entsteht ein Conditional-GAN) werden jedoch Anpassungen erfolgen.
 
 
 \subsection{Auswahl zu optimierender Hyperparameter}
+\todo[inline, shadow]{überarbeiten}
 Es ist nicht möglich, alle möglichen Hyperparameter zu optimieren.
 Eine solche Optimierung benötigt zu viele Ressourcen, die im Rahmen der Studienarbeit nicht vorhanden sind.
-Es wurde deshalb eine Vorauswahl getroffen, die im Folgenden erläutert wird.
+Deshalb wird die Optimierung auf einige vielversprechende Hyperparameter beschränkt.
 \newline
 
-\todo[inline, shadow]{Erläuterung hinzufügen}
-\begin{itemize}
-	\item Learning-Rate Generator
-	\item Learning-Rate Discriminator
-	\item Dropout Discriminator
-	\item NumUnits in bestimmten Layern
-\end{itemize}
+Die auszuwählenden Hyperparameter sollen dabei zum einen eine vergleichsweise hohe Auswirkung auf den Trainingserfolg haben.
+Zum anderen sollen sie sehr allgemein sein, um sie gleichermaßen auf die verschiedenen Architekturen anwenden zu können.
+Das garantiert eine bessere Vergleichbarkeit zwischen den Architekturen.
+\newline
+
+Die Hyperparameter \textit{Batch-Size}, \textit{Learning-Rate Generator}, \textit{Learning-Rate Discriminator}, \textit{Dropout} und \textit{Smoothness} entsprechen diesen Voraussetzungen.
+\newline
+
+Die Learning-Rate hat allgemein einen sehr hohen Einfluss und sollte immer angepasst werden \cite{learning-rate-most-important}.
+Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter für Anpassungen und wird in unterschiedlichen Tutorials angegeben \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery} \todo{Begründung aus der quelle übernehmen? \cite{tutorial:tune-batch-size-machinelearningmastery}}.
+Sowohl Dropout als auch Smoothness sind vor allem für einen persönlichen Erkenntnisgewinn mit aufgenommen worden.
+Die Smoothness entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-onesided-label-smoothing}.
+
+\subsection{Trainingsablauf}
+Vor der Implementierung und Analyse der verschiedenen Architekturen werden zunächst die Trainingsdaten generiert.
+Danach erfolgt die Implementierung einer neuen Architektur und Festlegung der Hyperparameter.
+Schließlich wird das Training durchgeführt.
+Beim Training werden automatisch alle Hyperparameter-Kombinationen ausprobiert, Log-Dateien erstellt und auch die FID-Werte für die einzelnen Durchgänge berechnet.
+Alle Metriken in den Logs werden dabei auf Testdaten angewendet, um ein Overfitting erkennen zu können.
+Die Logs können im Anschluss mithilfe von Tensorboard visualisiert werden.
 
 \section{Erfolgskriterien}
 Damit die Konfigurationen treffend vorausgewählt werden könne, müssen die Kriterien für ein erfolgreich trainiertes GAN klar definiert werden.
@@ -100,7 +102,7 @@ Zudem bezieht sich die Varietät auf die generierten Bilder untereinander.
 Sie sollten auch möglichst verschieden sein, was oftmals nicht der Fall ist.
 Das Phänomen ist als 'mode-collapse' bekannt (siehe Stand der Technik). %TODO steht das auch in Stand der Technik?
 
-Beide Probleme lassen sich durch den Vergleich der Bilder mittels 'Structural Similarity Index' \cite{structural-similarity-index} bewerten.
+Beide Probleme werden mittels einer manuellen Analyse ausgewertet.
 % https://scikit-image.org/docs/0.12.x/api/skimage.measure.html#skimage.measure.compare_ssim
 
 \paragraphNewLine{Korrektheit}
@@ -114,57 +116,9 @@ So sollten im Hintergrund möglichst keine anderen Figuren oder Pixelfragmente e
 All diese Kriterien werden durch eine manuelle Überprüfung evaluiert werden.
 
 \begin{itemize}
-	\item Inception Score zum Rating von erzeugten Bildern (Salimans et al. 2016)
-	\item Frechet Inception Distance (Heusel et al. 2017)
+	\item manuelle Auswertung
+	\item Frechet Inception Distance \cite{frechet-inception-distance}
 \end{itemize}
-
-\section{Verfahren zur Hyperparametersuche}
-Zur Auswahl von Hyperparametern gibt es verschiedene Verfahren.
-Dazu gehören unter anderem die Manuelle Suche, Gridsearch, Random Search und Genetic Algorithms.
-Die Verfahren sind jeweils im Stand der Technik erklärt (siehe \cref{chapter:verfahren-bestimmung-hyperparameter}).
-In diesem Abschnitt werden die verschiedenen Verfahren verglichen und zusätzliche Anpassungen erläutert.
-
-\subsection{Vergleich}
-In der Studienarbeit wird ausschließlich die Gridsearch zur Bestimmung der Hyperparameter zur Anwendung kommen.
-Die Entscheidung ist mit den nachfolgenden Punkten begründet.
-
-\paragraphNewLine{Manuelle Suche}
-Die ausschließlich manuelle Suche ist zwar sehr flexibel\todo{anderes wort}, aber zu aufwändig.
-Eine weitreichende Suche mit ständiger Neuevaluierung der Trainingsergebnisse ist für den kurzen Zeitraum der Studienarbeit nicht verhältnismäßig.
-Zudem ist das Verfahren für eine komplexe Hyperparametersuche nicht mehr zeitgemäß.
-Die anderen vorgestellten Verfahren sind der manuellen Suche immer überlegen.
-
-\paragraphNewLine{Zufallssuche}
-Die Zufallssuche ist der Gridsearch sehr ähnlich.
-Statt festgelegten Zahlen werden Zufallszahlen verwendet.
-Dadurch wird ein größeres Spektrum an Kombinationen abgedeckt.
-Allerdings führt das Verfahren in der Praxis nicht unbedingt zu besseren Ergebnissen als die Gridsearch.
-Zusätzlich führt es zu einem größeren Implementierungsaufwand und wieder mehr Hyperparametern als die Gridsearch.
-Der erhöhte Implementierungsaufwand ist durch eine zusätzliche Zufallsfunktion zu begründen.
-Die Funktion wird benötigt, um die alle Kombinationen anzupassen.
-Im Vergleich dazu kann bei der Gridsearch pro Hyperparameter ein Array mit verschiedenen Werten übergeben werden.
-Die zusätzlichen Hyperparameter hängen auch mit der Zufallsfunktion zusammen.
-Denn der zufällige Abstand zum Originalwert muss in einem sinnvollen Intervall liegen.
-Die Bestimmung der Grenzen des Intervalls benötigt zusätzliche Anpassungen und Training.
-
-\paragraphNewLine{Evolutionäre Suche}
-Die evolutionäre Suche ist sowohl mit einem hohen Implementierungs-, als auch Rechenaufwand verbunden.
-Dafür ist es möglich, sehr viele Hyperparameter auf ihre Zusammenhänge zu untersuchen.
-Jedoch reduzieren wir die Hyperparameter auf eine kleine Auswahl, weswegen der Aufwand nicht gerechtfertigt ist.
-
-\paragraphNewLine{Gridsearch}
-Die Gridsearch ist für die Arbeit am besten geeignet, da sie zum einen einen sehr geringen Implementierungsaufwand mit sich bringt.
-Es müssen nur die Hyperparameter festgelegt werden, der Suchprozess kann dann mithilfe von Tensorboard grafisch veranschaulicht werden.
-
-\subsection{Anpassung an Gridsearch}
-Zwar findet die Gridsearch in keiner intelligenten Weise die optimalen Hyperparameter, aber durch kurze Trainings- und Validierungsintervalle können schlecht trainierende Kombinationen schnell aussortiert werden.
-Dafür können am Anfang $n$ GANs auf $m$ Generationen trainiert werden.
-Nach dem Training werden die Ergebnisse evaluiert und die Hälfte der GANs aussortiert 
-Im Gegenzug wird die Anzahl der zu trainierenden Generationen verdoppelt.
-So bleibt der Aufwand für das Training, bei deutlich erhöhter Intensität, der gleiche.
-Es ist anzumerken, dass die neuronalen Netze weitertrainiert werden und der vorhandene Lernfortschritt nicht zurückgesetzt wird.
-Der Prozess wird beliebig oft wiederholt und es können zu jedem Zeitpunkt Zusammenhänge zwischen den verbliebenen GANs analysiert werden.
-
 
 
 

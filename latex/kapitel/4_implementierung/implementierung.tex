@@ -2,24 +2,49 @@
 % !TeX spellcheck = de_DE
 
 \chapter{Implementierung}
+Dieses Kapitel beinhaltet technische Details zur Umsetzung des GANs.
+Die Details beinhalten allgemeinere Projektinformationen und vorgenommene Anpassungen zur Optimierung.
 
-\section{Umgebung}
-\begin{itemize}
-	\item Python Version
-	\item Tensorflow Version (+ CUDA)
-	\item Keras Version
-	\item pip-install erwähenen ? $\rightarrow$ wie setzt man das Projekt auf?
-	\item github
-\end{itemize}
+\section{Projekt}
+Diese Sektion beinhaltet allgemeine Informationen zum Projekt.
+Sie ist insbesondere an die Leser gerichtet, die den Code selbst ausführen oder bei sich einbinden wollen.
 
-\section{Model}
-\begin{itemize}
-	\item Aufbau Generator + Discriminator (Bild)
-	\item Hyperparameter, die wir so gesetzt haben (Dropout, LeakyReLU, ?)
-\end{itemize}
+\subsection{Umgebung}
+Für die Implementierung des GAN werden verschiedene Dependencies genutzt.
+Diese sind alle im \textit{Pipfile} definiert und können mit \textit{pip install} installiert werden.
+Deshalb werden an dieser Stelle nur die wichtigsten Dependencies genannt.
+Dabei handelt es sich um Python 3.9, Tensorflow 2.6 und Keras 2.8.
+Es ist anzumerken, dass Tensorflow mithilfe von CUDA auf der GPU läuft.
 
-\section{Generierung von Trainingsdaten}
-\begin{itemize}
-	\item Datei zum Konfigurien erklären
-	\item Erklärung, was da drin ist (Datensatz-Generierung)
-\end{itemize}
+\subsection{Konfiguration}
+Für das Projekt existieren sehr viele Parameter, wie zum Beispiel die Anzahl an Bildern pro Label oder auch die exakten Werte für Hyperparameter.
+All diese Konfigurationen können innerhalb der Dateien \textit{configuration.py} und \textit{hyperparameters.py} eingesehen und bearbeitet werden.
+Je nach Parameter müssen dann die Bilder erneut erzeugt werden.
+
+\subsection{Ausführung}
+Sowohl zum Generieren, als auch für das Training muss die Datei \textit{main.py} ausgeführt werden.
+Sollte eine Generierung stattfinden sollen muss in der Datei zusätzlich der Booleanwert \textit{GENERATE\_IMAGES} auf \textit{True} gesetzt werden.
+
+\section{Optimierungen}
+Während der Arbeit wurden verschiedene Optimierungen vorgenommen, um entweder Ressourcen zu sparen oder den Trainingsprozess zu beschleunigen.
+Die Optimierungen werden im Folgenden vorgestellt.
+
+\subsection{Eigene Trainingsfunktion}\todo{Verständlich?}
+Tensorflow bietet eine Standardfunktion zum Traininieren von Neuronalen Netzen mit \textit{model.fit} an.
+Die Funktion ist für das Trainieren von Klassifikatoren auch sehr gut geeignet, aber für GANs ineffizient.
+Die Ineffizienz entsteht durch das separate berechnen des Loss-Wertes für den Discriminator und Generator auf die Fake-Daten.
+Dieser Loss-Wert ist der gleiche und muss nur 1x berechnet werden.
+Auf der Tensorflow Webseite ist dafür eine Alternative Lernfunktion angegeben, die verwendet wurde \cite{tensorflow-gan-learn-step}.
+
+\subsection{Matplotlib}
+Matplotlib wird zur Erstellung der Bilder für die Logs verwendet.
+Für jedes Bild muss dafür eine Figure erstellt werden, die von Matplotlib aber nicht automatisch bereinigt wird.
+Das führt bei sehr vielen Bildern zu einem Overflow Error.
+Um den Fehler zu verhindern wird nach jedem Logging die Funktion \textit{plt.close('all')} aufgerufen.
+Die Funktion schließt alle existierenden Figure-Instanzen manuell.
+
+\subsection{Tensorflow-Keras}
+Tensorflow ist nicht dafür ausgelegt, in einem Durchgang sehr viele Unterschiedliche Modelle zu trainieren.
+Deshalb kommt es zu stetig steigendem Arbeitsspeicher-Verbrauch.
+Die Modelle können aber durch einen Befehl manuell gelöscht werden \textit{tf.keras.backend.clear\_session()}.
+Die Funktion wird nach dem Training jedes Modells ausgeführt.
