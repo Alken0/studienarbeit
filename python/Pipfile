@@ -14,6 +14,7 @@ matplotlib = "3.3.3"
 imageio = "2.16"
 keras = "2.8"
 pytorch-fid = "0.2"
+pydot-ng = "2.0"
 
 [dev-packages]
 autopep8 = "*"
