@@ -3,11 +3,60 @@
 
 \chapter{Ergebnisse}
 
-\section{DC-GAN}
+\section{DC-GAN-Late-Label}
+Die Architektur dieses Modells basiert nicht auf anderen Papern oder Tutorials. \todo{Fabi zitieren? :D}
+Stattdessen wird die Idee ausprobiert, die Convolutional Layer des Discriminators ausschließlich auf die Bilder anzuwenden.
+Das Label wird dann erst im letzten Schritt mit dem Ergebnis der Convolutional Layer verknüpft und bewertet.
+Die Entscheidung ist mit dem Verhalten der Convolutional Layern zu begründen.
+Denn die Layer extrahieren Zusammenhänge von nebeneinanderliegenden Pixeln.
+Diese Zusammenhänge sind jedoch nicht natürlich bei einem synthetischen Latent-Vektor gegeben.
+
+\subsection{Architektur}
+Die Besonderheit der Architektur liegt in der späten Fusionierung von Bild- und Labeldaten beim Discriminator.
+Ein Diagramm mit der genauen Architektur befindet sich im Anhang (Discriminator \cref{architecture:dcgan-dis} und Generator \cref{architecture:dcgan-gen}).
+
+
+Allgemein werden primär Convolutional und Convolutional Transposed Layer genutzt.
+Beim Discriminator besteht eine Schicht aus einer Kombination von Conv2d, LeakyReLu (mit einem alpha von 0.2) und Dropout (beeinflusst vom Hyperparameter).
+Der Generator besteht aus Schichten von Conv2DTranspose, BatchNormalisation und LeakyReLu (mit einem alpha von 0.2).
+
+\subsection{Hyperparameter}
+Die Hyperparameter wurden in einem Gridsearchverfahren, das heißt in allen Kombinationen angewendet.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l l}
+		Name                        & Werte            \\ \hline
+		Epochen                     & 100              \\
+		Batch Size                  & 16, 32           \\
+		Dropout                     & 0.3, 0.4         \\
+		Smoothness                  & 0, 0.1           \\
+		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
+		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
+	\end{tabular}
+	\caption{Hyperparameter für das Training des 'DC-GAN-Late-Label's}
+\end{table}
+
+\subsection{Ergebnisse}
+\begin{itemize}
+	\item Tensorboard Graph
+	\item 'beste' Bilder
+\end{itemize}
+
+\subsection{Zusammenfassung}
+\begin{itemize}
+	\item ignoriert Label
+	\item keine Figuren
+	\item kein mode-collapse
+\end{itemize}
+
+\section{DC-GAN-COVID-Inspired}
 \subsection{Allgemein}
+Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \cite{inspiration-dc-gan-2}.
+
+
 \begin{itemize}
 	\item deep convolutional
-	\item woher idee
+	\item woher idee \cite{inspiration-dc-gan-2}
 	\item welche anpassungen
 \end{itemize}
 
@@ -16,15 +65,24 @@
 	\item Was ist besonders an Architektur?
 	\item wirklich nochmal in Textform beschreiben?
 	\item alpha von LeakyRelu wird nicht angezeigt
-	\item Discriminator \cref{architecture:dcgan-dis} 
+	\item Discriminator 
 	\item Generator \cref{architecture:dcgan-gen}
 \end{itemize}
 
 \subsection{Hyperparameter}
-\begin{itemize}
-	\item welche Hyperparameter wurden verwendet? -> Tabelle?
-	\item Wie viele Epochen trainiert?
-\end{itemize}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l l}
+		Name                        & Werte            \\ \hline
+		Epochen                     & 100              \\
+		Batch Size                  & 16, 32           \\
+		Dropout                     & 0.3, 0.4         \\
+		Smoothness                  & 0, 0.1           \\
+		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
+		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
+	\end{tabular}
+	\caption{Hyperparameter für das Training des DC-GANs}
+\end{table}
 
 \subsection{Ergebnisse}
 \begin{itemize}
@@ -34,3 +92,32 @@
 \end{itemize}
 
 \section{DENSE-GAN}
+\subsection{Architektur}
+Sowohl die Architektur zum Generator \cref{architecture:densegan-gen} als auch zum Discriminator \cref{architecture:densegan-dis} ist in den Anlagen als Diagramm zu finden.
+
+
+Die Architektur ist inspiriert von einem Tutorial für den MNIST Datenset \cite{inspiration-dense-gan}.
+Da die Datensätze sehr ähnlich sind, kann die Struktur übernommen werden.
+
+
+\subsection{Hyperparameter}
+Für das Training wurde eine Anzahl an vordefinierten Hyperparameterkombinationen ausprobiert.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l l}
+		Name                        & Werte            \\ \hline
+		Epochen                     & 100              \\
+		Batch Size                  & 16, 32           \\
+		Dropout                     & 0.3, 0.4         \\
+		Smoothness                  & 0, 0.1           \\
+		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
+		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
+	\end{tabular}
+	\caption{Hyperparameter für das Training des Dense-GANs}
+\end{table}
+
+
+
+\subsection{Ergebnisse}
+

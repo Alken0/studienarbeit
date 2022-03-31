@@ -40,6 +40,37 @@ Dazu erhalten der Generator und Discriminator das Datenlabel als einen weiteren 
 So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
 
+\section{Ausprägungen von GANs}
+\todo[inline, shadow]{Hier DC-GAN usw. nochmal erklären, weil die Begriffe sind nicht so eindeutig!}
+Die folgenden Ausprägungen von GAN Architekturen unterscheiden sich Primär in den verwendeten Layern.
+
+\subsection{CGAN}
+Conditional GAN
+
+\subsection{Dense-GAN}
+Eine Dense-GAN nutzt sowohl für Discriminator als auch für den Generator Dense Layer beziehungsweise Fully Connected Layer.
+Die Anzahl der Layer ist dabei irrelevant.
+\newline
+
+Vorteil dieses Architekturmodells ist seine große Flexibilität.
+Mithilfe der Dense Layer und einer ausreichend großen Architektur lassen sich theoretisch alle Zusammenhänge eines Datensets lernen.
+\newline
+
+Nachteil sind die vielen zu lernenden Parameter.
+Pro Schicht ergeben sich $|weights| = inputs * outputs$, was bei größeren Architekturen einen erheblichen Lernaufwand bedeutet.
+
+\subsection{DC-GAN}
+Ein DC-GAN oder auch Deep Convolutional GAN besteht hauptsächlich aus Convolutional Layern.
+Im Generator finden vor allem Convolutional Transposed Layer ihre Anwendung, um die Zufallsdaten hochzuskalieren.
+Während im Discriminator hauptsächlich Convolutional Layer genutzt werden, um die Daten auf eine Entscheidung herunterzuskalieren.
+\newline
+
+Vorteil dieser Architektur sind die wenigen zu lernenden Parameter.
+
+- weniger Parameter -> inputs teilen sich Parameter
+- Beziehung von umgebenden Pixeln in Vordergrund
+- Filter
+
 \section{Verfahren zur Bestimmung von Hyperparametern}
 \label{chapter:verfahren-bestimmung-hyperparameter}
 \todo{Quelle \cite{hyperparameters-search}}
