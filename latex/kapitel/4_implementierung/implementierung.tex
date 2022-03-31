@@ -48,3 +48,24 @@ Tensorflow ist nicht dafür ausgelegt, in einem Durchgang sehr viele Unterschied
 Deshalb kommt es zu stetig steigendem Arbeitsspeicher-Verbrauch.
 Die Modelle können aber durch einen Befehl manuell gelöscht werden \textit{tf.keras.backend.clear\_session()}.
 Die Funktion wird nach dem Training jedes Modells ausgeführt.
+
+\section{Daten-Generator}
+Die Daten für das Training vom GAN sind synthetisch generiert mit einem eigens Implementierten Generators.
+Der Code für den Generator befindet sich in der Datei \textit{generator.py}.
+Die Generierung der Bilder findet automatisch statt, sollte in der Datei \textit{main.py} der Boolean \textit{GENERATE\_IMAGES} auf True gesetzt sein.
+\newline
+
+Die Funktionen des Generators basieren auf dem Package skimage.
+Bei dem Package handelt es sich um eine Sammlung von Methoden für Image-Processing und Computer Vision \todo{Quelle https://scikit-image.org/docs/dev/api/skimage.html}.
+Insbesondere die Methoden zum Zeichnen von Polygonen und Kreisen werden zur Generierung angewendet.
+\newline
+
+Für die Generierung werden eine Bildgröße, Formmindestgröße, Formmaximalgröße und Anzahl zu generierender Bilder benötigt.
+Die zugehörigen Werte sind in der Konfigurationsdatei \textit{constants.py} angegeben.
+Beim Aufruf des Generators wird dann die jeweilige Generierungsfunktion für die Form aufgerufen.
+Diese erstellt dann pro mögliche Größe eine Anzahl an Bildern.
+Die Anzahl pro Größe ist abhängig von der Anzahl der maximalen Bilder und berechnet sich mit der Formel: $AnzahlProBild = MaximalAnzahlAnBildern / GrössenKombinationen$.
+Die Position der Form ist zufällig, kann aber durch einen Seed beeinflusst werden, um den Prozess reproduzieren zu können.
+Durch die zufallsgesteuerte Positionierung können Positionen identisch sein.
+Allerdings sind gleiche Bilder bei den verwendeten Konfigurationen sehr selten. \todo{Analyse gibt es gleiche Bilder?}
+
