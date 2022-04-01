@@ -19,7 +19,7 @@ Es ist anzumerken, dass Tensorflow mithilfe von CUDA auf der GPU läuft.
 \subsection{Konfiguration}
 Für das Projekt existieren sehr viele Parameter, wie zum Beispiel die Anzahl an Bildern pro Label oder auch die exakten Werte für Hyperparameter.
 All diese Konfigurationen können innerhalb der Dateien \textit{configuration.py} und \textit{hyperparameters.py} eingesehen und bearbeitet werden.
-Je nach Parameter müssen dann die Bilder erneut erzeugt werden.
+Je nach Parameter müssen dann die Bilder erneut generiert werden.
 
 \subsection{Ausführung}
 Sowohl zum Generieren, als auch für das Training muss die Datei \textit{main.py} ausgeführt werden.
@@ -31,23 +31,49 @@ Die Optimierungen werden im Folgenden vorgestellt.
 
 \subsection{Eigene Trainingsfunktion}\todo{Verständlich?}
 Tensorflow bietet eine Standardfunktion zum Traininieren von Neuronalen Netzen mit \textit{model.fit} an.
-Die Funktion ist für das Trainieren von Klassifikatoren auch sehr gut geeignet, aber für GANs ineffizient.
-Die Ineffizienz entsteht durch das separate berechnen des Loss-Wertes für den Discriminator und Generator auf die Fake-Daten.
-Dieser Loss-Wert ist der gleiche und muss nur 1x berechnet werden.
-Auf der Tensorflow Webseite ist dafür eine Alternative Lernfunktion angegeben, die verwendet wurde \cite{tensorflow-gan-learn-step}.
+Die Funktion wird auf ein Model angewendet und führt eine Trainingsepoche auf einen übergebenen Datensatz mit zu übergebenden Parametern durch.
+Die Funktion ist für simple Trainingsabläufe wie das Trainieren eines Klassifikatoren sehr gut geeignet.
+Allerdings ist sie für den Trainingsablauf bei GANs ineffizient.
+
+Bei einem GAN müssen Generator und Discriminator beide trainiert werden.
+Dabei benötigt der Generator den Losswert des Discriminators auf seine generierten Daten $loss_{unecht} = d(X_{unecht})$.
+Der Discriminator soll lernen unechte von echten Daten zu Unterscheiden.
+Dafür kann er mithilfe von Supervised Learning trainiert werden.
+Um den Fehler über beide Datensets zu bestimmen müssen die folgenden Operationen ausgeführt werden $loss_{unecht} = d(X_{unecht})$ und $loss_{echt} = d(X_{echt})$.
+Im Trainingsprozess gibt es somit eine Überschneidung, der $loss_{unecht} = d(X_{unecht})$.
+Um diesen Losswert wiederzuverwenden benötigt es eine eigene Trainingsfunktion.
+Auf der Tensorflow Webseite ist dafür auch eine Alternative Lernfunktion angegeben, die statt \textit{model.fit} verwendet wird \cite{tensorflow-gan-learn-step}.
 
 \subsection{Matplotlib}
-Matplotlib wird zur Erstellung der Bilder für die Logs verwendet.
-Für jedes Bild muss dafür eine Figure erstellt werden, die von Matplotlib aber nicht automatisch bereinigt wird.
-Das führt bei sehr vielen Bildern zu einem Overflow Error.
-Um den Fehler zu verhindern wird nach jedem Logging die Funktion \textit{plt.close('all')} aufgerufen.
-Die Funktion schließt alle existierenden Figure-Instanzen manuell.
+Für die Erstellung der Logs werden diverse Bilder erzeugt und abgespeichert.
+Bei der Nutzung von Matplotlib muss dafür für jedes Bild zunächst eine Figure erstellt werden.
+Die Figure wird benötigt, um das Bild zu konfigurieren.
+Es ist dabei nicht möglich, die Figures für verschiedene Bilder vernünftig wiederzuverwenden.
+
+Das Problem einer großen Anzahl an Figures ist, dass Matplotlib die Figures nicht automatisch bereinigt.
+Stattdessen sammeln sich im Hintergrund immer mehr ungenutzte Objekte an.
+Das führt zu einem ständig größer werdenden Arbeitsspeicherverbrauch.
+Der erhöhte Verbrauch endet dann in einem Overflow Error und Absturz des Programms, in diesem Falle des Trainings.
+
+Eine Lösung für das Löschen der Figure-Objekte ist die Methode \textit{plt.close('all')}, die von Matplotlib selbst bereitgestellt wird.
+Sie löscht alle offenen Instanzen und bereinigt so den Arbeitsspeicher.
+Die Methode muss jedoch manuell aufgerufen werden.
+Um eine möglichst optimale Speichernutzung zu garantieren, wird die Funktion während des Trainings nach jedem geschriebenen Log ausgeführt.
+Dadurch ist sichergestellt, dass auch lange Trainingsperioden durchgeführt werden können, ohne dass zusätzliche Ressourcen benötigt werden.
 
 \subsection{Tensorflow-Keras}
+Bei der Hyperparameteroptimierung werden verschiedene Modelle erzeugt und trainiert.
 Tensorflow ist nicht dafür ausgelegt, in einem Durchgang sehr viele Unterschiedliche Modelle zu trainieren.
-Deshalb kommt es zu stetig steigendem Arbeitsspeicher-Verbrauch.
-Die Modelle können aber durch einen Befehl manuell gelöscht werden \textit{tf.keras.backend.clear\_session()}.
-Die Funktion wird nach dem Training jedes Modells ausgeführt.
+Es existiert deshalb keine Automatismus, der nicht mehr benötigte Modell im Hintergrund aufräumt.
+Dadurch kommt es zu einem stetig steigendem Arbeitsspeicher-Verbrauch.
+
+Der Speicherverbrauch ist schlecht, da er zum Beispiel das Loggen verhindert.
+Die entstehenden Probleme sind so gravierend, dass sie zu einem Abbruch des Lernprozesses führen können.
+
+Die Lösung besteht im manuellen bereinigen der nicht mehr genutzten Modelle.
+Für das Bereinigen stellt Tensorflow die Methode \textit{tf.keras.backend.clear\_session()} bereit.
+Um eine möglichst optimale Speichernutzung zu gewährleisten wird die Methode nach jedem fertigen Model-Training aufgerufen.
+So wird verhindert, dass Tensorflow gleichzeitig mehr als ein Modell bekannt ist.
 
 \section{Daten-Generator}
 Die Daten für das Training vom GAN sind synthetisch generiert mit einem eigens Implementierten Generators.
