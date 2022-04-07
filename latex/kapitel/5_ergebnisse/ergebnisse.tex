@@ -4,6 +4,7 @@
 \chapter{Ergebnisse}
 
 \section{DC-GAN-Late-Label}
+\label{section:dc-gan-late-label}
 Die Architektur dieses Modells basiert nicht auf anderen Papern oder Tutorials. \todo{Fabi zitieren? :D}
 Stattdessen wird die Idee ausprobiert, die Convolutional Layer des Discriminators ausschließlich auf die Bilder anzuwenden.
 Das Label wird dann erst im letzten Schritt mit dem Ergebnis der Convolutional Layer verknüpft und bewertet.
@@ -92,17 +93,32 @@ Die genauen Architekturen befinden sich im Anhang, sowohl für den Discriminator
 \end{itemize}
 
 \section{DC Generator und Dense Discriminator}
+Das GAN bedient sich des Generators aus dem DC-GAN \cref{section:dc-gan-late-label} und dem Discriminator des Dense-GANs \cref{section:dense-gan}.
+Beide Architekturen wurden zuvor schon verwendet und folglich nicht weiter angepasst werden.
 
 \subsection{Architektur}
-\begin{itemize}
-	\item Discriminator: \cref{architecture:dcgen-densedis-dis}
-	\item Generator: \cref{architecture:dcgen-densedis-gen}
-\end{itemize}
+Die Architekturen für den Discriminator \cref{architecture:dcgen-densedis-dis} und Generator \cref{architecture:dcgen-densedis-gen} befinden sich im Anhang.
+Es handelt sich um die gleichen Architekturen, ohne zusätzliche Änderungen.
+
 \subsection{Hyperparameter}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l l}
+		Name                        & Werte            \\ \hline
+		Epochen                     & 100              \\
+		Batch Size                  & 16, 32           \\
+		Dropout                     & 0.3, 0.4         \\
+		Smoothness                  & 0, 0.1           \\
+		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
+		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
+	\end{tabular}
+	\caption{Hyperparameter für das Training vom DC-Discriminator und Dense-Generator}
+\end{table}
 \subsection{Ergebnisse}
 \subsection{Zusammenfassung}
 
 \section{Dense GAN}
+\label{section:dense-gan}
 Das Dense GAN ist an einem Tutorial für das MNIST Datenset inspiriert.
 Im Tutorial wird jedoch nur ein normales GAN statt einem CGAN verwendet.
 Folglich fehlt die Eingabe von Labeln, die in der verwendeten Architektur ergänzt sind.
@@ -136,11 +152,27 @@ Für das Training wurde eine Anzahl an vordefinierten Hyperparameterkombinatione
 \subsection{Zusammenfassung}
 
 \section{Dense Generator und DC Discriminator}
+Dieses GAN ist eine Kombination aus dem Dense GAN \cref{section:dense-gan} und DC GAN \cref{section:dc-gan-late-label}.
+Dabei ist dem Dense GAN der Generator entnommen und dem DC GAN der Discriminator.
+Beide Architekturen sind bereits an das Datenset angepasst und müssen nicht weiter verändert werden.
+
 \subsection{Architektur}
-\begin{itemize}
-	\item Discriminator: \cref{architecture:densegen-dcdis-dis}
-	\item Generator: \cref{architecture:densegen-dcdis-gen}
-\end{itemize}
+Die Architekturen für den Discriminator \cref{architecture:densegen-dcdis-dis} und Generator \cref{architecture:densegen-dcdis-gen} befinden sich im Anhang.
+Es wurden keine Änderungen zu den bereits vorhanden Architekturen vorgenommen.
+
 \subsection{Hyperparameter}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l l}
+		Name                        & Werte            \\ \hline
+		Epochen                     & 100              \\
+		Batch Size                  & 16, 32           \\
+		Dropout                     & 0.3, 0.4         \\
+		Smoothness                  & 0, 0.1           \\
+		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
+		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
+	\end{tabular}
+	\caption{Hyperparameter für das Training vom Dense-Generator und DC-Discriminator}
+\end{table}
 \subsection{Ergebnisse}
 \subsection{Zusammenfassung}
