@@ -25,7 +25,7 @@ class FakeDataMetricLogger(MetricLogger):
         # amount = len(list(dataset)) # not recommended!
         # amount = dataset.cardinality()
         # amount = dataset.cardinality().numpy()
-        amount = 892
+        amount = 100
 
         noise = generate_random_noise(amount)
         labels = generate_random_labels(amount)
