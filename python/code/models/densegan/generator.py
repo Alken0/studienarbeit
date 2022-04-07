@@ -28,7 +28,7 @@ def make_generator_model() -> Model:
     merge = BatchNormalization(momentum=0.8)(merge)
 
     # hidden layer 2
-    merge = Dense(256)(merge)
+    merge = Dense(512)(merge)
     merge = LeakyReLU(alpha=0.2)(merge)
     merge = BatchNormalization(momentum=0.8)(merge)
 

@@ -1,6 +1,6 @@
 from keras.losses import BinaryCrossentropy
 
-MODEL_NAME="models.dcgan"
+MODEL_NAME="models.densegan"
 
 CLASS_NAMES = ["circle", "rectangle", "triangle"]
 NUM_CLASSES = len(CLASS_NAMES)
