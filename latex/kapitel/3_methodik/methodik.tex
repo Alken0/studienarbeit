@@ -89,7 +89,8 @@ Beim Training werden automatisch alle Hyperparameter-Kombinationen ausprobiert, 
 Alle Metriken in den Logs werden dabei auf Testdaten angewendet, um ein Overfitting erkennen zu können.
 Die Logs können im Anschluss mithilfe von Tensorboard visualisiert werden.
 
-\section{Erfolgskriterien}
+\section{Bewertung}
+\subsection{Erfolgskriterien}
 Damit die Konfigurationen treffend vorausgewählt werden könne, müssen die Kriterien für ein erfolgreich trainiertes GAN klar definiert werden.
 Als Erfolgskriterien zählen in diesem Fall die Varietät der generierten Bilder und die Korrektheit der generierten Figuren.
 Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
@@ -120,7 +121,32 @@ All diese Kriterien werden durch eine manuelle Überprüfung evaluiert werden.
 	\item Frechet Inception Distance \cite{frechet-inception-distance}
 \end{itemize}
 
+\subsection{Logs}
+Während des Trainings wird eine Reihe von Logs zur Analyse erzeugt.
+Die Logs werden bei der Erzeugung automatisch in Architektur und Hyperparameterkombination unterteilt.
+Durch Unterteilung ist die Grundlage einer fundierten Auswahl einer Architektur mit den besten Ergebnissen sichergestellt.
+\newline
 
+Während dem Training werden mehrere Werte geloggt.
+Ein Wert ist dabei der Loss, sowohl für den Generator, als auch für den Discriminator.
+Der Loss wird dabei für jede Epoche geloggt und ist vor allem zur Analyse des Trainingsprozesses interessant.
+So können nicht funktionierende Architekturen schon früher abgebrochen werden und verbessert werden.
+\newline
+
+Für die Auswertung sind vor allem die generierten Bilder und der FID-Index relevant.
+Die Bilder werden nach jeder Epoche mit einer immer identischen Latent-Dim erzeugt.
+Dadurch ist eine bessere Vergleichbarkeit gewährleistet.
+Tensorboard erlaubt dann eine Ansicht mit Zeitachse, um den Lernprozess über die verschiedenen Epochen beobachten zu können.
+\newline
+
+Der FID-Index ist sehr aufwändig zu berechnen.
+Deshalb wird er erst am Ende mit den finalen Bildern erzeugt.
+Bei einem Overfitting könnten so theoretisch schlechtere Ergebnisse für ein Modell entstehen.
+Durch eine zusätzliche manuelle Analyse über die einzelnen Epochen und der vergleichsweise geringen Epochenanzahl ist das Risiko einer potentiellen Verfälschung der Ergebnisse jedoch sehr gering.
+\newline
+
+Die gesammelten Daten sind dabei alle nach Architektur und Hyperparameterkombination unterteilt.
+Die Unterteilung erlaubt die Auswahl einer möglichst optimalen Kombination aus beidem.
 
 
 \begin{comment}

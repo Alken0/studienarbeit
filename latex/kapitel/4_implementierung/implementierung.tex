@@ -11,19 +11,36 @@ Sie ist insbesondere an die Leser gerichtet, die den Code selbst ausführen oder
 
 \subsection{Umgebung}
 Für die Implementierung des GAN werden verschiedene Dependencies genutzt.
-Diese sind alle im \textit{Pipfile} definiert und können mit \textit{pip install} installiert werden.
-Deshalb werden an dieser Stelle nur die wichtigsten Dependencies genannt.
+Diese sind alle im \textit{Pipfile} definiert und können mit \textit{pipenv install} installiert werden.
+Im Gegensatz zu einen \textit{pip install} wird dabei zusätzlich ein Virtual Envirionment erzeugt.
+Das Virtual Environment verhindert insbesondere Version Conflicts in Python.
+\newline
+
+Aufgrund der trivialen Installation des Projekts werden an dieser Stelle nur die wichtigsten Dependencies für Vergleiche genannt.
 Dabei handelt es sich um Python 3.9, Tensorflow 2.6 und Keras 2.8.
-Es ist anzumerken, dass Tensorflow mithilfe von CUDA auf der GPU läuft.
+Es ist anzumerken, dass Tensorflow mithilfe von CUDA optimiert wurde.
+CUDA erlaubt die Ausführung der Trainings auf der GPU, was den Trainingsprozess stark beschleunigt.
 
 \subsection{Konfiguration}
 Für das Projekt existieren sehr viele Parameter, wie zum Beispiel die Anzahl an Bildern pro Label oder auch die exakten Werte für Hyperparameter.
 All diese Konfigurationen können innerhalb der Dateien \textit{configuration.py} und \textit{hyperparameters.py} eingesehen und bearbeitet werden.
 Je nach Parameter müssen dann die Bilder erneut generiert werden.
+\newline
+
+Parameter, die als Wert den Text \textit{"set by hyperparameters"} haben, werden während des Trainings überschrieben.
+Um die Hyperparameter zu ändern, muss die Datei \textit{hyperparameters.py} angepasst werden.
+Gewünschte Hyperparameter können dort einfach in der entsprechenden Liste ergänzt werden.
 
 \subsection{Ausführung}
 Sowohl zum Generieren, als auch für das Training muss die Datei \textit{main.py} ausgeführt werden.
-Sollte eine Generierung stattfinden sollen muss in der Datei zusätzlich der Booleanwert \textit{GENERATE\_IMAGES} auf \textit{True} gesetzt werden.
+Allerdings sollte dafür zunächst der Model Name in der Datei \textit{constants.py} gesetzt werden.
+Die Einstellung bestimmt das zu nutzende Modell.
+Falls zusätzlich zum Training eine Generierung stattfinden soll, muss in der Datei \textit{main.py} zusätzlich der Booleanwert \textit{GENERATE\_IMAGES} auf \textit{True} gesetzt werden.
+\newline
+
+Während dem Training werden die zugehörigen Logs automatisch erstellt.
+Um diese einzusehen empfiehlt sich die Nutzung von Tensorboard.
+Das Tensorboard kann mit dem Befehl \textit{tensorboard --logdir=data/logs/<model-name>} gestartet werden.
 
 \section{Optimierungen}
 Während der Arbeit wurden verschiedene Optimierungen vorgenommen, um entweder Ressourcen zu sparen oder den Trainingsprozess zu beschleunigen.
