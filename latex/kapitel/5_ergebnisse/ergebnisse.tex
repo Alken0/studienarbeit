@@ -21,7 +21,7 @@ Beim Discriminator besteht eine Schicht aus einer Kombination von Conv2d, LeakyR
 Der Generator besteht aus Schichten von Conv2DTranspose, BatchNormalisation und LeakyReLu (mit einem alpha von 0.2).
 
 \subsection{Hyperparameter}
-Die Hyperparameter wurden in einem Gridsearchverfahren, das heißt in allen Kombinationen angewendet.
+Die Hyperparameter werden mithilfe des Gridsearchverfahrens optimiert.
 \begin{table}[H]
 	\centering
 	\begin{tabular}{l l}
@@ -38,20 +38,26 @@ Die Hyperparameter wurden in einem Gridsearchverfahren, das heißt in allen Komb
 
 \subsection{Ergebnisse}
 \begin{itemize}
-	\item Tensorboard Graph
+	\item Tensorboard Graph -> beste Hyperparameter?
 	\item 'beste' Bilder
 \end{itemize}
 
 \subsection{Zusammenfassung}
-\begin{itemize}
-	\item ignoriert Label
-	\item keine Figuren
-	\item kein mode-collapse
-\end{itemize}
+\todo{auf Hyperparameter eingehen + zu negativ?}
+Wie anhand der Ergebnisse zu erkennen ist, sind die Trainingsergebnisse nicht mit den Originalbildern vergleichbar.
+Es bestehen insbesondere keine Sensitivität gegenüber Labeln.
+So wird keine Figur erkennbar abgebildet.
+Stattdessen wird in der Regel eine Kombination aus Kreis und Quadrat in verschiedenen Größen und Positionen erzeugt.
+\newline
 
-\section{DC-GAN-COVID-Inspired}
-\subsection{Allgemein}
-Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \cite{inspiration-dc-gan-2}.
+Allerdings unterscheiden sich die Bilder voneinander.
+Es existiert somit kein Mode-Collapse und folglich wird die Latent-Dim immer in Betracht gezogen.
+Außerdem sind die Figuren ohne Rauschen gezeichnet.
+Das bedeutet, es existieren keine einzelnen Pixel außerhalb oder innerhalb der Figur in der jeweils anderen Farbe.
+
+\section{DC-GAN-Medical-Inspired}
+
+Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \cite{inspiration-dc-gan-med}.
 
 
 \begin{itemize}
@@ -65,8 +71,8 @@ Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \
 	\item Was ist besonders an Architektur?
 	\item wirklich nochmal in Textform beschreiben?
 	\item alpha von LeakyRelu wird nicht angezeigt
-	\item Discriminator 
-	\item Generator \cref{architecture:dcgan-gen}
+	\item Discriminator \cref{architecture:dcgan-med-dis}
+	\item Generator \cref{architecture:dcgan-med-gen}
 \end{itemize}
 
 \subsection{Hyperparameter}
@@ -91,14 +97,23 @@ Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \
 	\item Hyperparameter Analyse
 \end{itemize}
 
-\section{DENSE-GAN}
+\section{DC Generator und Dense Discriminator}
+
+\subsection{Architektur}
+\begin{itemize}
+	\item Discriminator: \cref{architecture:dcgen-densedis-dis}
+	\item Generator: \cref{architecture:dcgen-densedis-gen}
+\end{itemize}
+\subsection{Hyperparameter}
+\subsection{Ergebnisse}
+\subsection{Zusammenfassung}
+
+\section{Dense GAN}
 \subsection{Architektur}
 Sowohl die Architektur zum Generator \cref{architecture:densegan-gen} als auch zum Discriminator \cref{architecture:densegan-dis} ist in den Anlagen als Diagramm zu finden.
 
-
 Die Architektur ist inspiriert von einem Tutorial für den MNIST Datenset \cite{inspiration-dense-gan}.
 Da die Datensätze sehr ähnlich sind, kann die Struktur übernommen werden.
-
 
 \subsection{Hyperparameter}
 Für das Training wurde eine Anzahl an vordefinierten Hyperparameterkombinationen ausprobiert.
@@ -117,7 +132,15 @@ Für das Training wurde eine Anzahl an vordefinierten Hyperparameterkombinatione
 	\caption{Hyperparameter für das Training des Dense-GANs}
 \end{table}
 
-
-
 \subsection{Ergebnisse}
+\subsection{Zusammenfassung}
 
+\section{Dense Generator und DC Discriminator}
+\subsection{Architektur}
+\begin{itemize}
+	\item Discriminator: \cref{architecture:densegen-dcdis-dis}
+	\item Generator: \cref{architecture:densegen-dcdis-gen}
+\end{itemize}
+\subsection{Hyperparameter}
+\subsection{Ergebnisse}
+\subsection{Zusammenfassung}
