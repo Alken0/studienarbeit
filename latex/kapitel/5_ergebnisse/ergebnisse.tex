@@ -58,22 +58,16 @@ Das bedeutet, es existieren keine einzelnen Pixel außerhalb oder innerhalb der 
 \section{DC-GAN-Medical-Inspired}
 
 Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \cite{inspiration-dc-gan-med}.
-
-
-\begin{itemize}
-	\item deep convolutional
-	\item woher idee \cite{inspiration-dc-gan-2}
-	\item welche anpassungen
-\end{itemize}
+Bei den verwendeten Daten im Paper handelt es sich um schwarz-weiß Scans von Lungen zur Identifizierung von COVID-19 Erkrankungen.
+Die Bilder sind deutlich größer als die von uns verwendeten, weshalb die Architektur dementsprechend angepasst werden muss.
 
 \subsection{Architektur}
-\begin{itemize}
-	\item Was ist besonders an Architektur?
-	\item wirklich nochmal in Textform beschreiben?
-	\item alpha von LeakyRelu wird nicht angezeigt
-	\item Discriminator \cref{architecture:dcgan-med-dis}
-	\item Generator \cref{architecture:dcgan-med-gen}
-\end{itemize}
+Sowohl Discriminator als auch Generator wurden aufgrund der anderen Bildgröße (244x244 anstatt 28x28 Pixel) angepasst.
+Dafür wurde aber nur die Art des Paddings für die einzelnen Layer angepasst.
+Die Architektur besteht dabei hauptsächlich aus Convolutional (Transpose) Layern.
+Die Anzahl der Layer, die jeweiligen Ausgabedimensionen und Filtergrößen bleibt unverändert.
+Dadurch entsteht ein vergleichsweise großes Netz.
+Die genauen Architekturen befinden sich im Anhang, sowohl für den Discriminator \cref{architecture:dcgan-med-dis} als auch für den Generator \cref{architecture:dcgan-med-gen}.
 
 \subsection{Hyperparameter}
 \begin{table}[H]
@@ -109,11 +103,17 @@ Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \
 \subsection{Zusammenfassung}
 
 \section{Dense GAN}
-\subsection{Architektur}
-Sowohl die Architektur zum Generator \cref{architecture:densegan-gen} als auch zum Discriminator \cref{architecture:densegan-dis} ist in den Anlagen als Diagramm zu finden.
+Das Dense GAN ist an einem Tutorial für das MNIST Datenset inspiriert.
+Im Tutorial wird jedoch nur ein normales GAN statt einem CGAN verwendet.
+Folglich fehlt die Eingabe von Labeln, die in der verwendeten Architektur ergänzt sind.
 
-Die Architektur ist inspiriert von einem Tutorial für den MNIST Datenset \cite{inspiration-dense-gan}.
-Da die Datensätze sehr ähnlich sind, kann die Struktur übernommen werden.
+\subsection{Architektur}
+In der Architektur kommen ausschließlich Dense Layer zum Einsatz.
+Den Dense Layern folgen dann immer eine Aktivierungsschicht (LeakyReLu mit einem alpha von 0.2) und einer Batch Normalization.
+Label und Latent-Dimension beziehungsweise des Bildes werden in beiden Architekturen direkt miteinander fusioniert.
+Dies geschieht über eine Multiply-Schicht.
+
+Sowohl die Architektur des Discriminators \cref{architecture:densegan-dis} als auch des Generators \cref{architecture:densegan-gen} ist in den Anlagen als Diagramm zu finden.
 
 \subsection{Hyperparameter}
 Für das Training wurde eine Anzahl an vordefinierten Hyperparameterkombinationen ausprobiert.
