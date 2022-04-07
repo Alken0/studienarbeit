@@ -1,0 +1,19 @@
+dcgan1:
+- git: c776cf5c68f989dd0141186ba1c1e74001a56e33
+- discriminator: conv layer only for image input
+- generator: latent-dim + label merged and then convT layers
+- label and image merge in last step
+
+dcgan2:
+- git: 7016a1142cc696626ca6cdd92ea3510b4c6d4f3a
+- ???
+
+dcgan3:
+- git: 7016a1142cc696626ca6cdd92ea3510b4c6d4f3a
+- batch-size: [16, 32]
+- generator: 
+  - multiply label + latent-dim instead of concat
+  - more dims for convT
+- discriminator:
+  - multiply label + latent-dim instead of concat
+  - +1 conv layer
