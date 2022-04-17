@@ -39,18 +39,13 @@ Gewünschte Hyperparameter können dort einfach in der entsprechenden Liste erg�
 Zunächst sollte der Model Name in der Datei \textit{constants.py} gesetzt werden.
 Die Einstellung bestimmt das zu nutzende Modell.
 Auch andere Hyperparameter können für das Training geändert werden (\cref{chapter:configuration-hyperparams}).
-\newline
-
-Falls zusätzlich zum Training eine Generierung stattfinden soll, muss in der Datei \textit{main.py} zusätzlich der Booleanwert \textit{GENERATE\_IMAGES} auf \textit{True} gesetzt werden.
-\newline
-
+Falls zusätzlich zum Training eine Generierung stattfinden soll, muss in der Datei \textit{main.py} der Booleanwert \textit{GENERATE\_IMAGES} auf \textit{True} gesetzt werden.
 Schließlich muss die Datei \textit{main.py} ausgeführt werden.
 Das ausgeführte Script startet sowohl Generierungsprozess (falls konfiguriert) als auch das Training.
 
 \subsection{Logs}
 Bei den Logs handelt es sich um Bilder, FID-Werte und Graphen für die jeweilige Hyperparameterkombinationen.
 Die Logs werden während dem Training automatisch erstellt.
-\newline
 
 Um die Logs einzusehen empfiehlt sich die Nutzung von Tensorboard.
 Es sollte nach dem \textit{pip install} des \textit{Pipfile}s automatisch installiert sein.
@@ -69,7 +64,6 @@ Allerdings ist sie für den Trainingsablauf bei GANs ineffizient.
 
 Bei einem GAN müssen Generator und Discriminator beide trainiert werden.
 Dafür benötigt der Generator den Losswert des Discriminators auf seine generierten Daten $loss_{unecht} = d(X_{unecht})$.
-
 Der Discriminator soll lernen unechte von echten Daten zu Unterscheiden.
 Hierzu kann er mithilfe von Supervised Learning trainiert werden.
 Um den Fehler über beide Datensets zu bestimmen müssen die folgenden Operationen ausgeführt werden $loss_{unecht} = d(X_{unecht})$ und $loss_{echt} = d(X_{echt})$.
