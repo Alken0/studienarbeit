@@ -17,29 +17,43 @@ Das Virtual Environment verhindert insbesondere Version Conflicts in Python.
 \newline
 
 Aufgrund der trivialen Installation des Projekts werden an dieser Stelle nur die wichtigsten Dependencies für Vergleiche genannt.
+
 Dabei handelt es sich um Python 3.9, Tensorflow 2.6 und Keras 2.8.
 Es ist anzumerken, dass Tensorflow mithilfe von CUDA optimiert wurde.
 CUDA erlaubt die Ausführung der Trainings auf der GPU, was den Trainingsprozess stark beschleunigt.
 
 \subsection{Konfiguration}
-Für das Projekt existieren sehr viele Parameter, wie zum Beispiel die Anzahl an Bildern pro Label oder auch die exakten Werte für Hyperparameter.
-All diese Konfigurationen können innerhalb der Dateien \textit{configuration.py} und \textit{hyperparameters.py} eingesehen und bearbeitet werden.
-Je nach Parameter müssen dann die Bilder erneut generiert werden.
+\label{chapter:configuration-hyperparams}
+Für das Projekt existieren diverse Hyperparameter, wie zum Beispiel die Anzahl an Bildern pro Label oder auch die exakten Werte für Hyperparameter.
 \newline
 
-Parameter, die als Wert den Text \textit{"set by hyperparameters"} haben, werden während des Trainings überschrieben.
+Alle Konfigurationen können innerhalb der Dateien \textit{configuration.py} und \textit{hyperparameters.py} eingesehen und bearbeitet werden.
+Je nach Hyperparameter müssen dann die Bilder erneut generiert werden.
+\newline
+
+Hyperparameter, die in der Datei \textit{configuration.py} als Wert den Text \textit{'set by hyperparameters'} haben, werden während des Trainings überschrieben.
 Um die Hyperparameter zu ändern, muss die Datei \textit{hyperparameters.py} angepasst werden.
 Gewünschte Hyperparameter können dort einfach in der entsprechenden Liste ergänzt werden.
 
 \subsection{Ausführung}
-Sowohl zum Generieren, als auch für das Training muss die Datei \textit{main.py} ausgeführt werden.
-Allerdings sollte dafür zunächst der Model Name in der Datei \textit{constants.py} gesetzt werden.
+Zunächst sollte der Model Name in der Datei \textit{constants.py} gesetzt werden.
 Die Einstellung bestimmt das zu nutzende Modell.
+Auch andere Hyperparameter können für das Training geändert werden (\cref{chapter:configuration-hyperparams}).
+\newline
+
 Falls zusätzlich zum Training eine Generierung stattfinden soll, muss in der Datei \textit{main.py} zusätzlich der Booleanwert \textit{GENERATE\_IMAGES} auf \textit{True} gesetzt werden.
 \newline
 
-Während dem Training werden die zugehörigen Logs automatisch erstellt.
-Um diese einzusehen empfiehlt sich die Nutzung von Tensorboard.
+Schließlich muss die Datei \textit{main.py} ausgeführt werden.
+Das ausgeführte Script startet sowohl Generierungsprozess (falls konfiguriert) als auch das Training.
+
+\subsection{Logs}
+Bei den Logs handelt es sich um Bilder, FID-Werte und Graphen für die jeweilige Hyperparameterkombinationen.
+Die Logs werden während dem Training automatisch erstellt.
+\newline
+
+Um die Logs einzusehen empfiehlt sich die Nutzung von Tensorboard.
+Es sollte nach dem \textit{pip install} des \textit{Pipfile}s automatisch installiert sein.
 Das Tensorboard kann mit dem Befehl \textit{tensorboard --logdir=data/logs/<model-name>} gestartet werden.
 
 \section{Optimierungen}
@@ -51,12 +65,16 @@ Tensorflow bietet eine Standardfunktion zum Traininieren von Neuronalen Netzen m
 Die Funktion wird auf ein Model angewendet und führt eine Trainingsepoche auf einen übergebenen Datensatz mit zu übergebenden Parametern durch.
 Die Funktion ist für simple Trainingsabläufe wie das Trainieren eines Klassifikatoren sehr gut geeignet.
 Allerdings ist sie für den Trainingsablauf bei GANs ineffizient.
+\newline
 
 Bei einem GAN müssen Generator und Discriminator beide trainiert werden.
-Dabei benötigt der Generator den Losswert des Discriminators auf seine generierten Daten $loss_{unecht} = d(X_{unecht})$.
+Dafür benötigt der Generator den Losswert des Discriminators auf seine generierten Daten $loss_{unecht} = d(X_{unecht})$.
+
 Der Discriminator soll lernen unechte von echten Daten zu Unterscheiden.
-Dafür kann er mithilfe von Supervised Learning trainiert werden.
+Hierzu kann er mithilfe von Supervised Learning trainiert werden.
 Um den Fehler über beide Datensets zu bestimmen müssen die folgenden Operationen ausgeführt werden $loss_{unecht} = d(X_{unecht})$ und $loss_{echt} = d(X_{echt})$.
+\newline
+
 Im Trainingsprozess gibt es somit eine Überschneidung, der $loss_{unecht} = d(X_{unecht})$.
 Um diesen Losswert wiederzuverwenden benötigt es eine eigene Trainingsfunktion.
 Auf der Tensorflow Webseite ist dafür auch eine Alternative Lernfunktion angegeben, die statt \textit{model.fit} verwendet wird \cite{tensorflow-gan-learn-step}.
@@ -66,15 +84,19 @@ Für die Erstellung der Logs werden diverse Bilder erzeugt und abgespeichert.
 Bei der Nutzung von Matplotlib muss dafür für jedes Bild zunächst eine Figure erstellt werden.
 Die Figure wird benötigt, um das Bild zu konfigurieren.
 Es ist dabei nicht möglich, die Figures für verschiedene Bilder vernünftig wiederzuverwenden.
+\newline
 
 Das Problem einer großen Anzahl an Figures ist, dass Matplotlib die Figures nicht automatisch bereinigt.
 Stattdessen sammeln sich im Hintergrund immer mehr ungenutzte Objekte an.
 Das führt zu einem ständig größer werdenden Arbeitsspeicherverbrauch.
 Der erhöhte Verbrauch endet dann in einem Overflow Error und Absturz des Programms, in diesem Falle des Trainings.
+\newline
 
 Eine Lösung für das Löschen der Figure-Objekte ist die Methode \textit{plt.close('all')}, die von Matplotlib selbst bereitgestellt wird.
 Sie löscht alle offenen Instanzen und bereinigt so den Arbeitsspeicher.
 Die Methode muss jedoch manuell aufgerufen werden.
+\newline
+
 Um eine möglichst optimale Speichernutzung zu garantieren, wird die Funktion während des Trainings nach jedem geschriebenen Log ausgeführt.
 Dadurch ist sichergestellt, dass auch lange Trainingsperioden durchgeführt werden können, ohne dass zusätzliche Ressourcen benötigt werden.
 
@@ -83,11 +105,13 @@ Bei der Hyperparameteroptimierung werden verschiedene Modelle erzeugt und traini
 Tensorflow ist nicht dafür ausgelegt, in einem Durchgang sehr viele Unterschiedliche Modelle zu trainieren.
 Es existiert deshalb keine Automatismus, der nicht mehr benötigte Modell im Hintergrund aufräumt.
 Dadurch kommt es zu einem stetig steigendem Arbeitsspeicher-Verbrauch.
+\newline
 
 Der Speicherverbrauch ist schlecht, da er zum Beispiel das Loggen verhindert.
 Die entstehenden Probleme sind so gravierend, dass sie zu einem Abbruch des Lernprozesses führen können.
-
 Die Lösung besteht im manuellen bereinigen der nicht mehr genutzten Modelle.
+\newline
+
 Für das Bereinigen stellt Tensorflow die Methode \textit{tf.keras.backend.clear\_session()} bereit.
 Um eine möglichst optimale Speichernutzung zu gewährleisten wird die Methode nach jedem fertigen Model-Training aufgerufen.
 So wird verhindert, dass Tensorflow gleichzeitig mehr als ein Modell bekannt ist.
@@ -105,9 +129,12 @@ Insbesondere die Methoden zum Zeichnen von Polygonen und Kreisen werden zur Gene
 
 Für die Generierung werden eine Bildgröße, Formmindestgröße, Formmaximalgröße und Anzahl zu generierender Bilder benötigt.
 Die zugehörigen Werte sind in der Konfigurationsdatei \textit{constants.py} angegeben.
+
 Beim Aufruf des Generators wird dann die jeweilige Generierungsfunktion für die Form aufgerufen.
-Diese erstellt dann pro mögliche Größe eine Anzahl an Bildern.
-Die Anzahl pro Größe ist abhängig von der Anzahl der maximalen Bilder und berechnet sich mit der Formel: $AnzahlProBild = MaximalAnzahlAnBildern / GrössenKombinationen$.
+Diese erstellt pro mögliche Größe eine Anzahl an Bildern.
+Die Anzahl der Größen ist abhängig von der Anzahl der maximalen Bilder und berechnet sich mit der Formel: $AnzahlProGrö"se = MaximalAnzahlAnBildern / Grö"senKombinationen$.
+\newline
+
 Die Position der Form ist zufällig, kann aber durch einen Seed beeinflusst werden, um den Prozess reproduzieren zu können.
 Durch die zufallsgesteuerte Positionierung können Positionen identisch sein.
 Allerdings sind gleiche Bilder bei den verwendeten Konfigurationen sehr selten. \todo{Analyse gibt es gleiche Bilder?}

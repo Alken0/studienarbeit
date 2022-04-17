@@ -9,19 +9,24 @@ Danach erfolgt eine Festlegung der Kriterien für ein erfolgreiche trainiertes '
 \section{Dataset}
 Das Dataset wurde im Rahmen der Studienarbeit generiert und besteht für das Training aus 1500 Bildern.
 Die 1500 Bilder teilen sich dabei in jeweils 500 Bilder pro Formklasse (Dreieck, Kreis, Quadrat) auf.
+\newline
+
 Alle Bilder haben eine Größe von 28x28 Pixel und sind Schwarz-Weiß kodiert.
 Der Grauwert jedes Pixels wird durch einen Channel angegeben, dessen Werte durch eine Zahl im ganzzahligen Intervall $[0; 255]$ festgelegt ist.
 Dabei entspricht die Zahl 0 einem schwarzen Pixel und die Zahl 255 repräsentiert einen weißen Pixel.
+\newline
 
 Auf jedem Bild ist eine geometrische Form abgebildet.
 Bei den geometrischen Formen handelt es sich um gleichseitige Dreiecke, Quadrate und Kreise.
 Die Formen unterscheiden sich in Größe und Position auf dem Bild.
 Andere Transformationen, wie beispielsweise Rotationen, werden nicht angewendet.
+\newline
 
 Die Quadrate und gleichseitigen Dreiecke sind zwischen 5 und 16 Pixel groß.
 Die Größe bezieht sich dabei auf die Seitenlänge der Seiten.
 Die Kreise sind zwischen 5 und 10 Pixel groß.
 Hierbei gibt der Wert den Radius des Kreises an.
+\newline
 
 Die Formen sind so im Bild positioniert, dass sie Seitenränder touchieren können.
 Allerdings ist eine Form immer vollständig im Bild abgebildet und wird vom Bildrand nicht geschnitten.
@@ -51,6 +56,7 @@ Die Anforderungen an die Ein- und Ausgabe wie folgt definiert.
 
 Der Generator erhält als Eingabe einen 100 Stellen langes Array mit Zufallszahlen (Latent-Dimension) und eine Zahl zwischen 0 und 2, die das Label repräsentiert.
 Die Ausgabe des Generators ist ein Array mit den gleichen Dimensionen, wie ein Bild (28x28x1).
+\newline
 
 Der Discriminator erhält als Eingabe ein Bild als Array und zusätzlich ein Label als Zahl.
 Die Ausgabe ist eine Zahl zwischen 1 und -1, die die vorhergesagte Echtheit angibt.
