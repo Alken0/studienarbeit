@@ -24,7 +24,7 @@ Ursprünglich als unabhängige API entwickelt, ist Keras seit Tensorflow 2.0 ein
 \section{General Adversarial Network}
 Der Begriff GAN \textit{(General Adversarial Network)} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
 Das Wort bezeichnet ein Konstrukt aus 2 neuronalen Netzen, die sich gegenseitig trainieren.
-Durch das spezielle Training gelingt die Generierung von realistischen unechten Daten.
+Durch das spezielle Training gelingt die Generierung von realistischen synthetischen Daten.
 Solche Daten können dann zum Beispiel für das Training anderer neuronalen Netze \cite{gan-application-augmenting-training-data}, in der Bildverarbeitung \cite{gan-application-upscaling, gan-application-blending} und vielen weiteren Anwendungsgebieten verwendet werden \cite{gan-application-dna-optimizes-protein-functions, gan-application-audio-synthesis}.
 
 \begin{figure}[H]
@@ -35,7 +35,7 @@ Solche Daten können dann zum Beispiel für das Training anderer neuronalen Netz
 \end{figure}
 
 Die beiden Netze eines GANs werden in den Generator und den Discriminator unterschieden.
-Aufgabe des Generators ist die Generierung von unechten Daten.
+Aufgabe des Generators ist die Generierung von synthetischen Daten.
 Dafür wandelt er eine zufälligen Eingabe in einen möglichst realistischen Output um.
 Die zufällige Eingabe dient dabei als Basis für die Ausgabedaten.
 Das ist notwendig, da der Umwandlungsprozess selbst deterministisch ist, aber trotzdem eine Vielzahl an unterschiedlichen Daten generiert werden soll.
