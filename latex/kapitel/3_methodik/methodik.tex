@@ -31,19 +31,20 @@ Hierbei gibt der Wert den Radius des Kreises an.
 Die Formen sind so im Bild positioniert, dass sie Seitenränder touchieren können.
 Allerdings ist eine Form immer vollständig im Bild abgebildet und wird vom Bildrand nicht geschnitten.
 
-\newcommand{\trainDataImage}[1]{\subfloat{\fbox{\includegraphics[width=.29\linewidth]{#1}}}}
-\begin{figure}
-	\trainDataImage{kapitel/3\_methodik/data/circle\_00.png}\hfill
-	\trainDataImage{kapitel/3\_methodik/data/circle\_01.png}\hfill
-	\trainDataImage{kapitel/3\_methodik/data/circle\_02.png}\par \hfill
+\newcommand{\trainDataImage}[1]{\subfloat{\fbox{\includegraphics{#1}}}}
+\begin{figure}[H]
+	\centering
+	\trainDataImage{kapitel/3\_methodik/data/circle\_00.png}
+	\trainDataImage{kapitel/3\_methodik/data/circle\_01.png}
+	\trainDataImage{kapitel/3\_methodik/data/circle\_02.png}\par 
 	
-	\trainDataImage{kapitel/3\_methodik/data/rectangle\_00.png}\hfill
-	\trainDataImage{kapitel/3\_methodik/data/rectangle\_01.png}\hfill
-	\trainDataImage{kapitel/3\_methodik/data/rectangle\_02.png}\par \hfill
+	\trainDataImage{kapitel/3\_methodik/data/rectangle\_00.png}
+	\trainDataImage{kapitel/3\_methodik/data/rectangle\_01.png}
+	\trainDataImage{kapitel/3\_methodik/data/rectangle\_02.png}\par 
 	
-	\trainDataImage{kapitel/3\_methodik/data/triangle\_00.png}\hfill
-	\trainDataImage{kapitel/3\_methodik/data/triangle\_01.png}\hfill
-	\trainDataImage{kapitel/3\_methodik/data/triangle\_02.png}\par \hfill
+	\trainDataImage{kapitel/3\_methodik/data/triangle\_00.png}
+	\trainDataImage{kapitel/3\_methodik/data/triangle\_01.png}
+	\trainDataImage{kapitel/3\_methodik/data/triangle\_02.png}\par 
 	
 	\caption{Auswahl an zufällig generierten Trainingsbilder}
 \end{figure}
