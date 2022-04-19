@@ -72,47 +72,117 @@ Die Ausgabe ist eine Zahl zwischen 1 und -1, die die vorhergesagte Echtheit angi
 \section{Verfahren zur Hyperparametersuche}
 \todo[shadow,inline]{Aufbau ändern in: Kriterien $\rightarrow$ Tabelle $\rightarrow$ Auswahl/Bewertung (siehe Kommentare)}
 Zur Auswahl von Hyperparametern gibt es verschiedene Verfahren.
-Dazu gehören unter anderem die Manuelle Suche, Gridsearch, Random Search und Genetic Algorithms (siehe \cref{chapter:verfahren-bestimmung-hyperparameter}).
+Dazu gehören unter anderem die Manuelle Suche, Grid Search, Random Search und Genetic Algorithms (siehe \cref{chapter:verfahren-bestimmung-hyperparameter}).
 In diesem Abschnitt werden die verschiedenen Verfahren verglichen und zusätzliche Anpassungen erläutert.
 
 \subsection{Kriterien}
-\todo[shadow, inline]{Implementierungsaufwand, Laufzeit, Komplexität, Unterstützung durch Tensorflow, ?}
+\todo[inline, shadow]{irgendwo hardware festhalten}
+In diesem Abschnitt werden Kriterien für die Auswahl eines geeigneten Hyperparameter Suchverfahrens ausgewählt.
+Die Kriterien dienen als Basis für die Bewertung der Suchverfahren im nächsten Schritt.
+
+\paragraphNewLine{Automatisierbarkeit}
+Ziel ist es, pro Nacht eine Architektur zu trainieren.
+Deswegen ist es wichtig, dass das Verfahren vollkommen automatisiert ablaufen kann.
+
+\paragraphNewLine{Ressourcenbedarf}
+Das Verfahren darf in keinem Fall während oder nach einer Trainingsiteration so viel zusätzlichen Speicher belegen, dass das Training fehlschlägt.
+Denn Trainingsabläufe sollen primär über Nacht durchgeführt werden, wodurch Fehlschläge erst sehr spät entdeckt werden.
+
+Dabei ist zu beachten, dass die Hardware den Trainingsprozess stark beeinflusst.
+So ist der verfügbare Arbeits- und Grafikkartenspeicher nicht ausreichend, um Trainingsdurchläufe stark zu parallelisieren.
+
+\paragraphNewLine{Laufzeit}
+Die Laufzeit der Hyperparametersuche ist von entscheidender Bedeutung.
+Denn die verwendete Hardware ist nicht ausreichend, um jegliche Kombinationen von Hyperparametern in einer vernünftigen Zeit zu testen.
+Als zeitliche Begrenzung dient dabei die Ausführung in einer Nacht von 8h.
+
+Jedoch ist zu beachten, dass auch der Trainingsprozess als solcher viel Zeit in Anspruch nimmt.
+Der reine Trainingsaufwand erlaubt mit der verwendeten Hardware in den 8h maximal 75 sequentielle Trainingsdurchläufe (je nach Architektur kann der genaue Wert abweichen).
+Folglich sollte das Verfahren innerhalb von 75 Durchläufen zu einem Ergebnis kommen.
+
+\paragraphNewLine{Effektivität}
+Das Verfahren soll in jedem Fall eine gute Kombination im zeitlichen Rahmen finden.
+Das ist insofern wichtig, als dass ansonsten kein Vergleich zu anderen Architekturen erfolgen kann.
+Aufgrund der geringen Ressourcen (Zeit und Rechenleistung) besteht zwar kein Anspruch auf Optimalität, jedoch sollte es zumindest ein gutes Ergebnis liefern.
+
+\paragraphNewLine{Implementierungsaufwand}
+Der zusätzlich verursachte Implementierungsaufwand ist nicht so wichtig wie die anderen Kriterien.
+Er kann aber als Ausschlusskriterium bei ähnlich guten Verfahren dienen.
+Der Implementierungsaufwand wird durch Dokumentation, Tutorials, Libraries, oder eine Einbindung in Tensorflow/-board verringert.
+
+Bei der Verwendung von Libraries ist essentiell, dass sie eigene Trainingsfunktionen und den spezielleren Trainingsablauf von GANs unterstützen.
+Zusätzlich müssen sie in jedem Fall mit Tensorflow oder Keras kompatibel sein.
 
 \subsection{Vergleich}
-In der Studienarbeit wird ausschließlich die Gridsearch zur Bestimmung der Hyperparameter zur Anwendung kommen.
-Die Entscheidung ist mit den nachfolgenden Punkten begründet.
+In diesem Abschnitt werden die vorgestellten Verfahren miteinander auf Basis der Kriterien verglichen.
 
 \paragraphNewLine{Manuelle Suche}
-Die ausschließlich manuelle Suche ist zwar sehr flexibel\todo{anderes wort}, aber zu aufwändig.
-Eine weitreichende Suche mit ständiger Neuevaluierung der Trainingsergebnisse ist für den kurzen Zeitraum der Studienarbeit nicht verhältnismäßig.
-Zudem ist das Verfahren für eine komplexe Hyperparametersuche nicht mehr zeitgemäß.
-Die anderen vorgestellten Verfahren sind der manuellen Suche immer überlegen.
+Die manuelle Suche ist aufgrund der ständigen verpflichtenden Neuevaluierungen der Traingsergebnisse als einziges Verfahren \todo{reicht es nur automatisierbarkeit nur in der manuellen suche anzusprechen?} nicht automatisierbar.
+Zudem erhöhen die Evaluierungen den Zeitaufwand zusätzlich, da jedes mal eine fundierte\todo{mehr richtung durchdachte?} Entscheidung getroffen werden muss.
+Insgesamt erhöht sich so die Laufzeit im Vergleich zu automatisierten Verfahren sehr stark.
+\newline
 
-\paragraphNewLine{Zufallssuche}
-Die Zufallssuche ist der Gridsearch sehr ähnlich.
-Statt festgelegten Zahlen werden Zufallszahlen verwendet.
-Dadurch wird ein größeres Spektrum an Kombinationen abgedeckt.
-Allerdings führt das Verfahren in der Praxis nicht unbedingt zu besseren Ergebnissen als die Gridsearch.
-Zusätzlich führt es zu einem größeren Implementierungsaufwand und wieder mehr Hyperparametern als die Gridsearch.
-Der erhöhte Implementierungsaufwand ist durch eine zusätzliche Zufallsfunktion zu begründen.
-Die Funktion wird benötigt, um die alle Kombinationen anzupassen.
-Im Vergleich dazu kann bei der Gridsearch pro Hyperparameter ein Array mit verschiedenen Werten übergeben werden.
-Die zusätzlichen Hyperparameter hängen auch mit der Zufallsfunktion zusammen.
-Denn der zufällige Abstand zum Originalwert muss in einem sinnvollen Intervall liegen.
-Die Bestimmung der Grenzen des Intervalls benötigt zusätzliche Anpassungen und Training.
+Alle anderen Kriterien werden hingegen optimal erfüllt.
+Denn für die Einführung einer manuellen Suche müssen keinerlei Anpassungen am Trainingsprozess oder Code vorgenommen werden.
 
-\paragraphNewLine{Evolutionäre Suche}
-Die evolutionäre Suche ist sowohl mit einem hohen Implementierungs-, als auch Rechenaufwand verbunden.
-Dafür ist es möglich, sehr viele Hyperparameter auf ihre Zusammenhänge zu untersuchen.
-Jedoch reduzieren wir die Hyperparameter auf eine kleine Auswahl, weswegen der Aufwand nicht gerechtfertigt ist.
+\paragraphNewLine{Grid Search}
+Die Laufzeit der Grid Search hängt stark von der Anzahl der Hyperparameter ab.
+Das liegt an der Durchführung eines Trainings für jede mögliche Kombination aus den Hyperparametern.
+Im Rahmen der Studienarbeit werden jedoch nur wenige bestimmte Hyperparameter getestet, wodurch eine ausreichend schnelle Laufzeit gegeben ist.
+Zwar könnte das Verfahren insgesamt durch Parallelisierung noch beschleunigt werden, das würde allerdings die Hardwarekapazitäten übersteigen.
+Bei einem sequentiellen Ablauf stellt die Ressourcennutzung keine Probleme dar.
+\newline
 
-\paragraphNewLine{Gridsearch}
-Die Gridsearch ist für die Arbeit am besten geeignet, da sie zum einen einen sehr geringen Implementierungsaufwand mit sich bringt.
-Es müssen nur die Hyperparameter festgelegt werden, der Suchprozess kann dann mithilfe von Tensorboard grafisch veranschaulicht werden.
+Die Effektivität des Verfahrens ist auch gegeben, solange eine geeignete Kombination aus den Hyperparameterwerten gebildet werden kann.
+Sollte keine gute Kombination im Suchraum existieren, scheitert das Verfahren.
+Dementsprechend wichtig ist die Wahl der Werte.
+\newline
+
+Die Implementierung in das Projekt ist sehr einfach, da eine Grid Search native von Tensorflow unterstützt wird.
+Durch eine Iteration über das Kreuzprodukts aller Hyperparameterwerte lässt sich dann die Suche umsetzen.
+Durch den simplen Neustart des Trainings werden auch automatisch eigene Trainingsfunktionen oder -abläufe unterstützt.
+
+\paragraphNewLine{Random Search}
+Die Random Search ist der Grid Search sowohl im Verhalten als auch in der Bewertung sehr ähnlich.
+Auch bei der Random Search sind Ressourcenbedarf und Laufzeit vertretbar, solange das Verfahren nicht parallelisiert wird und nicht zu viele zufällige Werte für die Hyperparameter ausgewählt werden.
+\newline
+
+Statt der Wahl der Werte beeinflusst bei diesem Verfahren die Wahl der Intervalle die Effektivität.
+Diese müssen so klein gewählt werden, dass bei der Anzahl an generierten Werten eine Chance besteht, optimale Werte zu finden.
+Das bedeutet einem Intervall von 100 möglichen Werten sollte nicht nur 1 Zufallswert gegenüberstehen. \todo{in Stand der Technik?}
+\newline
+
+Der Implementierungsaufwand ist etwas größer als bei der Grid Search.
+Zwar gibt es das Package KerasTuner \cite{omalley2019kerastuner}.
+Der KerasTuner hat allerdings keine Dokumentation zu eigenen Trainingsabläufen/-funktionen, die beim GAN zum Einsatz kommen.
+Allerdings können die Werte auch ohne den KerasTuner erzeugt und dann wie bei der Grid Search verwendet werden.
+Dann fehlt jedoch eine Funktion, die eine \textit{Automatic Relevance Determination} über die Werte ausführt.
+
+\paragraphNewLine{Genetic Algorithm}
+Die Laufzeit des Genetic Algorithms ist bei wenigen Hyperparametern vergleichsweise hoch.
+Dafür nimmt die Laufzeit bei mehr Hyperparametern in nur geringem Maß zu.
+Jedoch wird für die Studienarbeit eine stark begrenzende Vorauswahl an Hyperparametern getroffen. \todo{Wo begründet?}
+Dadurch ist die Laufzeit des Verfahrens vergleichsweise hoch.
+
+Durch eine mangelnde Parallelisierung müssen auch alle Modelle in einem Evolutionsschritt sequentiell trainiert werden.
+Da es sich dabei beispielsweise um 50 (Standardwert für Tensorflow Optimierung) parallele Modelle handelt, ist steigert das die Laufzeit sehr stark.
+\newline
+
+Die Effektivität des Verfahrens ist gegeben, wenn es komplett durchlaufen kann.
+Das ist aufgrund der hohen Laufzeit allerdings fraglich.
+Sobald das Verfahren früher abgebrochen wird, muss keine Effektivität mehr vorhanden sein.
+Insbesondere unter der Annahme, dass sich die Hyperparameter stetig anpassen und optimieren \todo{und das netz nicht übertrainiert wurde}, sollte sogar ein deutlich schlechteres Ergebnis geliefert werden, als am Ende herauskommt.
+\newline
+
+Für die Implementierung stellt Tensorflow eine Optimierungsfunktion bereit.
+Jedoch unterstützt die Funktion keine eigenen Trainingsabläufe, oder es ist nicht dokumentiert.
+Aufgrund der fehlenden Informationslage ist der tatsächliche Aufwand nur schwer einschätzbar. \todo{nochmal recherchieren?}
+Er sollte jedoch deutlich höher liegen, als bei den anderen beiden Verfahren.
 
 \subsection{Bewertung}
-\todo[shadow, inline]{vorher: Anpassung an Gridsearch $\rightarrow$ markus: gehört in Bewertung/Auswahl $\rightarrow$ umschreiben}
-Zwar findet die Gridsearch in keiner intelligenten Weise die optimalen Hyperparameter, aber durch kurze Trainings- und Validierungsintervalle können schlecht trainierende Kombinationen schnell aussortiert werden.
+\todo[shadow, inline]{vorher: Anpassung an Grid Search $\rightarrow$ markus: gehört in Bewertung/Auswahl $\rightarrow$ umschreiben}
+
+Zwar findet die Grid Search in keiner intelligenten Weise die optimalen Hyperparameter, aber durch kurze Trainings- und Validierungsintervalle können schlecht trainierende Kombinationen schnell aussortiert werden.
 Dafür können am Anfang $n$ GANs auf $m$ Generationen trainiert werden.
 Nach dem Training werden die Ergebnisse evaluiert und die Hälfte der GANs aussortiert 
 Im Gegenzug wird die Anzahl der zu trainierenden Generationen verdoppelt.
@@ -261,7 +331,7 @@ Ziel: GAN das möglichst diverse und korrekte Bilder erzeugt $\rightarrow$ Wie w
 \begin{enumerate}
 	\item Anpassung von Hyperparametern (Learning-rate, batch-size, momentum)
 	\footnote{https://towardsdatascience.com/what-are-hyperparameters-and-how-to-tune-the-hyperparameters-in-a-deep-neural-network-d0604917584a}
-	\footnote{Grid-search (erlaubt methodisches Suchen nach optimalen Hyperparametern): https://www.tensorflow.org/tensorboard/hyperparameter\_tuning\_with\_hparams}
+	\footnote{Grid Search (erlaubt methodisches Suchen nach optimalen Hyperparametern): https://www.tensorflow.org/tensorboard/hyperparameter\_tuning\_with\_hparams}
 	\item Anpassung von Neuralen Netzarchitektur
 	\footnote{https://lab.wallarm.com/the-first-step-by-step-guide-for-implementing-neural-architecture-search-with-reinforcement-learning-using-tensorflow-99ade71b3d28/}
 \end{enumerate}

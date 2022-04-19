@@ -137,60 +137,83 @@ Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Arc
 \label{chapter:verfahren-bestimmung-hyperparameter}
 \todo{Quelle \cite{hyperparameters-search}}
 
-Hyperparameter dienen der Konfiguration des Trainingsprozesses.
-Im Gegensatz zu den Parametern neuronaler Netze werden sie durch das Training nicht verändert.
-Bei Hyperparametern handelt es sich zum Beispiel um die Lernrate oder Lossfunction \cite{hyperparameters-gan-using-genetic-algorithm}.
-Die Bestimmung von Hyperparametern ist wichtig für den Trainingserfolg des Modells und sollte für jeden Datensatz neu bestimmt werden.
+\begin{comment}
+	Soll in allgemeines für Neuronale Netze:
+	
+	\todo{Quelle \cite{hyperparameters-search}}
+	
+	Hyperparameter dienen der Konfiguration des Trainingsprozesses.
+	Im Gegensatz zu den Parametern neuronaler Netze werden sie durch das Training nicht verändert.
+	Bei Hyperparametern handelt es sich zum Beispiel um die Lernrate oder Lossfunction \cite{hyperparameters-gan-using-genetic-algorithm}.
+	Die Bestimmung von Hyperparametern ist wichtig für den Trainingserfolg des Modells und sollte für jeden Datensatz neu bestimmt werden.
+	
+	Nicht alle Hyperparameter sind gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate zählt zu den dominanteren Faktoren \cite{learning-rate-most-important}.
+\end{comment}
 
+\todo[inline, shadow]{Eingrenzung/Vorauswahl fehlt $\rightarrow$ gibt ja noch viel mehr params...}
 
-Jedoch sind nicht alle Hyperparameter gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate zählt zu den dominanteren Faktoren \cite{learning-rate-most-important}.
-Zusätzlich unterscheiden sich optimale Hyperparameter bei verschiedenen Datensätzen oder Netzarchitekturen.
+Eine optimale Wahl der Werte für die Hyperparameter unterscheidet sich bei verschiedenen Datensätzen oder Netzarchitekturen. \todo{Quelle}
+Deswegen ist es wichtig, zumindest die wichtigsten Hyperparameter immer neu zu bestimmen.
+
+Dies ist auch im Rahmen der Arbeit wichtig, da verschiedene Architekturen auf ihre Effektivität beziehungsweise Effizienz \todo{Wortwahl} untersucht werden sollen.
+Bei gleichen Hyperparametern für verschiedene Architekturen wäre dies ein unfairer Vergleich.
+
 Für die Suche nach optimalen Hyperparametern gibt es verschieden Verfahren, die im Folgend vorgestellt werden.
 
-\paragraphNewLine{Manuelle Suche}
-Zunächst ist es möglich die Hyperparameter manuell festzulegen.
-Das ist vor allem bei unwichtigen Hyperparametern sinnvoll, da dort bekannte Standardwerte gesetzt werden können.
-Für eine gründliche Suche aller Hyperparameter ist die manuelle Suche allerdings viel zu aufwändig.
+\subsection{Manuelle Suche}
+Die manuelle Suche ist das simpelste vorgestellt Verfahren.
+Hierfür werden nur die Hyperparameter vor jedem Trainingsdurchlauf manuell festgelegt.
+Nach einem Trainingsdurchlauf können dann die Ergebnisse analysiert, Hyperparameter angepasst und die verbesserte Version erneut trainiert werden.
 
-\paragraphNewLine{Gridsearch}
-Bei der Gridsearch handelt es sich um eine sehr traditionelle Technik und ist gut mit einem Brute-Force Ansatz vergleichbar \cite{hyperparameters-grid-search}.
-Dafür werden zunächst die zu untersuchenden Hyperparameter ausgewählt.
+%Die manuelle Suche ist vor allem bei unwichtigen Hyperparametern sinnvoll, da dort bekannte Standardwerte gesetzt werden können.
+%Für eine gründliche Suche aller Hyperparameter ist die manuelle Suche allerdings viel zu aufwändig.
+
+\subsection{Grid Search}
+Bei der Grid Search handelt es sich um eine sehr traditionelle Technik, die gut mit einem Brute-Force Ansatz vergleichbar ist \cite{hyperparameters-grid-search}.
+\newline
+
+Für die Suche werden zunächst die zu untersuchenden Hyperparameter ausgewählt.
 Danach erfolgt die Definition eines Suchintervalls inklusive Intervallschritten für jeden Hyperparameter.
 Schließlich wird das neuronale Netzwerk für jede Kombination der Hyperparameterwerte trainiert und die Ergebnisse der einzelnen Durchläufe festgehalten.
-\newline
+Die Trainingsdurchläufe können dabei parallel stattfinden.
+Dadurch entsteht zwar ein erhöhter Speicherbedarf, jedoch wird die Trainingszeit stark beschleunigt.
 
 Nach dem Training ist es dann möglich, die einzelnen Ergebnisse zu vergleichen.
 Dabei können dann Schemata erkannt und Kombinationen aussortiert werden.
-Es ist dann möglich die erfolgversprechendsten Netze weiter zu trainieren, oder direkt eine zufriedenstellende Kombination auszuwählen.
+%Es ist dann möglich die erfolgversprechendsten Netze weiter zu trainieren, oder direkt eine zufriedenstellende Kombination auszuwählen.
 \newline
 
-Insgesamt ist Gridsearch sehr simpel zu implementieren, aber auch sehr ressourcenaufwändig.
+Insgesamt ist Grid Search sehr simpel zu implementieren, aber auch sehr ressourcenaufwändig.
 Der exakte Aufwand hängt dabei stark von der Anzahl der möglichen Kombinationen der Hyperparameterwerte ab.
-Weil es sich bei den Kombinationen um ein ein Kreuzprodukt handelt, wächst der Aufwand mit der Anzahl an Werten auch sehr stark an.
-Durch die Möglichkeit von Parallelisierung findet die Gridsearch in der Regel bessere Parameter als die sequentielle manuelle Suche in der gleichen Zeit \cite{hyperparameters-random-search}.
+Da es sich bei den Kombinationen um ein ein Kreuzprodukt handelt, wächst der Aufwand mit der Anzahl an Werten sehr stark an.
+Durch die Möglichkeit von Parallelisierung findet die Grid Search in der Regel bessere Parameter als die sequentielle manuelle Suche in der gleichen Zeit \cite{hyperparameters-random-search}.
 
-\paragraphNewLine{Random Search}
-Die Random Search \cite{hyperparameters-random-search} funktioniert ähnlich wie die Gridsearch, nur werden zufällige Werte statt einem festgelegten Werteraster erzeugt (\cref{img:random-search}).
+\subsection{Random Search}
+Die Random Search \cite{hyperparameters-random-search} funktioniert ähnlich wie die Grid Search, nur werden zufällige Werte statt einem festgelegten Werteraster erzeugt.
+\newline
+
 Die zufälligen Werte haben den Vorteil, dass es weniger Werte-Überlagerungen im Vergleich zur den Raster-Kombinationen gibt.
 Deswegen kann die zufällige Suche bei gleich vielen Durchläufen ein größeres Spektrum an Ergebnissen abdecken.
 Mittels \textit{Automatic Relevance Determination} \cite{automatic-relevance-determination} ist es dann möglich, den Einfluss und Wertebereich der einzelnen Hyperparameter darzustellen.
+\newline
 
-\begin{figure}[H]
-	\includegraphics{kapitel/2_stand_der_technik/img/random-vs-grid-search.png}
-	\caption{Random Search vs Grid Search (Quelle \cite{hyperparameters-random-search})}
-	\label{img:random-search}
-\end{figure}
+Vorteil der Random Search im Vergleich zur Grid Search ist, dass keine Hyperparameter festgelegt werden müssen.
+Das erlaubt eine unvoreingenommene Herangehensweise an die Suche.
 
 Problem der Random Search ist vor allem, dass die Räume der guten Hyperparameter (\textit{Search Space}) sehr klein sind.
-Dadurch ist nicht gewährleistet, dass ein zufälliger Wert auch den Raum trifft.
-Jedoch erzielen Optimierungen mittels Random Search in der Regel trotzdem (sehr) gute Ergebnisse.
-Dem Grid-Search-Verfahren ist die Random-Search allerdings nicht prinzipiell überlegen \cite{hyperparameters-random-search}.
+Dadurch ist nicht gewährleistet, dass ein zufälliger Wert auch den Raum der optimalen Werte trifft.
+Jedoch erzielen Hyperparametersuchen mittels Random Search in der Regel trotzdem (sehr) gute Ergebnisse.
+Dem Grid Search Verfahren ist die Random Search allerdings nicht prinzipiell überlegen \cite{hyperparameters-random-search}.
 
-\paragraphNewLine{Genetic Algorithm - Evolutionäre Suche}
+Aufgrund ihrer Ähnlichkeit teilt sich die Random Search auch das Problem der Ressourcenintensivität mit der Grid Search.
+Sobald ein sehr großes Spektrum an Hyperparametern untersucht werden soll, benötigt sie sehr viel Zeit.
+Je nach zusätzlichen Optimierungen für die Wahl der Zufallswerte lässt sich die Random Search auch nicht unbedingt parallelisieren, was zu einer sehr langen Laufzeit führen kann.
+
+\subsection{Genetic Algorithm}
 \todo[inline,shadow]{mehr belegen}
-Das evolutionäre Suchverfahren wandelt die Hyperparametersuche in einen evolutinären Entwicklungsprozess um.
-Die 'Evolution' des Algorithmus ist eine Anlehnung an die natürliche Entwicklung in der Natur.
-Diese Entwicklung zeichnet sich durch die Operatoren Selektion, Kombination und Mutation aus, die auch der Algorithmus verwendet. \cite{hyperparameters-search-comparison-focus-genetic, hyperparameters-genetic-algorithm}
+Der Genetic Algorithm wandelt die Hyperparametersuche in einen evolutionären Entwicklungsprozess um.
+Der Evolutionsaspekt des Algorithmus ist dabei eine Anlehnung an die natürliche Entwicklung in der Natur.
+Diese Entwicklung zeichnet sich durch die Operatoren \textit{Selektion}, \textit{Kombination} und \textit{Mutation} aus, die der Algorithmus verwendet \cite{hyperparameters-genetic-algorithm}.
 \newline
 
 Für den Optimierungsprozess werden am Anfang mehrere zufällige Hyperparameterinstanzen erzeugt.
@@ -198,23 +221,22 @@ Die Instanzen werden dann trainiert und stehen im Wettbewerb um das beste Ergebn
 Nach der Auswertung der Trainingsergebnisse werden die besten Instanzen selektiert und miteinander gekreuzt und oder mutiert.
 \newline
 
-Die evolutionäre Suche eignet sich besonders gut bei sehr vielen Hyperparametern.
-Im Gegensatz zur Grid-Search werden nicht immer alle Kombinationen ausprobiert, sondern nur einzelne, die sich bereits zuvor als vielversprechend herausgestellt haben.
+Der Genetic Algorithm eignet sich besonders gut bei sehr vielen Hyperparametern.
+Im Gegensatz zur Grid Search werden nicht immer alle Kombinationen ausprobiert, sondern nur einzelne, die sich bereits zuvor als vielversprechend herausgestellt haben.
 Dadurch kann mit sehr großen Mengen an Hyperparametern umgegangen werden.
 
-Allerdings ist die evolutionäre Suche vergleichsweise langsam, da die Evolutionsschritte sequentiell ablaufen müssen.
-Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum wird die Grid-Search dann so langsam, dass sich die evolutionäre Suche lohnt \cite{hyperparameters-search-comparison-focus-genetic}.
+Allerdings ist der Genetic Algorithm vergleichsweise langsam, da die Evolutionsschritte sequentiell ablaufen müssen.
+Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum ist der Genetic Algorithm effizienter als eine Grid Search \cite{hyperparameters-search-comparison-focus-genetic}.
 
 \section{Related Work}
+\todo[inline, shadow]{Komplett überarbeiten}
 \label{chapter:related-work}
 Es gibt viele verschiedene Versuche und Varianten die Hyperparameter zu optimieren.
-Dementsprechend viele Papers und Artikel befassen sich damit.
 Einige dieser Arbeiten werden nachfolgend kurz vorgestellt.
 \newline
 
 \paragraphNewLine{Best Selection of Generative Adversarial Networks Hyper-Parameters Using Genetic Algorithm \cite{hyperparameters-genetic-algorithm}}
 Die Studie befasst sich mit Hyperparameter Optimierung auf Basis von genetischen Algorithmen.
-Genetische Algorithmen zeichnen sich unter anderem durch die verwendeten Operatoren Mutation, Kreuzung und Selektion aus \cite{genetic-algorithms}.
 Ziel der Studie war es, bestmögliche Hyperparameter für das MNIST Datenset zu finden \cite{dataset:mnist}.
 Dabei wurden die Hyperparameter \textit{learning-rate, dropout, batch-size und number of neurons in dense layer} betrachtet.
 \newline
