@@ -136,6 +136,9 @@ Bei einem sequentiellen Ablauf stellt die Ressourcennutzung keine Probleme dar.
 Die Effektivität des Verfahrens ist auch gegeben, solange eine geeignete Kombination aus den Hyperparameterwerten gebildet werden kann.
 Sollte keine gute Kombination im Suchraum existieren, scheitert das Verfahren.
 Dementsprechend wichtig ist die Wahl der Werte.
+Die Effektivität kann allerdings mit Verfahrensanpassungen sogar erhöht werden.
+Zwar findet die Grid Search in keiner intelligenten Weise die optimalen Hyperparameter, aber durch kurze Trainings- und Validierungsintervalle können schlecht trainierende Kombinationen schnell aussortiert werden.
+Das erlaubt ein viel größeren Suchraum und somit auch eine effektivere Suche.
 \newline
 
 Die Implementierung in das Projekt ist sehr einfach, da eine Grid Search native von Tensorflow unterstützt wird.
@@ -180,15 +183,22 @@ Aufgrund der fehlenden Informationslage ist der tatsächliche Aufwand nur schwer
 Er sollte jedoch deutlich höher liegen, als bei den anderen beiden Verfahren.
 
 \subsection{Bewertung}
-\todo[shadow, inline]{vorher: Anpassung an Grid Search $\rightarrow$ markus: gehört in Bewertung/Auswahl $\rightarrow$ umschreiben}
+Die manuelle Suche ist viel zu aufwändig und für moderne Suchen nicht mehr zeitgemäß, da eine Automatisierung fehlt.
+Für eine derart intensive Suche fehlen die Ressourcen und der dabei entstehende Aufwand wiegt auch nicht den Nutzen auf.
+\newline
 
-Zwar findet die Grid Search in keiner intelligenten Weise die optimalen Hyperparameter, aber durch kurze Trainings- und Validierungsintervalle können schlecht trainierende Kombinationen schnell aussortiert werden.
-Dafür können am Anfang $n$ GANs auf $m$ Generationen trainiert werden.
-Nach dem Training werden die Ergebnisse evaluiert und die Hälfte der GANs aussortiert 
-Im Gegenzug wird die Anzahl der zu trainierenden Generationen verdoppelt.
-So bleibt der Aufwand für das Training, bei deutlich erhöhter Intensität, der gleiche.
-Es ist anzumerken, dass die neuronalen Netze weitertrainiert werden und der vorhandene Lernfortschritt nicht zurückgesetzt wird.
-Der Prozess wird beliebig oft wiederholt und es können zu jedem Zeitpunkt Zusammenhänge zwischen den verbliebenen GANs analysiert werden.
+Der Genetic Algorithm ist zwar an sich ein sehr guter Algorithmus.
+Allerdings ist das Projekt zu klein und die Hardware zu beschränkt, um ihn richtig ausnutzen zu können.
+Bei größeren Projekten und vor allem bei weniger ressourcenaufwändigen Trainingsdurchläufen als Bildgenerierungen mithilfe von GANs ist er allerdings definitiv vorzuziehen.
+Das liegt vor allem an der allgemeinen Suchart, bei der jegliche Kombination und diverse Hyperparameter in Betracht gezogen werden können.
+\newline
+
+Sowohl die Grid Search als auch die Random Search sind geeignete Verfahren im Rahmen dieser Arbeit.
+Sie sind sich so ähnlich, dass auch ihre Vorteile und Nachteile sich nicht stark unterscheiden.
+Die Verfahren sind vor allem aufgrund ihrer geringen Laufzeit bei wenigen Hyperparametern und der trotzdem guten Effektivität gewählt.
+
+Ausschlaggebend unterscheiden tun sich die Verfahren nur in der Implementierung.
+Hierbei ist die Grid Search der Random Search etwas überlegen und wird deshalb implementiert.
 
 \section{Training}
 Im Trainingsprozess werden verschiedene Architekturen mit unterschiedlichen Hyperparametern getestet.
