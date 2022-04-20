@@ -80,18 +80,18 @@ In diesem Abschnitt werden die verschiedenen Verfahren verglichen und zusätzlic
 In diesem Abschnitt werden Kriterien für die Auswahl eines geeigneten Hyperparameter Suchverfahrens ausgewählt.
 Die Kriterien dienen als Basis für die Bewertung der Suchverfahren im nächsten Schritt.
 
-\paragraphNewLine{Automatisierbarkeit}
+\subsubsection{Automatisierbarkeit}
 Ziel ist es, pro Nacht eine Architektur zu trainieren.
 Deswegen ist es wichtig, dass das Verfahren vollkommen automatisiert ablaufen kann.
 
-\paragraphNewLine{Ressourcenbedarf}
+\subsubsection{Ressourcenbedarf}
 Das Verfahren darf in keinem Fall während oder nach einer Trainingsiteration so viel zusätzlichen Speicher belegen, dass das Training fehlschlägt.
 Denn Trainingsabläufe sollen primär über Nacht durchgeführt werden, wodurch Fehlschläge erst sehr spät entdeckt werden.
 
 Dabei ist zu beachten, dass die Hardware den Trainingsprozess stark beeinflusst.
 So ist der verfügbare Arbeits- und Grafikkartenspeicher nicht ausreichend, um Trainingsdurchläufe stark zu parallelisieren.
 
-\paragraphNewLine{Laufzeit}
+\subsubsection{Laufzeit}
 Die Laufzeit der Hyperparametersuche ist von entscheidender Bedeutung.
 Denn die verwendete Hardware ist nicht ausreichend, um jegliche Kombinationen von Hyperparametern in einer vernünftigen Zeit zu testen.
 Als zeitliche Begrenzung dient dabei die Ausführung in einer Nacht von 8h.
@@ -100,12 +100,12 @@ Jedoch ist zu beachten, dass auch der Trainingsprozess als solcher viel Zeit in 
 Der reine Trainingsaufwand erlaubt mit der verwendeten Hardware in den 8h maximal 75 sequentielle Trainingsdurchläufe (je nach Architektur kann der genaue Wert abweichen).
 Folglich sollte das Verfahren innerhalb von 75 Durchläufen zu einem Ergebnis kommen.
 
-\paragraphNewLine{Effektivität}
+\subsubsection{Effektivität}
 Das Verfahren soll in jedem Fall eine gute Kombination im zeitlichen Rahmen finden.
 Das ist insofern wichtig, als dass ansonsten kein Vergleich zu anderen Architekturen erfolgen kann.
 Aufgrund der geringen Ressourcen (Zeit und Rechenleistung) besteht zwar kein Anspruch auf Optimalität, jedoch sollte es zumindest ein gutes Ergebnis liefern.
 
-\paragraphNewLine{Implementierungsaufwand}
+\subsubsection{Implementierungsaufwand}
 Der zusätzlich verursachte Implementierungsaufwand ist nicht so wichtig wie die anderen Kriterien.
 Er kann aber als Ausschlusskriterium bei ähnlich guten Verfahren dienen.
 Der Implementierungsaufwand wird durch Dokumentation, Tutorials, Libraries, oder eine Einbindung in Tensorflow/-board verringert.
@@ -116,7 +116,7 @@ Zusätzlich müssen sie in jedem Fall mit Tensorflow oder Keras kompatibel sein.
 \subsection{Vergleich}
 In diesem Abschnitt werden die vorgestellten Verfahren miteinander auf Basis der Kriterien verglichen.
 
-\paragraphNewLine{Manuelle Suche}
+\subsubsection{Manuelle Suche}
 Die manuelle Suche ist aufgrund der ständigen verpflichtenden Neuevaluierungen der Traingsergebnisse als einziges Verfahren \todo{reicht es nur automatisierbarkeit nur in der manuellen suche anzusprechen?} nicht automatisierbar.
 Zudem erhöhen die Evaluierungen den Zeitaufwand zusätzlich, da jedes mal eine fundierte\todo{mehr richtung durchdachte?} Entscheidung getroffen werden muss.
 Insgesamt erhöht sich so die Laufzeit im Vergleich zu automatisierten Verfahren sehr stark.
@@ -125,7 +125,7 @@ Insgesamt erhöht sich so die Laufzeit im Vergleich zu automatisierten Verfahren
 Alle anderen Kriterien werden hingegen optimal erfüllt.
 Denn für die Einführung einer manuellen Suche müssen keinerlei Anpassungen am Trainingsprozess oder Code vorgenommen werden.
 
-\paragraphNewLine{Grid Search}
+\subsubsection{Grid Search}
 Die Laufzeit der Grid Search hängt stark von der Anzahl der Hyperparameter ab.
 Das liegt an der Durchführung eines Trainings für jede mögliche Kombination aus den Hyperparametern.
 Im Rahmen der Studienarbeit werden jedoch nur wenige bestimmte Hyperparameter getestet, wodurch eine ausreichend schnelle Laufzeit gegeben ist.
@@ -145,7 +145,7 @@ Die Implementierung in das Projekt ist sehr einfach, da eine Grid Search native 
 Durch eine Iteration über das Kreuzprodukts aller Hyperparameterwerte lässt sich dann die Suche umsetzen.
 Durch den simplen Neustart des Trainings werden auch automatisch eigene Trainingsfunktionen oder -abläufe unterstützt.
 
-\paragraphNewLine{Random Search}
+\subsubsection{Random Search}
 Die Random Search ist der Grid Search sowohl im Verhalten als auch in der Bewertung sehr ähnlich.
 Auch bei der Random Search sind Ressourcenbedarf und Laufzeit vertretbar, solange das Verfahren nicht parallelisiert wird und nicht zu viele zufällige Werte für die Hyperparameter ausgewählt werden.
 \newline
@@ -161,7 +161,7 @@ Der KerasTuner hat allerdings keine Dokumentation zu eigenen Trainingsabläufen/
 Allerdings können die Werte auch ohne den KerasTuner erzeugt und dann wie bei der Grid Search verwendet werden.
 Dann fehlt jedoch eine Funktion, die eine \textit{Automatic Relevance Determination} über die Werte ausführt.
 
-\paragraphNewLine{Genetic Algorithm}
+\subsubsection{Genetic Algorithm}
 Die Laufzeit des Genetic Algorithms ist bei wenigen Hyperparametern vergleichsweise hoch.
 Dafür nimmt die Laufzeit bei mehr Hyperparametern in nur geringem Maß zu.
 Jedoch wird für die Studienarbeit eine stark begrenzende Vorauswahl an Hyperparametern getroffen. \todo{Wo begründet?}
@@ -240,7 +240,7 @@ Damit die Konfigurationen treffend vorausgewählt werden könne, müssen die Kri
 Als Erfolgskriterien zählen in diesem Fall die Varietät der generierten Bilder und die Korrektheit der generierten Figuren.
 Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
 
-\paragraphNewLine{Varietät}
+\subsubsection{Varietät}
 Die Varietät bezieht zum einen auf die Ähnlichkeit zwischen Trainingsbildern und den generierten Bildern der GANs.
 Die Ähnlichkeit zwischen diesen beiden Bildersets beschreibt, wie gut das GAN 'etwas neues schaffen' kann, oder ob es nur Trainingsbilder dupliziert.
 Sollte die Ähnlichkeit sehr gering sein, werden viele 'neue' Bilder generiert, was sehr positiv zu bewerten ist.
@@ -251,7 +251,7 @@ Das Phänomen ist als 'mode-collapse' bekannt (siehe Stand der Technik). %TODO s
 Beide Probleme werden mittels einer manuellen Analyse ausgewertet.
 % https://scikit-image.org/docs/0.12.x/api/skimage.measure.html#skimage.measure.compare_ssim
 
-\paragraphNewLine{Korrektheit}
+\subsubsection{Korrektheit}
 Neben der Varietät besitzt auch die Korrektheit eine hohe Bedeutung für die Bewertung der GANs.
 Dabei muss sichergestellt werden, dass die richtige Figur generiert wurde und erkennbar ist.
 Die Figuren müssen außerdem den gleichen Kriterien wie die Trainingsdaten genügen, das heißt, die Figuren sollten zum Beispiel vollständig innerhalb des Bildes abgebildet sein.
