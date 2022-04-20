@@ -207,10 +207,14 @@ Insbesondere aufgrund der Label-Abhängigkeit (im Rahmen der Studienarbeit entst
 
 
 \subsection{Auswahl zu optimierender Hyperparameter}
-\todo[inline, shadow]{überarbeiten}
-Es ist nicht möglich, alle möglichen Hyperparameter zu optimieren.
-Eine solche Optimierung benötigt zu viele Ressourcen, die im Rahmen der Studienarbeit nicht vorhanden sind.
-Deshalb wird die Optimierung auf einige vielversprechende Hyperparameter beschränkt.
+Die eigentliche Suche und Optimierung der Hyperparameter läuft automatisch ab.
+Allerdings können aufgrund von endlichen Ressourcen nicht alle Hyperparameter-Kombinationen getestet werden.
+Darum muss sich zuvor manuell auf die vielversprechenden Hyperparameter beschränkt werden.
+\newline
+
+Natürlich existieren so genannte Auto-Machine-Learning Systeme, welche ohne Vorauswahl vollautomatisch Architektur und Hyperparameter optimieren können. 
+Jedoch erreichen diese nicht immer die gleiche Leistung wie manuell optimierte Modelle.
+So zeigt eine Versuch aus dem Jahre 2021, dass die Bibliothek AutoKeras \cite{auto-keras} auch nach 24 Stunden Optimierungs-Zeit nicht die Genauigkeit eines von Hand eingestellten Modells erreicht \cite[S. 2036]{dl-framework-evaluation}.
 \newline
 
 Die auszuwählenden Hyperparameter sollen dabei zum einen eine vergleichsweise hohe Auswirkung auf den Trainingserfolg haben.
@@ -221,10 +225,54 @@ Das garantiert eine bessere Vergleichbarkeit zwischen den Architekturen.
 Die Hyperparameter \textit{Batch-Size}, \textit{Learning-Rate Generator}, \textit{Learning-Rate Discriminator}, \textit{Dropout} und \textit{Smoothness} entsprechen diesen Voraussetzungen.
 \newline
 
-Die Learning-Rate hat allgemein einen sehr hohen Einfluss und sollte immer angepasst werden \cite{learning-rate-most-important}.
+\todo[]{zu den einzelnen hyperparameter begründungen hinzu fügen und anschließend die ausgewählten werte nennen und begründen} 
+\subsubsection{Learning-Rate}
+Die Learning-Rate entspricht dem Faktor \(\alpha\), welcher die Intensität des Gradientenabstiegs bestimmt:  
+
+\[\theta_{}  =  \theta_{}  - \alpha   \nabla_{ \theta }  J( \theta )  \]
+
+\todo[]{vielleicht mehr auf adam beziehen?}
+Bei zu großem \(\alpha\) kann der Trainings-Fehler anfangen zu oszillieren oder sogar größer werden.
+Bei zu kleinem \(\alpha\) konvergiert der Fehler zu langsam oder bleibt in einem lokalen Minimum stehen. 
+Es ist anzumerken, dass die oben gezeigt Formel dem einfachen Gradientenabstieg entspricht.
+Normalerweise werden fortgeschrittenere Algorithmen angewendet, welche jedoch weiterhin auf dem Gradientenabstieg basieren.
+So können weitere Parameter, wie \textit{Momentum} oder \textit{Acceleration} die Abstiegsweite beeinflussen.
+Nichtsdestotrotz hat die Learning-Rate einen sehr hohen Einfluss auf das Trainings-Ergebnis und gilt als einer der wichtigsten Hyperparameter \cite[S. 447]{learning-rate-most-important}. 
+\newline
+
+\todo[]{todo problematik verschiedener raten bei gans}
+Das sticht vor allem bei einem GAN heraus, da dort die Learning-Rate für Generator und Discriminator unabhängig gesetzt werden kann.
+\newline
+
+Für die Hyperparamter-Suche wurden für Generator und Discriminator die gleichen drei Lernraten festgelegt: \(2e-3\), \(2e-4\) und \(3e-4\).
+
+	
+\subsubsection{Batch-Size}
 Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter für Anpassungen und wird in unterschiedlichen Tutorials angegeben \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery} \todo{Begründung aus der quelle übernehmen? \cite{tutorial:tune-batch-size-machinelearningmastery}}.
+
+\subsubsection{Dropout}
 Sowohl Dropout als auch Smoothness sind vor allem für einen persönlichen Erkenntnisgewinn mit aufgenommen worden.
+
+
+\subsubsection{Smoothness}
 Die Smoothness entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-onesided-label-smoothing}.
+\newline
+
+Alle festgelegten Hyperparameter finden sich in der folgenden Tabelle \ref{table:hyperparameter} nochmals zusammengefasst:
+
+\begin{table}[H]
+	\centering
+	\label{table:hyperparameter}
+	\begin{tabular}{l l}
+		Name                        & Werte            \\ \hline
+		Batch Size                  & 16, 32           \\
+		Dropout                     & 0.3, 0.4         \\
+		Smoothness                  & 0, 0.1           \\
+		Learning-Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
+		Learning-Rate Generator     & 2e-3, 2e-4, 3e-4
+	\end{tabular}
+	\caption{Hyperparameter Auswahl}
+\end{table}
 
 \subsection{Trainingsablauf}
 Vor der Implementierung und Analyse der verschiedenen Architekturen werden zunächst die Trainingsdaten generiert.
