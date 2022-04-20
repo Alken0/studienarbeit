@@ -23,31 +23,30 @@ Außerdem wird erläutert, weshalb die gewählten Frameworks und Techniken für 
 \todo[inline, shadow]{das Auskommentierte in 'Verfahren zur Bestimmung von Hyperparametern' \cref{chapter:verfahren-bestimmung-hyperparameter} kann hier auch eingebaut werden (Anmerkung Markus)}
 
 \section{DeepLearning Framework}
-Die Implementierung von DeepLearning-Algorithmen sind im Bereich der Künstlichen Intelligenzen eine komplexe Thematik.
+Die Implementierung von DeepLearning-Algorithmen ist im Bereich der Künstlichen Intelligenzen eine bedeutende Thematik.
 Vor allem die effiziente Ausnutzungen gegebener Hardware stellt eine enorme Herausforderung dar. 
 Deshalb existieren über verschiedene Abstraktions-Level diverse Frameworks und Bibliotheken, welche die Arbeit deutlich erleichtern.
 \newline
 
 Aufgrund der hohen Rechenkern-Anzahl und der daraus resultierende Multithreading-Charakteristik, eignen sich Grafikkarten besonders gut für DeepLearning-Berechnungen \cite{gpu-for-dl}.
-Grafikarten Hersteller stellen dafür Low-Level-API´s bereit, in der Routinen wie Matrix-Multiplikationen oder Aktivierungs-Funktionen hardware-beschleunigt werden.
-Dabei kann in den Zugang zu allgemeinen GPU-Operationen (API-Beispiel: CUDA), oder speziellen Funktionen für DeepLearning und Neuronale Netze (API-Beispiel: cuDNN) unterschieden werden.
+Grafikarten Hersteller stellen dafür Low-Level-APIs bereit, in der Routinen wie Matrix-Multiplikationen oder Aktivierungs-Funktionen hardware-beschleunigt werden.
+Dabei kann in den Zugang zu allgemeinen GPU-Operationen (API-Beispiel: CUDA) oder speziellen Funktionen für DeepLearning und Neuronale Netze (API-Beispiel: cuDNN) unterschieden werden.
 Das spätere Training wird auf einer GeForce GTX 1070 \cite{gtx-1070} durchgeführt.
-Die dazu korrespondierende Low-Level-API´s sind die von Nvidia entwickelten und bereits erwähnten Bibliotheken CUDA \cite{cuda-doc} und cuDNN \cite{cudnn-doc}.  
+Die dazu korrespondierende Low-Level-APIs sind die von Nvidia entwickelten und bereits erwähnten Bibliotheken CUDA \cite{cuda-doc} und cuDNN \cite{cudnn-doc}.  
 \newline
 
 Als Entwickler von DeepLearning-Anwendungen sind jedoch solche hardwarenahen Aufrufe häufig zu aufwendig.
-Deshalb habe sich in der Industrie und Forschung DeepLearning Frameworks entwickelt, welche Algorithmen weiter zusammenfassen und abstrahieren.
-Zu den am weitesten verbreiteten gehören unter anderem PyTorch, Caffe, TensorFlow oder MXNet \cite[S. 2018]{dl-framework-evaluation}. %todo bessere quelle
-Auch wenn sie sich einige Software-Architektonische Ansätze teilen, unterscheiden sich jedoch in der genauen Implementierung und Techniken \cite[S. 2018, 2020]{dl-framework-evaluation}.
-Vor allem aber in der Popularität gibt es große Unterschiede.
-So sind gemessen in Github Sternen TensorFlow (164k) \cite{github-tensorflow} und PyTorch (55k) \cite{github-pytorch} die bekanntesten, weshalb beide in näheren Betracht gezogen werden.
-%todo anstatt github sternen lieber stackOverflow? 
+Deshalb haben sich in der Industrie und Forschung DeepLearning Frameworks entwickelt, welche Algorithmen weiter zusammenfassen und abstrahieren.
+Zu den am weitesten verbreiteten gehören unter anderem PyTorch, Caffe, TensorFlow und MXNet \cite[S. 2018]{dl-framework-evaluation}. \todo{bessere quelle}
+Auch wenn sie sich einige architektonische Ansätze teilen, unterscheiden sich die Frameworks jedoch in der genauen Implementierung und Technik \cite[S. 2018, 2020]{dl-framework-evaluation}.
+Der größte Unterschied ist jedoch die Popularität der Frameworks.
+Gemessen an Github Sternen sind TensorFlow (164k) \cite{github-tensorflow} und PyTorch (55k) \cite{github-pytorch} die bekanntesten, weshalb sie im Folgenden näher analysiert werden.
  
 \subsection{TensorFlow und PyTorch}
 TensorFlow und PyTorch weichen in einigen technischen Eigenschaften, wie der Graphen Definition und dem verteilten Training von aneinander ab \cite{pytorch-vs-tensorflow}.
 Allerdings sind diese Charakteristiken im Rahmen der allgemeinen Architektur Untersuchung wenig relevant.
 Für die Evaluierung selbst ist eine gute Visualisierung der Trainingsdaten und -ergebnisse wichtig.
-Außerdem soll die Schnittstelle möglichst leicht sein, damit ohne großen Aufwand verschiedene Architekturen implementiert und getestet werden können.
+Außerdem soll die Schnittstelle möglichst einfach sein, damit ohne großen Aufwand verschiedene Architekturen implementiert und getestet werden können.
 
 \subsubsection{Tensorboard}
 Hinsichtlich der Visualisierung bietet TensorFlow das direkt integrierte Tensorboard.
@@ -56,7 +55,7 @@ Ohne großen Mehraufwand können so Metriken visualisiert, Modell-Graphen darges
 \subsubsection{Keras}
 Zwar ist TensorFlow im Vergleich zu CUDA bereits eine High-Level-API, allerdings fallen die API-Aufrufe weiterhin sehr detailliert aus.
 Dadurch sind hoch flexible Modelle und Training-Loops möglich.
-Bei optimierten Anwendungen garantiert das große Freiheiten, ist jedoch bei wissenschaftlichen Untersuchungen zu sperrig und komplex.
+Bei optimierten Anwendungen garantiert das große Freiheiten, ist jedoch im Rahmen der Studienarbeit zu umständlich und komplex.
 Da in dieser Arbeit grundlegende Architekturen untersucht werden sollen, wird zusätzlich die Keras API \cite{keras} verwendet.
 Ursprünglich als unabhängiges Framework entwickelt, ist Keras seit TensorFlow 2.0 ein fester Bestandteil der Bibliothek.
 Keras stellt eine weitere Abstraktion-Stufe dar, wodurch Modelle sehr einfach beschrieben und vordefinierte Traings-Loops verwendet werden können.
