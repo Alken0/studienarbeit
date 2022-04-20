@@ -6,21 +6,45 @@ In diesem Kapitel soll ein grundlegendes Verständnis für die genutzten Technol
 Außerdem wird erläutert, weshalb die gewählten Frameworks und Techniken für diese Arbeit am geeignetsten sind.
 
 \section{Neuronale Netze}
+\todo{Quelle \cite{hyperparameters-search}}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=12cm]{kapitel/2_stand_der_technik/img/neural_networks.png}
+	\includegraphics[width=8cm]{kapitel/2_stand_der_technik/img/neural_networks.png}
 	\label{img:neural-networks}
-	\caption{Neural Network \cite{img:neural-networks}}
+	\caption{Neuronales Netz \cite{img:neural-networks}}
 \end{figure}
 
-\begin{itemize}
-	\item natürliches vorbild
-	\item aktivierungsfunktion/übergänge/...
-	\item ganz viele Neuronen $\rightarrow$ neuronales netz
-	\item lernarten (supervised/unsupervised/...)
-\end{itemize}
+Künstliche Neuronale Netze stellen ein Teilgebiet des Bereichs Künstliche Intelligenz dar.
+Durch sie können komplexe Aufgaben, wie Gesichtserkennung, automatisches Fahren und die Generierung von Bildern mit Computerprogrammen gelöst werden.
+\newline
 
-\todo[inline, shadow]{das Auskommentierte in 'Verfahren zur Bestimmung von Hyperparametern' \cref{chapter:verfahren-bestimmung-hyperparameter} kann hier auch eingebaut werden (Anmerkung Markus)}
+Neuronale Netze bestehen aus synthetischen Neuronen, die sich an ihrem am biologischen Vorbild orientieren.
+In der Grafik \cref{img:neural-networks} sind die Neuronen als farbige Kreise gekennzeichnet.
+Die Aufgabe eines Neurons besteht in der Umwandlung eines oder mehrere Eingangssignale in eine Ausgangssignal.
+Für die Umwandlung wird die Summe aller Eingaben berechnet und auf eine Activation-Function angewendet.
+Der resultierende Wert wird an alle Ausgaben weitergegeben.
+\newline
+
+Neuronen sind in der Regel in Schichten sortiert, die jeweils mit der vorherigen Schicht verbunden sind.
+Damit die Neuronen der verschiedenen Schichten miteinander kommunizieren können, gibt es Übergänge, die als schwarze Linien dargestellt sind.
+Jeder Übergang besitzt einen Weight, das mit dem zu übertragenden Wert multipliziert wird.
+Dadurch wird die Komplexität des Modells erhöht, was es erlaubt, schwierigere Aufgaben zu bewältigen.
+\newline
+
+Statt Neuronale Netze komplett zu programmieren, wird eine bestimmte Netzarchitektur trainiert.
+Der Trainingsprozess orientiert sich dabei wieder an natürlichen Lernvorgängen.
+Dabei gibt es verschiedene Herangehensweisen wie Supervised oder Unsupervised Learning.
+Bei ersterem existiert im Gegensatz zu letzterem eine vorgegebene Lösung.
+Beide Verfahren und nicht an dieser Stelle genannte haben Vor- und Nachteile, ihre Anwendung ergibt sich meistens aus den vorhanden Daten und gewünschten Ergebnissen.
+Das Training fokussiert sich vor allem auf die Anpassung der Weights, die im Training auch Parameter genannt werden.
+Das erlaubt dem Netz, sich an die Daten anzupassen.
+\newline
+
+Für das Training müssen zusätzlich bestimmte Konfigurationen festgelegt werden, die Hyperparameter genannt werden.
+Im Gegensatz zu den Parametern neuronaler Netze werden sie durch das Training nicht verändert.
+Bei Hyperparametern handelt es sich zum Beispiel um die Lernrate oder Lossfunction \cite{hyperparameters-gan-using-genetic-algorithm}.
+Die Bestimmung von Hyperparametern ist wichtig für den Trainingserfolg des Modells und sollte für jeden Datensatz neu bestimmt werden.
+Es sind auch nicht alle Hyperparameter gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate zählt zu den dominanteren Faktoren \cite{learning-rate-most-important}.
 
 \section{DeepLearning Framework}
 Die Implementierung von DeepLearning-Algorithmen ist im Bereich der Künstlichen Intelligenzen eine bedeutende Thematik.
@@ -152,19 +176,6 @@ Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Arc
 \section{Verfahren zur Bestimmung von Hyperparametern}
 \label{chapter:verfahren-bestimmung-hyperparameter}
 \todo{Quelle \cite{hyperparameters-search}}
-
-\begin{comment}
-	Soll in allgemeines für Neuronale Netze:
-	
-	\todo{Quelle \cite{hyperparameters-search}}
-	
-	Hyperparameter dienen der Konfiguration des Trainingsprozesses.
-	Im Gegensatz zu den Parametern neuronaler Netze werden sie durch das Training nicht verändert.
-	Bei Hyperparametern handelt es sich zum Beispiel um die Lernrate oder Lossfunction \cite{hyperparameters-gan-using-genetic-algorithm}.
-	Die Bestimmung von Hyperparametern ist wichtig für den Trainingserfolg des Modells und sollte für jeden Datensatz neu bestimmt werden.
-	
-	Nicht alle Hyperparameter sind gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate zählt zu den dominanteren Faktoren \cite{learning-rate-most-important}.
-\end{comment}
 
 \todo[inline, shadow]{Eingrenzung/Vorauswahl fehlt $\rightarrow$ gibt ja noch viel mehr params...}
 
