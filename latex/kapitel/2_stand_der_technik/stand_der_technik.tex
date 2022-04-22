@@ -137,16 +137,17 @@ Die folgenden Ausprägungen von GAN Architekturen unterscheiden sich Primär in 
 Bei einem Conditional GAN wird neben der Latent-Dimension zusätzlich noch ein Label übergeben.
 Dies geschieht sowohl beim Discriminator als auch beim Generator.
 Das Label gibt eine bestimmt Klasse der Daten an und wird dann auch beim Trainingsprozess berücksichtigt.
-Das bedeutet, der Discriminator kriegt bei Label X nur Daten des Labels X zum Vergleich vorgelegt.
+Das bedeutet, der Discriminator bekommt bei Label X nur Daten des Labels X zum Vergleich vorgelegt.
 \newline
 
-Sobald das GAN fertig trainiert ist, können so labelspezifische Daten generiert werden.
-Das kann in der Praxis sehr günstig sein, wenn zum Beispiel das Krankheitsbild einer bestimmten Krankheit benötigt wird.
-Andersherum \todo{Umgangssprachlich} erlaubt auch der Discriminator die Identifizierung bestimmter Krankheiten auf einem Bild.
+Sobald das GAN zufriedenstellend trainiert ist, können so labelspezifische Daten generiert werden.
+Das kann in der Praxis sehr günstig sein, wenn zum Beispiel das Krankheitsbild einer bestimmten Krankheit generiert werden soll.
+Aber die Nutzung des Conditional Discriminators erlaubt beispielsweise die Identifizierung einer bestimmten Krankheit auf einem Bild.
 
 \subsection{Dense-GAN}
 Eine Dense-GAN nutzt sowohl für Discriminator als auch für den Generator Dense Layer beziehungsweise Fully Connected Layer.
 Dense Layer bestehen aus Neuronen, die jeweils mit jeder Ausgabe der vorherigen Schicht verknüpft sind.
+\newline
 
 Vorteil dieses Architekturmodells ist seine große Flexibilität.
 Mithilfe der Dense Layer und einer ausreichend großen Architektur lassen sich theoretisch alle Zusammenhänge eines Datensets lernen.
@@ -159,22 +160,21 @@ Insbesondere im Vergleich zu Convolutional Layern macht dies einen enormen Unter
 \todo{Belege}
 Ein DC-GAN oder auch Deep Convolutional GAN besteht hauptsächlich aus Convolutional Layern.
 Im Generator finden vor allem Convolutional Transposed Layer ihre Anwendung.
-Convolutional Transpose Layer funktionieren wie Convolutional Layer, jedoch sind sie umgedreht.
-Somit skalieren sie Daten hoch statt sie zu komprimieren.
-Im Discriminator werden Convolutional Layer genutzt, um die Daten auf eine Entscheidung herunter zu skalieren.
-Im letzten Schritt des Discriminators existiert jedoch ein Dense Layer, um die Entscheidung zu berechnen.
+Convolutional Transpose Layer funktionieren wie Convolutional Layer, jedoch vergrößern sie Ausschnitte, statt sie zu komprimieren.
+Im Discriminator werden Convolutional Layer genutzt, um die Datenmenge auf eine Entscheidung klein zu skalieren.
+Im letzten Schritt des Discriminators existiert in der Regel ein Dense Layer, um die finale Entscheidung zu berechnen.
 \newline
 
 Vorteil dieser Architektur sind die vergleichsweise wenigen zu lernenden Parameter.
 Die geringe Anzahl an Parametern sind der Tatsache geschuldet, dass es pro Ausgabe-Dimension nur einen Filter für das Convolutional Layers gibt.
 Dadurch ist auch die Parameteranzahl der Convolutional Layern unabhängig von der Bildgröße.
 
-Zusätzlich zur geringen Parameteranzahl fördern die Filter auch das Lernen von Beziehungen \todo{falsches Wort?} zwischen benachbarten Pixeln.
-Diese werden implizit durch die Architektur vorgegeben und müssen nicht erst aufwändig gelernt werden.
+Zusätzlich zur geringen Parameteranzahl fördern die Filter auch das Verständnis von Zusammenhängen zwischen benachbarten Pixeln.
+Die Zusammenhänge werden dabei implizit durch die Architektur vorgegeben und müssen nicht erst aufwändig gelernt werden.
 \newline
 
-Die Tatsache, dass die Filter der Convolutional Layer so viel vorgeben ist jedoch auch gleichzeitig ein Nachteil für die Architektur.
-Sollten die Beziehungen zwischen nahen Datenpunkten nicht existieren, werden falsche Zusammenhänge gelernt.
+Die Tatsache, dass die Filter der Convolutional Layer so viel vorgeben ist jedoch auch gleichzeitig ein Nachteil der Architektur.
+Sollten die Beziehungen zwischen nahen Datenpunkten nicht existieren, werden falsche Zusammenhänge impliziert, was zu schlechteren Ergebnissen führen kann.
 Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Architektur, aber dafür effizienter.
 
 \section{Verfahren zur Bestimmung von Hyperparametern}
