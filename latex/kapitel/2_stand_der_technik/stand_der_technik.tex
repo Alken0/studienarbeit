@@ -181,15 +181,12 @@ Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Arc
 \label{chapter:verfahren-bestimmung-hyperparameter}
 \todo{Quelle \cite{hyperparameters-search}}
 
-\todo[inline, shadow]{Eingrenzung/Vorauswahl fehlt $\rightarrow$ gibt ja noch viel mehr params...}
-
-Eine optimale Wahl der Werte für die Hyperparameter unterscheidet sich bei verschiedenen Datensätzen oder Netzarchitekturen. \todo{Quelle}
-Deswegen ist es wichtig, zumindest die wichtigsten Hyperparameter immer neu zu bestimmen.
-
-Dies ist auch im Rahmen der Arbeit wichtig, da verschiedene Architekturen auf ihre Effektivität beziehungsweise Effizienz \todo{Wortwahl} untersucht werden sollen.
+Die Bestimmung guter Hyperparameter ist im Rahmen der Arbeit von großer Bedeutung, da verschiedene Architekturen auf ihre Effektivität und Effizienz untersucht werden sollen.
 Bei gleichen Hyperparametern für verschiedene Architekturen wäre dies ein unfairer Vergleich.
 
 Für die Suche nach optimalen Hyperparametern gibt es verschieden Verfahren, die im Folgend vorgestellt werden.
+Dabei wird sich auf die Grid Search, Random Search und den Genetic Algorithm beschränkt, da diese die beliebtesten Algorithmen zur Optimierung sind \cite{hyperparameters-search-comparison-focus-genetic}.
+Die Verfahren werden zusätzlich mit der manuellen Suche verglichen, um eine allgemeinere Einschätzung gewährleisten zu können.
 
 \subsection{Manuelle Suche}
 Die manuelle Suche ist das simpelste vorgestellt Verfahren.
