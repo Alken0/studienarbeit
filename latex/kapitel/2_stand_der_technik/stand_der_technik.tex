@@ -131,11 +131,12 @@ So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
 
 \section{Ausprägungen von GANs}
-\todo[inline, shadow]{Hier DC-GAN usw. nochmal erklären, weil die Begriffe sind nicht so eindeutig!}
-Die folgenden Ausprägungen von GAN Architekturen unterscheiden sich Primär in den verwendeten Layern.
+In diesem Kapitel werden verschiedene Architekturmodelle von GANs vorgestellt.
+Das ist insbesondere wichtig, da die zugehörigen Bezeichnungen nicht klar definiert sind.
+Die Unterschiede entstehen durch die verwendeten Layern oder Funktionsweise der GANs.
 
 \subsection{CGAN}
-\todo[inline, shadow]{Formel aus dem Paper: \cite{mirza2014conditional}}
+\todo[inline, shadow]{Formel aus dem Paper übernehmen? \cite{mirza2014conditional}}
 Bei einem Conditional GAN \cite{mirza2014conditional} wird neben der Latent-Dimension zusätzlich noch ein Label übergeben.
 Dies geschieht sowohl beim Discriminator als auch beim Generator.
 Das Label gibt eine bestimmt Klasse der Daten an und wird dann auch beim Trainingsprozess berücksichtigt.
@@ -244,10 +245,9 @@ Sobald ein sehr großes Spektrum an Hyperparametern untersucht werden soll, ben�
 Je nach zusätzlichen Optimierungen für die Wahl der Zufallswerte lässt sich die Random Search auch nicht unbedingt parallelisieren, was zu einer sehr langen Laufzeit führen kann.
 
 \subsection{Genetic Algorithm}
-\todo[inline,shadow]{mehr belegen}
-Der Genetic Algorithm wandelt die Hyperparametersuche in einen evolutionären Entwicklungsprozess um.
+Der Genetic Algorithm \cite{hyperparameters-genetic-algorithm} wandelt die Hyperparametersuche in einen evolutionären Entwicklungsprozess um.
 Der Evolutionsaspekt des Algorithmus ist dabei eine Anlehnung an die natürliche Entwicklung in der Natur.
-Diese Entwicklung zeichnet sich durch die Operatoren \textit{Selektion}, \textit{Kombination} und \textit{Mutation} aus, die der Algorithmus verwendet \cite{hyperparameters-genetic-algorithm}.
+Diese Entwicklung zeichnet sich durch die Operatoren \textit{Selektion}, \textit{Kombination} und \textit{Mutation} aus, die der Algorithmus verwendet .
 \newline
 
 Für den Optimierungsprozess werden am Anfang mehrere zufällige Hyperparameterinstanzen erzeugt.

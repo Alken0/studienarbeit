@@ -12,7 +12,7 @@ Die Entscheidung ist mit dem Verhalten der Convolutional Layern zu begründen.
 Denn die Layer extrahieren Zusammenhänge von nebeneinanderliegenden Pixeln.
 Diese Zusammenhänge sind jedoch nicht natürlich bei einem synthetischen Latent-Vektor gegeben.
 
-\subsection{Architektur}
+\subsubsection{Architektur}
 Die Besonderheit der Architektur liegt in der späten Fusionierung von Bild- und Labeldaten beim Discriminator.
 Ein Diagramm mit der genauen Architektur befindet sich im Anhang (Discriminator \cref{architecture:dcgan-dis} und Generator \cref{architecture:dcgan-gen}).
 
@@ -21,7 +21,7 @@ Allgemein werden primär Convolutional und Convolutional Transposed Layer genutz
 Beim Discriminator besteht eine Schicht aus einer Kombination von Conv2d, LeakyReLu (mit einem alpha von 0.2) und Dropout (beeinflusst vom Hyperparameter).
 Der Generator besteht aus Schichten von Conv2DTranspose, BatchNormalisation und LeakyReLu (mit einem alpha von 0.2).
 
-\subsection{Hyperparameter}
+\subsubsection{Hyperparameter}
 Die Hyperparameter werden mithilfe des Gridsearchverfahrens optimiert.
 \begin{table}[H]
 	\centering
@@ -37,13 +37,13 @@ Die Hyperparameter werden mithilfe des Gridsearchverfahrens optimiert.
 	\caption{Hyperparameter für das Training des 'DC-GAN-Late-Label's}
 \end{table}
 
-\subsection{Ergebnisse}
+\subsubsection{Ergebnisse}
 \begin{itemize}
 	\item Tensorboard Graph -> beste Hyperparameter?
 	\item 'beste' Bilder
 \end{itemize}
 
-\subsection{Zusammenfassung}
+\subsubsection{Zusammenfassung}
 \todo{auf Hyperparameter eingehen + zu negativ?}
 Wie anhand der Ergebnisse zu erkennen ist, sind die Trainingsergebnisse nicht mit den Originalbildern vergleichbar.
 Es bestehen insbesondere keine Sensitivität gegenüber Labeln.
@@ -62,7 +62,7 @@ Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \
 Bei den verwendeten Daten im Paper handelt es sich um schwarz-weiß Scans von Lungen zur Identifizierung von COVID-19 Erkrankungen.
 Die Bilder sind deutlich größer als die von uns verwendeten, weshalb die Architektur dementsprechend angepasst werden muss.
 
-\subsection{Architektur}
+\subsubsection{Architektur}
 Sowohl Discriminator als auch Generator wurden aufgrund der anderen Bildgröße (244x244 anstatt 28x28 Pixel) angepasst.
 Dafür wurde aber nur die Art des Paddings für die einzelnen Layer angepasst.
 Die Architektur besteht dabei hauptsächlich aus Convolutional (Transpose) Layern.
@@ -70,7 +70,7 @@ Die Anzahl der Layer, die jeweiligen Ausgabedimensionen und Filtergrößen bleib
 Dadurch entsteht ein vergleichsweise großes Netz.
 Die genauen Architekturen befinden sich im Anhang, sowohl für den Discriminator \cref{architecture:dcgan-med-dis} als auch für den Generator \cref{architecture:dcgan-med-gen}.
 
-\subsection{Hyperparameter}
+\subsubsection{Hyperparameter}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{l l}
@@ -85,7 +85,7 @@ Die genauen Architekturen befinden sich im Anhang, sowohl für den Discriminator
 	\caption{Hyperparameter für das Training des DC-GANs}
 \end{table}
 
-\subsection{Ergebnisse}
+\subsubsection{Ergebnisse}
 \begin{itemize}
 	\item Tensorboard grafik
 	\item Beste Bilder
@@ -96,11 +96,11 @@ Die genauen Architekturen befinden sich im Anhang, sowohl für den Discriminator
 Das GAN bedient sich des Generators aus dem DC-GAN \cref{section:dc-gan-late-label} und dem Discriminator des Dense-GANs \cref{section:dense-gan}.
 Beide Architekturen wurden zuvor schon verwendet und folglich nicht weiter angepasst werden.
 
-\subsection{Architektur}
+\subsubsection{Architektur}
 Die Architekturen für den Discriminator \cref{architecture:dcgen-densedis-dis} und Generator \cref{architecture:dcgen-densedis-gen} befinden sich im Anhang.
 Es handelt sich um die gleichen Architekturen, ohne zusätzliche Änderungen.
 
-\subsection{Hyperparameter}
+\subsubsection{Hyperparameter}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{l l}
@@ -114,8 +114,8 @@ Es handelt sich um die gleichen Architekturen, ohne zusätzliche Änderungen.
 	\end{tabular}
 	\caption{Hyperparameter für das Training vom DC-Discriminator und Dense-Generator}
 \end{table}
-\subsection{Ergebnisse}
-\subsection{Zusammenfassung}
+\subsubsection{Ergebnisse}
+\subsubsection{Zusammenfassung}
 
 \section{Dense GAN}
 \label{section:dense-gan}
@@ -123,7 +123,7 @@ Das Dense GAN ist an einem Tutorial für das MNIST Datenset inspiriert.
 Im Tutorial wird jedoch nur ein normales GAN statt einem CGAN verwendet.
 Folglich fehlt die Eingabe von Labeln, die in der verwendeten Architektur ergänzt sind.
 
-\subsection{Architektur}
+\subsubsection{Architektur}
 In der Architektur kommen ausschließlich Dense Layer zum Einsatz.
 Den Dense Layern folgen dann immer eine Aktivierungsschicht (LeakyReLu mit einem alpha von 0.2) und einer Batch Normalization.
 Label und Latent-Dimension beziehungsweise des Bildes werden in beiden Architekturen direkt miteinander fusioniert.
@@ -131,7 +131,7 @@ Dies geschieht über eine Multiply-Schicht.
 
 Sowohl die Architektur des Discriminators \cref{architecture:densegan-dis} als auch des Generators \cref{architecture:densegan-gen} ist in den Anlagen als Diagramm zu finden.
 
-\subsection{Hyperparameter}
+\subsubsection{Hyperparameter}
 Für das Training wurde eine Anzahl an vordefinierten Hyperparameterkombinationen ausprobiert.
 
 \begin{table}[H]
@@ -148,19 +148,19 @@ Für das Training wurde eine Anzahl an vordefinierten Hyperparameterkombinatione
 	\caption{Hyperparameter für das Training des Dense-GANs}
 \end{table}
 
-\subsection{Ergebnisse}
-\subsection{Zusammenfassung}
+\subsubsection{Ergebnisse}
+\subsubsection{Zusammenfassung}
 
 \section{Dense Generator und DC Discriminator}
 Dieses GAN ist eine Kombination aus dem Dense GAN \cref{section:dense-gan} und DC GAN \cref{section:dc-gan-late-label}.
 Dabei ist dem Dense GAN der Generator entnommen und dem DC GAN der Discriminator.
 Beide Architekturen sind bereits an das Datenset angepasst und müssen nicht weiter verändert werden.
 
-\subsection{Architektur}
+\subsubsection{Architektur}
 Die Architekturen für den Discriminator \cref{architecture:densegen-dcdis-dis} und Generator \cref{architecture:densegen-dcdis-gen} befinden sich im Anhang.
 Es wurden keine Änderungen zu den bereits vorhanden Architekturen vorgenommen.
 
-\subsection{Hyperparameter}
+\subsubsection{Hyperparameter}
 \begin{table}[H]
 	\centering
 	\begin{tabular}{l l}
@@ -174,5 +174,5 @@ Es wurden keine Änderungen zu den bereits vorhanden Architekturen vorgenommen.
 	\end{tabular}
 	\caption{Hyperparameter für das Training vom Dense-Generator und DC-Discriminator}
 \end{table}
-\subsection{Ergebnisse}
-\subsection{Zusammenfassung}
+\subsubsection{Ergebnisse}
+\subsubsection{Zusammenfassung}
