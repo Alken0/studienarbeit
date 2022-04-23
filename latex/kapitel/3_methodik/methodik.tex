@@ -74,7 +74,6 @@ Der Discriminator erhält als Eingabe ein Bild als Array und zusätzlich ein Lab
 Die Ausgabe ist eine Zahl zwischen 1 und -1, die die vorhergesagte Echtheit angibt.
 
 \section{Verfahren zur Hyperparametersuche}
-\todo[shadow,inline]{Aufbau ändern in: Kriterien $\rightarrow$ Tabelle $\rightarrow$ Auswahl/Bewertung (siehe Kommentare)}
 Zur Auswahl von Hyperparametern gibt es verschiedene Verfahren.
 Dazu gehören unter anderem die Manuelle Suche, Grid Search, Random Search und Genetic Algorithms (siehe \cref{chapter:verfahren-bestimmung-hyperparameter}).
 In diesem Abschnitt werden die verschiedenen Verfahren verglichen und zusätzliche Anpassungen erläutert.
@@ -91,14 +90,16 @@ Deswegen ist es wichtig, dass das Verfahren vollkommen automatisiert ablaufen ka
 \subsubsection{Ressourcenbedarf}
 Das Verfahren darf in keinem Fall während oder nach einer Trainingsiteration so viel zusätzlichen Speicher belegen, dass das Training fehlschlägt.
 Denn Trainingsabläufe sollen primär über Nacht durchgeführt werden, wodurch Fehlschläge erst sehr spät entdeckt werden.
+\newline
 
-Dabei ist zu beachten, dass die Hardware den Trainingsprozess stark beeinflusst.
+Dabei ist anzumerken, dass die Hardware den Trainingsprozess stark beeinflusst.
 So ist der verfügbare Arbeits- und Grafikkartenspeicher nicht ausreichend, um Trainingsdurchläufe stark zu parallelisieren.
 
 \subsubsection{Laufzeit}
 Die Laufzeit der Hyperparametersuche ist von entscheidender Bedeutung.
 Denn die verwendete Hardware ist nicht ausreichend, um jegliche Kombinationen von Hyperparametern in einer vernünftigen Zeit zu testen.
 Als zeitliche Begrenzung dient dabei die Ausführung in einer Nacht von 8h.
+\newline
 
 Jedoch ist zu beachten, dass auch der Trainingsprozess als solcher viel Zeit in Anspruch nimmt.
 Der reine Trainingsaufwand erlaubt mit der verwendeten Hardware in den 8h maximal 75 sequentielle Trainingsdurchläufe (je nach Architektur kann der genaue Wert abweichen).
@@ -121,8 +122,8 @@ Zusätzlich müssen sie in jedem Fall mit Tensorflow oder Keras kompatibel sein.
 In diesem Abschnitt werden die vorgestellten Verfahren miteinander auf Basis der Kriterien verglichen.
 
 \subsubsection{Manuelle Suche}
-Die manuelle Suche ist aufgrund der ständigen verpflichtenden Neuevaluierungen der Traingsergebnisse als einziges Verfahren \todo{reicht es nur automatisierbarkeit nur in der manuellen suche anzusprechen?} nicht automatisierbar.
-Zudem erhöhen die Evaluierungen den Zeitaufwand zusätzlich, da jedes mal eine fundierte\todo{mehr richtung durchdachte?} Entscheidung getroffen werden muss.
+Die manuelle Suche ist aufgrund der ständigen verpflichtenden Neuevaluierungen der Traingsergebnisse als einziges Verfahren \todo{reicht es nur Automatisierbarkeit nur in der manuellen suche anzusprechen?} nicht automatisierbar.
+Zudem erhöhen die Evaluierungen den Zeitaufwand zusätzlich, da jedes mal eine fundierte Entscheidung getroffen werden muss.
 Insgesamt erhöht sich so die Laufzeit im Vergleich zu automatisierten Verfahren sehr stark.
 \newline
 
