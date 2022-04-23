@@ -257,7 +257,35 @@ Allerdings ist der Genetic Algorithm vergleichsweise langsam, da die Evolutionss
 Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum ist der Genetic Algorithm effizienter als eine Grid Search \cite{hyperparameters-search-comparison-focus-genetic}.
 
 \section{Related Work}
-\todo[inline, shadow]{Komplett überarbeiten}
+In diesem Kapitel werden ähnliche Werke vorgestellt, die einen Bezug zu dieser Arbeit haben.
+Allerdings existieren keine Werke, die sich exakt mit dem gleichen Thema beschäftigen.
+Jedoch gibt es trotzdem Gemeinsamkeiten zu anderen Arbeiten, an denen sich in diesem Projekt orientiert werden kann.
+Das ist insbesondere der Fall, wenn die Daten ähnlich sind.
+Ähnlichkeit bedeutet in dem Fall eine ähnliche Bildgröße oder Farbe.
+
+\subsection{CGAN - MNIST}
+Das Paper \textit{Conditional Generative Adversarial Nets} \cite{mirza2014conditional} befasst sich allgemein mit der Erweiterung von GANs durch Conditions. \todo{anderes Wort als Conditions?}
+Die vorgestellten CGANs werden hierfür auf die Datensets MNIST und Flickr trainiert.
+Ziel ist dabei nicht, eine optimale Netzarchitektur oder Ergebnisse zu erzielen.
+Stattdessen stellt die Arbeit einen Machbarkeitsbeweis für CGANs im Allgemeinen dar.
+\newline
+
+Auf dem Paper aufbauend existiert ein Tutorial Notebook \cite{cgan-tutorial-notebook}, noch einmal explizit für das MNIST Datenset.
+Das ist zwar der gleiche Datensatz, der auch im Paper genutzt wird, jedoch wird dort die genaue Netzarchitektur nur grob beschrieben.
+Das Notebook hingegen enthält sogar Codebeispiele in Tensorflow, die eine Beispielimplementation bilden.
+\newline
+
+Die Architekturen von sowohl dem Generator, als auch vom Discriminator bestehen ausschließlich aus Dense Layern.
+Auf jede Dense Layer Schicht wird dann zusätzlich LeakyReLU und BatchNormalization angewendet.
+Als Eingabe erhält der Generator zum einen die Latent Dimension mit 100 zufälligen Zahlen und als Condition eine one-hot Vektor mit 10 Zahlen, die den MNIST-Zahlen-Klassen entsprechen.
+Nach 100 Epochen Training erreicht diese Architektur die folgenden Ergebnisse \todo{bei genug Seiten (inklusive Bild) raus nehmen, weil eigentlich ist das irrelevant}:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=7cm]{kapitel/2_stand_der_technik/img/cgan-notebook-ergebnisse.png}
+	\caption{Ergebnisse Notebook \cite{cgan-tutorial-notebook}) }
+\end{figure}
+
 \label{chapter:related-work}
 Es gibt viele verschiedene Versuche und Varianten die Hyperparameter zu optimieren.
 Einige dieser Arbeiten werden nachfolgend kurz vorgestellt.
