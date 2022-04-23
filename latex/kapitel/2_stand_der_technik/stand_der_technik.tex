@@ -259,6 +259,7 @@ Allerdings ist der Genetic Algorithm vergleichsweise langsam, da die Evolutionss
 Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum ist der Genetic Algorithm effizienter als eine Grid Search \cite{hyperparameters-search-comparison-focus-genetic}.
 
 \section{Related Work}
+\label{chapter:related-work}
 In diesem Kapitel werden ähnliche Werke vorgestellt, die einen Bezug zu dieser Arbeit haben.
 Allerdings existieren keine Werke, die sich exakt mit dem gleichen Thema beschäftigen.
 Jedoch gibt es trotzdem Gemeinsamkeiten zu anderen Arbeiten, an denen sich in diesem Projekt orientiert werden kann.
@@ -288,47 +289,22 @@ Nach 100 Epochen Training erreicht diese Architektur die folgenden Ergebnisse \t
 	\caption{Ergebnisse Notebook \cite{cgan-tutorial-notebook}) }
 \end{figure}
 
-\label{chapter:related-work}
-Es gibt viele verschiedene Versuche und Varianten die Hyperparameter zu optimieren.
-Einige dieser Arbeiten werden nachfolgend kurz vorgestellt.
+\subsection{LightCovidNet}
+Das LightCovidNet \cite{inspiration-dc-gan-med} erlaubt die Erkennung von Krankheitsfällen in Lungen Röntgenscans.
+Bei den Krankheitsbildern handelt es sich um COVID-19 und virale Lungenentzündungen.
+Das Netz wurde dafür zum Teil auf synthetische COVID-19 Bilder trainiert, um einem Missverhältnis an Bildern für die Krankheiten in den Trainingsdaten entgegenzuwirken.
+Das zur Generierung verwendete GAN erlaubt die Erzeugung von allen Krankheitstypen und auch Bildern von gesunden Lungen, wobei für die Arbeit nur die Generierung von COVID-19 Bildern von Interesse war.
 \newline
 
-\subsection{Best Selection of Generative Adversarial Networks Hyper-Parameters Using Genetic Algorithm \cite{hyperparameters-genetic-algorithm}}
-Die Studie befasst sich mit Hyperparameter Optimierung auf Basis von genetischen Algorithmen.
-Ziel der Studie war es, bestmögliche Hyperparameter für das MNIST Datenset zu finden \cite{dataset:mnist}.
-Dabei wurden die Hyperparameter \textit{learning-rate, dropout, batch-size und number of neurons in dense layer} betrachtet.
-\newline
+Das dadurch entstandene GAN ist auch für diese Arbeit interessant, da es in der Lage ist, komplexe Formen mithilfe von relativ weniger Parameter zu generieren.
+Die Parameteranzahl ist so gering, da in der Architektur hauptsächlich Convolutional(-Transpose) statt Dense-Layern eingesetzt werden.
 
-Zwar sind die Daten und die Herangehensweise nicht die selbe wie in dieser Arbeit, aber die untersuchten Hyperparameter.
-Diese können mit als Basis für die Untersuchung genommen werden.
-Zudem verdeutlicht die Arbeit noch einmal die große Auswirkung von Hyperparametern.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=9cm]{kapitel/2_stand_der_technik/img/light-covid-net-ergebnisse.png}
+	\caption{Ergebnisse GAN aus LightCovidNet \cite{inspiration-dc-gan-med}}
+\end{figure}
 
-\subsection{Unsupervised Representation Learning With Deep Convolutional Generative Adversarial Networks \cite{hyperparameters-convolutional-gan}}
-Ziel dieser Studie ist es allgemein gute Hyperparameter zu finden.
-Dafür wurden Bilder aus verschiedenen Datensets genommen (Large Scale Scene Understanding \cite{dataset:lsun}, Imagenet-1k \cite{dataset:image-net} und einem eigenen Datenset mit Gesichtern).
-Bei den Hyperparametern wurden diverse untersucht, zum Beispiel aber nicht ausschließlich die Lernrate, Momentum und Batch-Size.
-Im Ergebnis konnten für alle Werte gefunden werden, die über alle Datensets meistens stabil mit zufriedenstellenden Ergebnissen liefen.
-\todo{Hyperparameter: learning-rate 0.0002, momentum (beta1) zu 0.5, mini-batch size 128,... (Kapitel 4 Details of adversarial training)}
-Erkenntnis der Studie war auch, dass keine Hyperparameter Kombination gefunden werden konnte, die über alle Datensets 100\% stabil laufen konnte.
-\newline
-
-Eine allgemeine Studie zum Thema Hyperparameter ist für die Arbeit sehr interessant, da sie gute Ausgangswerte bietet.
-Dass keine 100\% stabile Zusammenstellung gefunden werden konnte, verdeutlicht die Notwendigkeit der Feinanpassung an jedes Datenset.
-
-
-\subsection{The GAN Landscape: Losses, Architectures, Regularization, And Normalization \cite{gan-landscape-losses-architectures-regularization-normalization}}
-Dieses Studie beschäftigt sich nicht ausschließlich mit Hyperparametertuning.
-Aber auch in dieser Studie werden allgemein GANs optimiert und die Erkenntnisse daraus können verwendet werden.
-In the GAN Landscape wird das GAN auf die Datensets CIFAR10 \cite{dataset:cifar10}, CELEBA-HQ-128 und LSUN-BEDROOM \cite{dataset:lsun}.
-Für das Training wurden dann ein DCGAN und ResNet verglichen.
-Dabei fand die Studie viele interssante Erkenntnisse heraus, zum Beispiel eine gute Updatequote von 5:1 zwischen Discriminator und Generator.
-\newline
-
-Besonders interessant bei dieser Arbeit ist die Bestimmung von anderen Methoden, wie das unterschiedliche Updaten von Discrimintaor und Generator.
-Wieder bietet die Arbeit eine gute Ausgangslage, aber keine Lösung für ein Datenset mit geometrischen Bildern.
-
-\subsection{Tunability: Importance of Hyperparameters of Machine Learning Algorithms}
-\url{https://www.jmlr.org/papers/volume20/18-444/18-444.pdf}
 
 \begin{comment}
 	
