@@ -153,6 +153,7 @@ Dense Layer bestehen aus Neuronen, die jeweils mit jeder Ausgabe der vorherigen 
 
 Vorteil dieses Architekturmodells ist seine große Flexibilität.
 Mithilfe der Dense Layer und einer ausreichend großen Architektur lassen sich theoretisch alle Zusammenhänge eines Datensets lernen.
+\newline
 
 Nachteil sind die vielen zu lernenden Parameter.
 Pro Schicht ergeben sich $|weights| = inputs * outputs$, was bei größeren Architekturen einen erheblichen Lernaufwand bedeutet.
@@ -185,6 +186,7 @@ Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Arc
 
 Die Bestimmung guter Hyperparameter ist im Rahmen der Arbeit von großer Bedeutung, da verschiedene Architekturen auf ihre Effektivität und Effizienz untersucht werden sollen.
 Bei gleichen Hyperparametern für verschiedene Architekturen wäre dies ein unfairer Vergleich.
+\newline
 
 Für die Suche nach optimalen Hyperparametern gibt es verschieden Verfahren, die im Folgend vorgestellt werden.
 Dabei wird sich auf die Grid Search, Random Search und den Genetic Algorithm beschränkt, da diese die beliebtesten Algorithmen zur Optimierung sind \cite{hyperparameters-search-comparison-focus-genetic}.
@@ -229,11 +231,13 @@ Mittels \textit{Automatic Relevance Determination} \cite{automatic-relevance-det
 
 Vorteil der Random Search im Vergleich zur Grid Search ist, dass keine Hyperparameter festgelegt werden müssen.
 Das erlaubt eine unvoreingenommene Herangehensweise an die Suche.
+\newline
 
 Problem der Random Search ist vor allem, dass die Räume der guten Hyperparameter (\textit{Search Space}) sehr klein sind.
 Dadurch ist nicht gewährleistet, dass ein zufälliger Wert auch den Raum der optimalen Werte trifft.
 Jedoch erzielen Hyperparametersuchen mittels Random Search in der Regel trotzdem (sehr) gute Ergebnisse.
 Dem Grid Search Verfahren ist die Random Search allerdings nicht prinzipiell überlegen \cite{hyperparameters-random-search}.
+\newline
 
 Aufgrund ihrer Ähnlichkeit teilt sich die Random Search auch das Problem der Ressourcenintensivität mit der Grid Search.
 Sobald ein sehr großes Spektrum an Hyperparametern untersucht werden soll, benötigt sie sehr viel Zeit.
@@ -254,6 +258,7 @@ Nach der Auswertung der Trainingsergebnisse werden die besten Instanzen selektie
 Der Genetic Algorithm eignet sich besonders gut bei sehr vielen Hyperparametern.
 Im Gegensatz zur Grid Search werden nicht immer alle Kombinationen ausprobiert, sondern nur einzelne, die sich bereits zuvor als vielversprechend herausgestellt haben.
 Dadurch kann mit sehr großen Mengen an Hyperparametern umgegangen werden.
+\newline
 
 Allerdings ist der Genetic Algorithm vergleichsweise langsam, da die Evolutionsschritte sequentiell ablaufen müssen.
 Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum ist der Genetic Algorithm effizienter als eine Grid Search \cite{hyperparameters-search-comparison-focus-genetic}.
