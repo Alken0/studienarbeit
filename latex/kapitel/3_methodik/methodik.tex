@@ -302,139 +302,67 @@ Alle festgelegten Hyperparameter finden sich in der folgenden Tabelle \ref{table
 Vor der Implementierung und Analyse der verschiedenen Architekturen werden zunächst die Trainingsdaten generiert.
 Danach erfolgt die Implementierung einer neuen Architektur und Festlegung der Hyperparameter.
 Schließlich wird das Training durchgeführt.
-Beim Training werden automatisch alle Hyperparameter-Kombinationen ausprobiert, Log-Dateien erstellt und auch die FID-Werte für die einzelnen Durchgänge berechnet.
-Alle Metriken in den Logs werden dabei auf Testdaten angewendet, um ein Overfitting erkennen zu können.
+Beim Training wird automatisch eine Grid Search durchgeführt und Logs für diverse Werte berechnet.
 Die Logs können im Anschluss mithilfe von Tensorboard visualisiert werden.
-
-\section{Bewertung}
-\subsection{Erfolgskriterien}
-Damit die Konfigurationen treffend vorausgewählt werden könne, müssen die Kriterien für ein erfolgreich trainiertes GAN klar definiert werden.
-Als Erfolgskriterien zählen in diesem Fall die Varietät der generierten Bilder und die Korrektheit der generierten Figuren.
-Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
-
-\subsubsection{Varietät}
-Die Varietät bezieht zum einen auf die Ähnlichkeit zwischen Trainingsbildern und den generierten Bildern der GANs.
-Die Ähnlichkeit zwischen diesen beiden Bildersets beschreibt, wie gut das GAN 'etwas neues schaffen' kann, oder ob es nur Trainingsbilder dupliziert.
-Sollte die Ähnlichkeit sehr gering sein, werden viele 'neue' Bilder generiert, was sehr positiv zu bewerten ist.
-Zudem bezieht sich die Varietät auf die generierten Bilder untereinander.
-Sie sollten auch möglichst verschieden sein, was oftmals nicht der Fall ist.
-Das Phänomen ist als 'mode-collapse' bekannt (siehe Stand der Technik). %TODO steht das auch in Stand der Technik?
-
-Beide Probleme werden mittels einer manuellen Analyse ausgewertet.
-% https://scikit-image.org/docs/0.12.x/api/skimage.measure.html#skimage.measure.compare_ssim
-
-\subsubsection{Korrektheit}
-Neben der Varietät besitzt auch die Korrektheit eine hohe Bedeutung für die Bewertung der GANs.
-Dabei muss sichergestellt werden, dass die richtige Figur generiert wurde und erkennbar ist.
-Die Figuren müssen außerdem den gleichen Kriterien wie die Trainingsdaten genügen, das heißt, die Figuren sollten zum Beispiel vollständig innerhalb des Bildes abgebildet sein.
-\todo{markus: wertung}
-Es ist allerdings eher unwahrscheinlich, dass das GAN Bilder generiert, die keinem Pendant aus den Trainingsbildern entsprechen.
-Ein weiterer wichtiger Aspekt der Bilder ist das Verhalten im Hintergrund der Figur.
-So sollten im Hintergrund möglichst keine anderen Figuren oder Pixelfragmente erzeugt werden.
-
-All diese Kriterien werden durch eine manuelle Überprüfung evaluiert werden.
-
-\begin{itemize}
-	\item manuelle Auswertung
-	\item Frechet Inception Distance \cite{frechet-inception-distance}
-\end{itemize}
 
 \subsection{Logs}
 Während des Trainings wird eine Reihe von Logs zur Analyse erzeugt.
-Die Logs werden bei der Erzeugung automatisch in Architektur und Hyperparameterkombination unterteilt.
-Durch Unterteilung ist die Grundlage einer fundierten Auswahl einer Architektur mit den besten Ergebnissen sichergestellt.
+Alle Metriken in den Logs werden dabei auf Testdaten angewendet, um ein Overfitting erkennen zu können.
+Die genauen Werte und die mit dem Logging verknüpften Intentionen werden im Folgenden erläutert.
 \newline
 
 Während dem Training werden mehrere Werte geloggt.
 Ein Wert ist dabei der Loss, sowohl für den Generator, als auch für den Discriminator.
-Der Loss wird dabei für jede Epoche geloggt und ist vor allem zur Analyse des Trainingsprozesses interessant.
-So können nicht funktionierende Architekturen schon früher abgebrochen werden und verbessert werden.
+Der Loss wird für jede Epoche geloggt und ist vor allem zur Analyse des Trainingsprozesses interessant.
+So können schlechte Trainingsdurchläufe schon früher abgebrochen werden und zugehörige Architekturen verbessert werden.
 \newline
 
-Für die Auswertung sind vor allem die generierten Bilder und der FID-Index relevant.
+Für die Auswertung sind vor allem die generierten Bilder und der \acrshort{FID}-Index relevant.
 Die Bilder werden nach jeder Epoche mit einer immer identischen Latent-Dim erzeugt.
 Dadurch ist eine bessere Vergleichbarkeit gewährleistet.
 Tensorboard erlaubt dann eine Ansicht mit Zeitachse, um den Lernprozess über die verschiedenen Epochen beobachten zu können.
 \newline
 
-Der FID-Index ist sehr aufwändig zu berechnen.
+Der \acrshort{FID}-Index ist sehr aufwändig zu berechnen.
 Deshalb wird er erst am Ende mit den finalen Bildern erzeugt.
 Bei einem Overfitting könnten so theoretisch schlechtere Ergebnisse für ein Modell entstehen.
 Durch eine zusätzliche manuelle Analyse über die einzelnen Epochen und der vergleichsweise geringen Epochenanzahl ist das Risiko einer potentiellen Verfälschung der Ergebnisse jedoch sehr gering.
 \newline
 
-Die gesammelten Daten sind dabei alle nach Architektur und Hyperparameterkombination unterteilt.
+Die gesammelten Daten sind alle nach Architektur und Hyperparameterkombination unterteilt abgespeichert.
 Die Unterteilung erlaubt die Auswahl einer möglichst optimalen Kombination aus beidem.
 
+\section{Bewertungskriterien}
+\todo[inline,shadow]{Vor Training schieben! (und nochmal gucken, ob es dann passt, weil FID wird in Logs benutzt)}
+\todo[inline, shadow]{FID in Stand der Technik erklären}
+Damit ein Vergleich zwischen den Architekturen gezogen werden kann, müssen Kriterien für ein erfolgreich trainiertes GAN klar definiert werden.
+Als Erfolgskriterien zählen in diesem Fall die Varietät der generierten Bilder und die Korrektheit der generierten Figuren.
+Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
 
-\begin{comment}
+\subsection{Varietät}
+Die Varietät bezieht zum einen auf die Ähnlichkeit zwischen Trainingsbildern und den generierten Bildern der GANs.
+Die Ähnlichkeit zwischen diesen beiden Bildersets beschreibt, wie gut das GAN 'etwas neues schaffen' kann, oder ob es nur Trainingsbilder dupliziert.
+Sollte die Ähnlichkeit sehr gering sein, werden viele 'neue' Bilder generiert, was sehr positiv zu bewerten ist.
+\newline
 
-Die Korrektheit bezieht sich dabei auf die generierte Figur im Bild oder auch umliegende Bildpunkte.
-Für die Korrektur der richtigen Formen gibt es mehrere Möglichkeiten:
-\begin{description}
-	\item[Neuronales Kontrollnetz]
-	Dafür wird ein weiteres Netzwerk zur Bewertung der Resultate trainiert.
-	Diese Variante ist sehr ungenau, da sie wieder von dem Trainingserfolg eines Neuronalen Netzes abhängt.
-	Allerdings erlaubt das Neuronale Netzwerk die Analyse von großen Datensätzen, die aber in diesem Fall nicht in der Form nötig sein wird.
-	
-	\item[händisch]
-	Das händische Kontrollieren ist sehr aufwändig.
-	Für die Kontrolle sollte das aber möglich sein.
-	
-	\item[Formvergleich]
-	Es ist möglich, die Lösung zu brute-forcen.
-	Das bedeutet, es wird jede mögliche Form über das Bild gelegt und diejenige mit der höchsten Überschneidung ausgewählt und als Indikator genommen.
-\end{description}
+Zudem bezieht sich die Varietät auf die generierten Bilder untereinander.
+Sie sollten auch möglichst verschieden sein, was oftmals nicht der Fall ist.
+Das Phänomen ist als 'mode-collapse' bekannt. \todo{ist mode-collapse im stand der technik?}
+% https://scikit-image.org/docs/0.12.x/api/skimage.measure.html#skimage.measure.compare_ssim
 
+\subsection{Korrektheit}
+Neben der Varietät besitzt auch die Korrektheit eine hohe Bedeutung für die Bewertung der GANs.
+Dafür muss sichergestellt werden, dass die richtige Figur zum zugehörigen Label generiert wurde und erkennbar ist.
+Die Figuren müssen außerdem den gleichen Kriterien wie die Trainingsdaten genügen, das heißt, die Figuren sollten zum Beispiel vollständig innerhalb des Bildes abgebildet sein.
+\newline
 
+Ein weiterer wichtiger Aspekt der Bilder ist das Verhalten im Hintergrund der Figur.
+So sollten im Hintergrund möglichst keine anderen Figuren oder Pixelfragmente erzeugt werden.
 
-\section{GAN: Bewertungs- und Vergleichskriterien}
+\subsection{Bestimmung}
+Sowohl Varietät als auch Korrektheit können mit der \acrlong{FID} \cite{frechet-inception-distance} gemessen werden.
+Dadurch wird ein objektiver Vergleich zwischen den Architekturen gewährleistet.
+\newline
 
-% How to write methods section: http://rc.rcjournal.com/content/respcare/49/10/1229.full.pdf
-\subsection{Warum synthetische Daten?}
-Mehr Kontrolle über die Bilder:
-\footnote{Die meisten Anpassungen erlauben auch Rechenleistung zu reduzieren, falls Computer überlastet sein sollten.}
-\begin{enumerate}
-	\item Anpassung von Größe
-	\item Anzahl der unterschiedlichen labels (wieviel unterschiedliche Formen sind enthalten)
-	\item sich unterscheidende Features in den Bildern (wo genau sind die Bilder zu finden, unterschiedliche Größe, Rotation?)
-	\item wie generiert? $\rightarrow$ Deterministisch $\rightarrow$ Seed
-	\item weniger Arbeitsaufwand als händische Generierung
-\end{enumerate}
-
-\subsection{Welche Eigenschaften haben die Bilder genau?}
-\begin{enumerate}
-	\item größe: 28x28
-	\item farbe: 1-dimensional $\rightarrow$ scharz-weiß 
-\end{enumerate}
-
-\section{Training}
-Ziel: GAN das möglichst diverse und korrekte Bilder erzeugt $\rightarrow$ Wie wird das erreicht?
-\begin{enumerate}
-	\item Anpassung von Hyperparametern (Learning-rate, batch-size, momentum)
-	\footnote{https://towardsdatascience.com/what-are-hyperparameters-and-how-to-tune-the-hyperparameters-in-a-deep-neural-network-d0604917584a}
-	\footnote{Grid Search (erlaubt methodisches Suchen nach optimalen Hyperparametern): https://www.tensorflow.org/tensorboard/hyperparameter\_tuning\_with\_hparams}
-	\item Anpassung von Neuralen Netzarchitektur
-	\footnote{https://lab.wallarm.com/the-first-step-by-step-guide-for-implementing-neural-architecture-search-with-reinforcement-learning-using-tensorflow-99ade71b3d28/}
-\end{enumerate}
-
-\section{Bewertung bzw. Vergleich der GANs}
-Ziel: messbare Vergleichskriterien
-
-\subsection{Korrektheit der Bilder}
-\begin{enumerate}
-	\item richtige Form für das angegebene Label? 
-	\item muss per Hand bestimmt werden? oder festen algorithmus, der form erkennt? neuronales netz wäre zu ungenau?
-\end{enumerate}
-
-\subsection{Diversität der generierten Bilder}
-\begin{enumerate}
-	\item Vergleich zu Trainingsdaten (wird etwas neues geschaffen?)
-	\item Vergleich zu anderen generierten Bildern $\rightarrow$ (Parital) Mode-Collapse?
-	\footnote{https://developers.google.com/machine-learning/gan/problems}
-	\footnote{eventuell 2 discriminator?: https://dl.acm.org/doi/10.1145/3283254.3283282}
-	\footnote{Google: https://research.google/pubs/pub45829/}
-	
-	\item Vergleich von Bildern durch 'Pixel by Pixel' Ähnlichkeit bestimmen $\rightarrow$ die X bilder mit einer Ähnlichkeit über Y \% können dann angeguckt werden
-\end{enumerate}
-\end{comment}
+Zusätzlich erfolgt eine manuelle Überprüfung der Endresultate.
+Eine manuelle Überprüfung ist zwar subjektiv, verhindert allerdings, dass gute Ergebnisse aufgrund von Ungenauigkeiten der \acrshort{FID} übersehen werden.
