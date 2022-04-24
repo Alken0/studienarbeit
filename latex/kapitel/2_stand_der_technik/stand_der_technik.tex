@@ -121,14 +121,6 @@ Ziel des Generators hingegen ist es, den Discriminator zu täuschen und die gene
 
 Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei die Ausgabe des Discriminators die zu optimierende Größe ist.
 Das bedeutet, der Generator versucht die Genauigkeit des Discriminators zu verringern, während der Discriminator sie erhöhen möchte. \cite{gan-minimax} 
-\newline
-
-
-Für diese Arbeit werden zusätzlich Label eingeführt, um die generierten Daten beeinflussen zu können. 
-Diese Art von GAN nennt sich CGAN oder Conditional GAN \cite{gan-conditional}.
-Dazu erhalten der Generator und Discriminator das Datenlabel als einen weiteren Input.
-So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
-Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
 
 \section{Ausprägungen von GANs}
 In diesem Kapitel werden verschiedene Architekturmodelle von GANs vorgestellt.
@@ -137,10 +129,10 @@ Die Unterschiede entstehen durch die verwendeten Layern oder Funktionsweise der 
 
 \subsection{CGAN}
 \todo[inline, shadow]{Formel aus dem Paper übernehmen? \cite{mirza2014conditional}}
-Bei einem Conditional GAN \cite{mirza2014conditional} wird neben der Latent-Dimension zusätzlich noch ein Label übergeben.
-Dies geschieht sowohl beim Discriminator als auch beim Generator.
-Das Label gibt eine bestimmt Klasse der Daten an und wird dann auch beim Trainingsprozess berücksichtigt.
-Das bedeutet, der Discriminator bekommt bei Label X nur Daten des Labels X zum Vergleich vorgelegt.
+CGANs oder Conditional GANs \cite{mirza2014conditional, gan-conditional} erlauben die Beeinflussung der Generierung durch Labels.
+Dazu erhalten der Generator und Discriminator das Datenlabel als einen weiteren Input.
+So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
+Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
 \newline
 
 Sobald das GAN zufriedenstellend trainiert ist, können so labelspezifische Daten generiert werden.
@@ -180,6 +172,19 @@ Die Zusammenhänge werden dabei implizit durch die Architektur vorgegeben und m�
 Die Tatsache, dass die Filter der Convolutional Layer so viel vorgeben ist jedoch auch gleichzeitig ein Nachteil der Architektur.
 Sollten die Beziehungen zwischen nahen Datenpunkten nicht existieren, werden falsche Zusammenhänge impliziert, was zu schlechteren Ergebnissen führen kann.
 Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Architektur, aber dafür effizienter.
+
+\section{Bewertung von GAN-Trainingserfolgen - FID}
+% TODO quelle: https://wandb.ai/ayush-thakur/gan-evaluation/reports/How-to-Evaluate-GANs-using-Frechet-Inception-Distance-FID---Vmlldzo0MTAxOTI
+Die Bewertung von Trainingserfolgen durch GANs ist nicht trivial, denn für die Bewertung muss die Qualität der generierten Bilder eingeschätzt werden.
+Solch eine Bewertung erlaubt der \acrfull{FID} Score, der eine Weiterentwicklung des Inception Scores darstellt \cite{are-gans-created-equally}.
+\newline
+
+Der \acrshort{FID} Index bewertet dabei 2 Eigenschaften der Bilder.
+Zum einen wird die Qualität der Bilder mit den Trainingsdaten verglichen.
+Zum anderen wird die Vielfalt der generierten Bilder einbezogen und dadurch beispielsweise auch ein Mode-Collapse negativ bewertet. \todo{mode collapse erklären}
+Die genaue Berechnung beschreibt die nachfolgende Formel, wobei $\mu$ und $\sigma$ die mittlere absolute Abweichung und Standardabweichungen der normalverteilten Daten $X$ und $Y$ (echte und synthetische Bilder) darstellt.
+
+\[d(X, Y) = (\mu_X - \mu_Y)^2 + (\sigma_X - \sigma_Y)^2 \]
 
 \section{Verfahren zur Bestimmung von Hyperparametern}
 \label{chapter:verfahren-bestimmung-hyperparameter}
