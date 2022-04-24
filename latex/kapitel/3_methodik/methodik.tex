@@ -230,35 +230,54 @@ Das garantiert eine bessere Vergleichbarkeit zwischen den Architekturen.
 Die Hyperparameter \textit{Batch-Size}, \textit{Learning-Rate Generator}, \textit{Learning-Rate Discriminator}, \textit{Dropout} und \textit{Smoothness} entsprechen diesen Voraussetzungen.
 \newline
 
-\todo[]{zu den einzelnen hyperparameter begründungen hinzu fügen und anschließend die ausgewählten werte nennen und begründen} 
+\todo[]{begründung und welche werte und warum} 
 \subsubsection{Learning-Rate}
 Die Learning-Rate entspricht dem Faktor \(\alpha\), welcher die Intensität des Gradientenabstiegs bestimmt:  
 
 \[\theta_{}  =  \theta_{}  - \alpha   \nabla_{ \theta }  J( \theta )  \]
 
-\todo[]{vielleicht mehr auf adam beziehen?}
+\todo[]{mit quellen backen}
 Bei zu großem \(\alpha\) kann der Trainings-Fehler anfangen zu oszillieren oder sogar größer werden.
 Bei zu kleinem \(\alpha\) konvergiert der Fehler zu langsam oder bleibt in einem lokalen Minimum stehen. 
 Es ist anzumerken, dass die oben gezeigt Formel dem einfachen Gradientenabstieg entspricht.
 Normalerweise werden fortgeschrittenere Algorithmen angewendet, welche jedoch weiterhin auf dem Gradientenabstieg basieren.
-So können weitere Parameter, wie \textit{Momentum} oder \textit{Acceleration} die Abstiegsweite beeinflussen.
-Nichtsdestotrotz hat die Learning-Rate einen sehr hohen Einfluss auf das Trainings-Ergebnis und gilt als einer der wichtigsten Hyperparameter \cite[S. 447]{learning-rate-most-important}. 
+So können weitere Parameter, wie das \textit{Momentum} die Abstiegsweite beeinflussen.
 \newline
 
-\todo[]{todo problematik verschiedener raten bei gans}
-Das sticht vor allem bei einem GAN heraus, da dort die Learning-Rate für Generator und Discriminator unabhängig gesetzt werden kann.
+Für alle Architekturen wird der Adam-Optimierungs-Algorithmus angewendet.
+\todo{warum? 1. bekannt / standart, 2. schnelle ergebnisse}
+\todo{wie funktioniert er grob?}
+Daraus lässt sich schließen, dass im Fall von Adam die Lernrate vor allem am Anfang des Trainings bedeutend ist.
+Nichtsdestotrotz hat die Learning-Rate auch einen großen Einfluss auf das Ergebnis und gilt allgemein als einer der wichtigsten Hyperparameter \cite[S. 447]{learning-rate-most-important}. 
 \newline
 
-Für die Hyperparamter-Suche wurden für Generator und Discriminator die gleichen drei Lernraten festgelegt: \(2e-3\), \(2e-4\) und \(3e-4\).
+Die Signifikanz sticht vor allem bei einem GAN heraus, da dort die Learning-Rate für Generator und Discriminator unabhängig gesetzt werden kann.
+Damit kann eine einseitige Entwicklung der Modelle ausgelöst, oder alternativ entgegen gesteuert werden.
+Es ist also dementsprechend wichtig, mehrere Kombinationen von verschiedenen Lernraten zu untersuchen.
+\newline
 
-	
+Vor der Studienarbeit gesammelte Erfahrungen haben gezeigt, das eine Lernrate von \(2e-3\) bis \(2e-4\) für die geplanten Modelle gut funktionieren.
+Außerdem wurden diese Werte häufig in Adam-bezogene Tutorials referenziert \cite{adam-tutorial}.
+Für die Hyperparamter-Suche werden deshalb für Generator und Discriminator die gleichen drei Lernraten festgelegt:
+
+\begin{center} \(2e-3\), \(2e-4\) und \(3e-4\). \end{center}
+ 
+Einerseits ist so ein symmetrischen Training mit guten Erfahrungswerten möglich.
+Anderseits können durch die gewählten Werte asymmetrische Trainings mit zwei verschiedenen Abständen untersucht werden:
+ein großer Abstand zwischen \(2e-3\) und \(2e-4\), als auch ein kleiner zwischen \(2e-4\) und \(3e-4\).
+
+
+\todo[]{begründung und welche werte und warum} 	
 \subsubsection{Batch-Size}
 Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter für Anpassungen und wird in unterschiedlichen Tutorials angegeben \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery} \todo{Begründung aus der quelle übernehmen? \cite{tutorial:tune-batch-size-machinelearningmastery}}.
 
+
+\todo[]{begründung und welche werte und warum} 
 \subsubsection{Dropout}
 Sowohl Dropout als auch Smoothness sind vor allem für einen persönlichen Erkenntnisgewinn mit aufgenommen worden.
 
 
+\todo[]{begründung und welche werte und warum} 
 \subsubsection{Smoothness}
 Die Smoothness entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-onesided-label-smoothing}.
 \newline
