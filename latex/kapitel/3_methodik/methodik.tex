@@ -228,9 +228,7 @@ Das garantiert eine bessere Vergleichbarkeit zwischen den Architekturen.
 \newline
 
 Die Hyperparameter \textit{Batch-Size}, \textit{Learning-Rate Generator}, \textit{Learning-Rate Discriminator}, \textit{Dropout} und \textit{Smoothness} entsprechen diesen Voraussetzungen.
-\newline
 
-\todo[]{begründung und welche werte und warum} 
 \subsubsection{Learning-Rate}
 Die Learning-Rate entspricht dem Faktor \(\alpha\), welcher die Intensität des Gradientenabstiegs bestimmt:  
 
@@ -264,8 +262,7 @@ Für die Hyperparamter-Suche werden deshalb für Generator und Discriminator die
  
 Einerseits ist so ein symmetrischen Training mit guten Erfahrungswerten möglich.
 Anderseits können durch die gewählten Werte asymmetrische Trainings mit zwei verschiedenen Abständen untersucht werden:
-ein großer Abstand zwischen \(2e-3\) und \(2e-4\), als auch ein kleiner zwischen \(2e-4\) und \(3e-4\).
-
+ein großer Abstand zwischen \(2e-3\) und \(2e-4\), als auch ein kleiner Abstand zwischen \(2e-4\) und \(3e-4\).
 
 \todo[]{begründung und welche werte und warum} 	
 \subsubsection{Batch-Size}
@@ -282,7 +279,8 @@ Sowohl Dropout als auch Smoothness sind vor allem für einen persönlichen Erken
 Die Smoothness entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-onesided-label-smoothing}.
 \newline
 
-Alle festgelegten Hyperparameter finden sich in der folgenden Tabelle \ref{table:hyperparameter} nochmals zusammengefasst:
+Alle festgelegten Hyperparameter finden sich in der folgenden Tabelle \ref{table:hyperparameter} nochmals zusammengefasst.
+Dementsprechend müssen insgesamt 72 Kombinationen pro Architektur getestet werden.
 
 \begin{table}[H]
 	\centering
