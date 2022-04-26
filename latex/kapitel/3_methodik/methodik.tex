@@ -250,10 +250,12 @@ Nichtsdestotrotz hat die Learning-Rate auch einen großen Einfluss auf das Ergeb
 \newline
 
 Die Signifikanz sticht vor allem bei einem GAN heraus, da dort die Learning-Rate für Generator und Discriminator unabhängig gesetzt werden kann.
-Damit kann eine einseitige Entwicklung der Modelle ausgelöst, oder alternativ entgegen gesteuert werden.
+Unterschiedliche Werte können dazu führen, dass eines der Modelle seinen Gegenspieler völlig dominiert.
+Auf der anderen Seite, können mittels unterschiedlichen Parameter etwaige Schwächen eines Modells ausgeglichen werden.
 Es ist also dementsprechend wichtig, mehrere Kombinationen von verschiedenen Lernraten zu untersuchen.
 \newline
 
+\todo{4. LR übernehmen}
 Vor der Studienarbeit gesammelte Erfahrungen haben gezeigt, das eine Lernrate von \(2e-3\) bis \(2e-4\) für die geplanten Modelle gut funktionieren.
 Außerdem wurden diese Werte häufig in Adam-bezogene Tutorials referenziert \cite{adam-tutorial}.
 Für die Hyperparamter-Suche werden deshalb für Generator und Discriminator die gleichen drei Lernraten festgelegt:
@@ -264,10 +266,26 @@ Einerseits ist so ein symmetrischen Training mit guten Erfahrungswerten möglich
 Anderseits können durch die gewählten Werte asymmetrische Trainings mit zwei verschiedenen Abständen untersucht werden:
 ein großer Abstand zwischen \(2e-3\) und \(2e-4\), als auch ein kleiner Abstand zwischen \(2e-4\) und \(3e-4\).
 
-\todo[]{begründung und welche werte und warum} 	
 \subsubsection{Batch-Size}
-Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter für Anpassungen und wird in unterschiedlichen Tutorials angegeben \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery} \todo{Begründung aus der quelle übernehmen? \cite{tutorial:tune-batch-size-machinelearningmastery}}.
+Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter und wird in unterschiedlichen Tutorials referenziert \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery}.
+Die Batch-Size beschreibt, wie viele Traingsdaten verabeitet werden, um einen Gradientenabstieg der Gewichte durchzuführen.
+Grundsätzlich führt eine kleine Batch-Size zu besseren Ergebnissen.
+Ein Experiment über kleine Batch-Größen im Bezug auf Neuronale Netze kam zu folgenden Ergebnis: 
 
+\begin{center}
+	\enquote{In all cases the best results have been obtained with batch sizes m = 32 or smaller, often as small as m = 2 or m = 4.}\cite[S. 16, Z. 5-7]{small-batch-size}
+\end{center}
+
+Eine kleinere Batch-Size führt dazu, dass der Fehler speziellere Fälle abbilden kann und damit eine Generalisierung unterbunden wird \cite{tutorial:tune-batch-size-machinelearningmastery}.
+Jedoch ergibt sich aus einer kleineren Batch-Size ein Leistungs-Problem: die Berechnung des Fehlerwerts und die anschließende Optimierung der Gewichte wird häufiger durchgeführt.
+Das führt logischerweise zu einer längeren Traingsdauer pro Epoche.
+Deshalb muss ein Kompromiss gefunden werden.
+\newline
+
+\(32\) wird in Papers oder Tutorials häufig als ein guter Standartwert angegeben \cite{default-batch-size}.
+Jedoch sollen in der Studienarbeit mehre Architekturen mit einer großen Anzahl an Hyperparametern untersucht werden.
+Gleichzeit sind die verfügbaren Ressourcen begrenzt, weshalb eine größere Batch-Size eine schnellere Hyperparameter-Suchen ermöglichen würde.
+Aus diesem Grund wird für die erste Untersuchung auch eine Batch-Size von \(64\) aufgenommen.
 
 \todo[]{begründung und welche werte und warum} 
 \subsubsection{Dropout}
@@ -280,8 +298,11 @@ Die Smoothness entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-ones
 \newline
 
 Alle festgelegten Hyperparameter finden sich in der folgenden Tabelle \ref{table:hyperparameter} nochmals zusammengefasst.
-Dementsprechend müssen insgesamt 72 Kombinationen pro Architektur getestet werden.
+Dementsprechend müssen insgesamt 72 Kombinationen pro Architektur getestet werden. \todo{72 nicht korrekt}
+Es ist jedoch anzumerken, dass spätere Anpassungen an der Hyperparameter-Auswahl weiterhin möglich sind.
+Vor allem falls es sich heraus stellt, dass einige Werte in keiner Kombination gute Ergebnisse erzeugen.
 
+\todo{tabelle nicht korrekt}
 \begin{table}[H]
 	\centering
 	\label{table:hyperparameter}
