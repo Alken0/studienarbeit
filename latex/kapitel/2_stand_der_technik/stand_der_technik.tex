@@ -128,12 +128,15 @@ Das ist insbesondere wichtig, da die zugehörigen Bezeichnungen nicht klar defin
 Die Unterschiede entstehen durch die verwendeten Layern oder Funktionsweise der GANs.
 
 \subsection{CGAN}
-\todo[inline, shadow]{Formel aus dem Paper übernehmen? \cite{mirza2014conditional}}
 CGANs oder Conditional GANs \cite{mirza2014conditional, gan-conditional} erlauben die Beeinflussung der Generierung durch Labels.
 Dazu erhalten der Generator und Discriminator das Datenlabel als einen weiteren Input.
 So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
-\newline
+
+Der Prozess, der auch als Min-Max Spiel bezeichnet werden kann, wird durch die Folgende Formel aus \cite[S. 3]{mirza2014conditional} verdeutlicht.
+Dabei steht das $y$ für die Bedingung, bei $x$ um die Trainingsdaten und bei $z$ handelt es sich Zufallszahlen, die beim Generator für die Generierung benötigt werden.
+
+\[ \min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)} [\log D(x|y)] + \mathbb{E}_{z \sim p_z(z)} [\log(1 - D(G(z|y)))] \]
 
 Sobald das GAN zufriedenstellend trainiert ist, können so labelspezifische Daten generiert werden.
 Das kann in der Praxis sehr günstig sein, wenn zum Beispiel das Krankheitsbild einer bestimmten Krankheit generiert werden soll.
