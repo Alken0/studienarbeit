@@ -4,17 +4,25 @@
 \chapter{Diskussion}
 %TODO Aufbau nach: https://www.scribbr.de/aufbau-und-gliederung/diskussion-bachelorarbeit/
 
+In Rahmen der Studienarbeit wurden diverse CGAN Architekturen zur Generierung von geometrischen Figuren untersucht.
+Bei den Figuren handelt es sich um Kreise, Quadrate und Dreiecke, die in unterschiedlicher Größe auf dem Bild verteilt sein können.
+Je nach Eingabelabel soll dann das GAN bestimmte Figuren generieren.
+Für den Vergleich wurden alle Architekturen mit der jeweiligen Hyperparametersuche für 100 Epochen auf die Bilder trainiert.
+In diesem Kapitel werden die Ergebnisse analysiert, interpretiert und eingeordnet.
+
 \section{Zusammenfassung der Ergebnisse}
-Insgesamt: nicht ganz so gute Ergebnisse
-\begin{enumerate}
-	\item Dense GAN ziemlich gute Ergebnisse
-	\begin{enumerate}
-		\item Unterscheidung der Formen
-		\item Erkennbare Formen
-	\end{enumerate}
-	
-	\item sehr wenig mode-collapse \todo{stimmt das?}
-\end{enumerate}
+Die besten Ergebnisse erzielt das Dense GAN, das ausschließlich aus Dense Layern besteht.
+Es ist in der Lage erkennbare Figuren zu erzeugen, die vom vorgegebenen Label abhängig sind.
+Allerdings hat das Dense GAN Schwierigkeiten mit Rauschen.
+So sind immer wieder kleinere Pixelfragmente im Hintergrund zu sehen, die nicht zur eigentlichen Figur gehören.
+\newline
+
+Alle anderen Architekturen besitzen Convolutional Layer, wobei es sich entweder Discriminator, Generator oder bei beiden Netze um Deep Convolutional Networks handelt.
+All diese Architekturen haben deutlich weniger Probleme mit Hintergrundrauschen.
+Jedoch ist die Qualität der Bilder trotzdem deutlich schlechter als beim Dense GAN.
+Hauptproblem ist, dass immer ein bis zwei Einheitsfiguren erzeugt werden, statt den gewünschten Figuren.
+Die Einheitsfiguren ähneln am ehesten dem Quadrat oder Kreis und werden vom GAN an verschiedenen Stellen in unterschiedlichen Größen im Bild platziert.
+Zwar handelt es sich nicht um einen Mode Collapse, weil sich die Bilder unterscheiden, das Label wird aber auch nicht erkennbar in den Gernierungsprozess einbezogen.
 
 \section{Interpretation der Ergebnisse}
 
