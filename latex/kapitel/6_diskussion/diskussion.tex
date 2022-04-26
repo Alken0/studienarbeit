@@ -25,6 +25,32 @@ Die Einheitsfiguren ähneln am ehesten dem Quadrat oder Kreis und werden vom GAN
 Zwar handelt es sich nicht um einen Mode Collapse, weil sich die Bilder unterscheiden, das Label wird aber auch nicht erkennbar in den Gernierungsprozess einbezogen.
 
 \section{Interpretation der Ergebnisse}
+Zunächst zeigt sich, dass die Kombination aus Dense und Deep Convolutional GAN keinen Vorteil gegenüber Architektur-Reinformen verschafft.
+Stattdessen verhalten sie sich sehr ähnlich zu den Deep Convolutional GANs.
+
+Die besten Ergebnisse erzielt das Dense GAN.
+Alle anderen 
+\subsubsection{Convolutional Layer im Vergleich zu Dense Layern}
+Die Ergebnisse zeigen deutlich, dass die Convolutinonal Layer keinen positiven Einfluss auf das Endresultat haben, auch nicht in Kombination mit Dense Layern.
+Stattdessen neigen sie viel mehr zu einer Einheitsfiguren, die eine Mischung aus Kreis und Quadrat darstellt.
+Alleine das Dense-GAN schafft, Figuren korrekt nach Label darzustellen.
+
+Hingegen ein positiver Aspekt bei der Vewendung von Convolutional Layern ist die Absenz oder zumindest deutliche Reduktion von Hintergrundrauschen.
+In diesem Bereich hat das Dense GAN deutlich mehr Probleme.
+
+\subsubsection{Labelsensitivität}
+Wie bereits angesprochen zeigen die Ergebnisse, dass alle GANs bis auf das Dense-GAN erhebliche Probleme haben, korrekte Bilder nach Label zu erzeugen.
+Statt verschiedenen Formen wird oftmals nur eine Standardform produziert, die einer Mischung aus Kreis und Quadrat ähnlich ist.
+Es handelt sich dabei zwar um keinen mode-collapse, da die Figuren immer unterschiedlich aussehen, aber die GANs sind nicht Label-sensitiv.
+
+Das könnte daran liegen, dass sich die Figuren bei geringer verpixelter Auflösung ähneln.
+Insbesondere, wenn die Figuren kleiner auf dem Bild abgebildet sind, als die maximale Bildgröße erlauben würde.
+Dadurch könnte ein Ungleichgewicht gegenüber der Dreiecksfigur entstehen, was dann den Lernprozess beeinflusst.
+\newline
+
+
+
+Interessant ist auch die 
 
 \begin{enumerate}
 	\item GAN hat Label nicht richtig beachtet
@@ -37,16 +63,15 @@ Zwar handelt es sich nicht um einen Mode Collapse, weil sich die Bilder untersch
 		\item weil dc-gan allgemein nicht gut?
 		\item weil sie nicht gut zusammen trainieren?
 	\end{enumerate}
-\end{enumerate}
 
-\subsection{Auffälligkeiten}
-\begin{enumerate}
-	\item FID Wert nicht so aussagekräftig wie angepriesen
-	\item weil Bilder untypisch klar definiert sind?
+	\item FID
+	\begin{enumerate}
+		\item FID Wert nicht so aussagekräftig wie angepriesen
+		\item weil Bilder untypisch klar definiert sind?
+	\end{enumerate}
 \end{enumerate}
 
 \section{Beschränkung der Forschung}
-
 \begin{enumerate}
 	\item Hardware
 	\begin{enumerate}
@@ -55,7 +80,8 @@ Zwar handelt es sich nicht um einen Mode Collapse, weil sich die Bilder untersch
 	\end{enumerate}
 \end{enumerate}
 
-\section{Empfehlungen für weiterführende Forschung}
+\section{Ausblick}
+% TODO Empfehlungen für weiterführende Forschung
 \begin{enumerate}
 	\item Bilder mehr preprocessen?
 	\begin{enumerate}
@@ -64,6 +90,8 @@ Zwar handelt es sich nicht um einen Mode Collapse, weil sich die Bilder untersch
 		\item Viereck und Kreis ähneln sich relativ stark im Vergleich zum Dreieck
 		\item durch sehr klare definierte Formen sehr hohe Ansprüche ans Ergebnis
 	\end{enumerate}
+
+	\item Architektur mit erst Dense dann Großflächigen Convolutional Layer am Ende gegen Rauschen?
 
 	\item bessere Hardware verwenden
 	\begin{enumerate}
