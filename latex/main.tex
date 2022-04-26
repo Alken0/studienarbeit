@@ -19,6 +19,7 @@
 
 % struktur nach https://www.thm.de/iem/images/user/dschul-910/Hinweise_zur_Abschlussarbeit.pdf (hat auch Seitenzahl Richtlinien für Arbeit mit max 70 Seiten)
 \begin{document}
+	\pagenumbering{roman}
 	\input{kapitel/0_offizielles/offizielles.tex}
 
 	\tableofcontents
@@ -30,6 +31,10 @@
 	\printglossary
 	
 	% <--- content start --->
+	\cleardoublepage{}
+	\pagenumbering{arabic}
+	\setcounter{page}{1}
+	
 	\input{kapitel/1_einleitung/einleitung.tex}
 	\input{kapitel/2_stand_der_technik/stand_der_technik.tex}
 	\input{kapitel/3_methodik/methodik.tex}
@@ -37,6 +42,10 @@
 	\input{kapitel/5_ergebnisse/ergebnisse.tex}
 	\input{kapitel/6_diskussion/diskussion.tex}
 	\input{kapitel/7_zusammenfassung/zusammenfassung.tex}
+	
+	\cleardoublepage{}
+	\appendix
+	\pagenumbering{Roman}
 	\input{kapitel/8_anhang/anhang.tex}
 	% <---  content end  --->
 	
