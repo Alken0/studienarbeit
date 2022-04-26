@@ -2,3 +2,65 @@
 % !TeX spellcheck = de_DE
 
 \chapter{Diskussion}
+%TODO Aufbau nach: https://www.scribbr.de/aufbau-und-gliederung/diskussion-bachelorarbeit/
+
+\section{Zusammenfassung der Ergebnisse}
+Insgesamt: nicht ganz so gute Ergebnisse
+\begin{enumerate}
+	\item Dense GAN ziemlich gute Ergebnisse
+	\begin{enumerate}
+		\item Unterscheidung der Formen
+		\item Erkennbare Formen
+	\end{enumerate}
+	
+	\item sehr wenig mode-collapse \todo{stimmt das?}
+\end{enumerate}
+
+\section{Interpretation der Ergebnisse}
+
+\begin{enumerate}
+	\item GAN hat Label nicht richtig beachtet
+	\begin{enumerate}
+		\item Formen (Kreis, Quadrat) zu ähnlich?
+	\end{enumerate}
+
+	\item gemischte Architektur kein Vorteil
+	\begin{enumerate}
+		\item weil dc-gan allgemein nicht gut?
+		\item weil sie nicht gut zusammen trainieren?
+	\end{enumerate}
+\end{enumerate}
+
+\subsection{Auffälligkeiten}
+\begin{enumerate}
+	\item FID Wert nicht so aussagekräftig wie angepriesen
+	\item weil Bilder untypisch klar definiert sind?
+\end{enumerate}
+
+\section{Beschränkung der Forschung}
+
+\begin{enumerate}
+	\item Hardware
+	\begin{enumerate}
+		\item geringe Anzahl an Hyperparametern
+		\item eventuell zu kleine Netze?
+	\end{enumerate}
+\end{enumerate}
+
+\section{Empfehlungen für weiterführende Forschung}
+\begin{enumerate}
+	\item Bilder mehr preprocessen?
+	\begin{enumerate}
+		\item oft werden Bilder gecroppt/skaliert um bestimmte Größe zu passen
+		\item unterschiedliche Position der Formen zu schwer?
+		\item Viereck und Kreis ähneln sich relativ stark im Vergleich zum Dreieck
+		\item durch sehr klare definierte Formen sehr hohe Ansprüche ans Ergebnis
+	\end{enumerate}
+
+	\item bessere Hardware verwenden
+	\begin{enumerate}
+		\item Genetic Algorithm
+		\item evt sogar Architektur allgemein die Layer als HP definieren
+		\item mehr Epochen trainieren
+	\end{enumerate}
+\end{enumerate}
