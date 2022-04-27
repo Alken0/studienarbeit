@@ -255,16 +255,19 @@ Auf der anderen Seite, können mittels unterschiedlichen Parameter etwaige Schw�
 Es ist also dementsprechend wichtig, mehrere Kombinationen von verschiedenen Lernraten zu untersuchen.
 \newline
 
-\todo{4. LR übernehmen}
-Vor der Studienarbeit gesammelte Erfahrungen haben gezeigt, das eine Lernrate von \(2e-3\) bis \(2e-4\) für die geplanten Modelle gut funktionieren.
+Vor der Studienarbeit gesammelte Erfahrungen haben gezeigt, das eine Lernrate im Bereich von \(2e-3\) bis \(2e-5\) für die geplanten Modelle gut funktionieren.
 Außerdem wurden diese Werte häufig in Adam-bezogene Tutorials referenziert \cite{adam-tutorial}.
-Für die Hyperparamter-Suche werden deshalb für Generator und Discriminator die gleichen drei Lernraten festgelegt:
+Für die Hyperparamter-Suche werden deshalb für Generator und Discriminator die gleichen vier Lernraten festgelegt:
 
-\begin{center} \(2e-3\), \(2e-4\) und \(3e-4\). \end{center}
+\begin{center} \(2e-3\), \(2e-4\), \(3e-4\) und \(2e-5\). \end{center}
  
 Einerseits ist so ein symmetrischen Training mit guten Erfahrungswerten möglich.
-Anderseits können durch die gewählten Werte asymmetrische Trainings mit zwei verschiedenen Abständen untersucht werden:
-ein großer Abstand zwischen \(2e-3\) und \(2e-4\), als auch ein kleiner Abstand zwischen \(2e-4\) und \(3e-4\).
+Anderseits sollen durch die gewählten Werte asymmetrische Trainings mit drei verschiedenen Abständen untersucht werden:
+\begin{itemize}
+	\item ein sehr großer Abstand von zwei Dezimalstellen
+	\item ein großer Abstand von einer Dezimalstelle
+	\item ein kleiner Abstand von \(1e-4\)
+\end{itemize}	
 
 \subsubsection{Batch-Size}
 Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter und wird in unterschiedlichen Tutorials referenziert \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery}.
@@ -278,18 +281,18 @@ Ein Experiment über kleine Batch-Größen im Bezug auf Neuronale Netze kam zu f
 
 Eine kleinere Batch-Size führt dazu, dass der Fehler speziellere Fälle abbilden kann und damit eine Generalisierung unterbunden wird \cite{tutorial:tune-batch-size-machinelearningmastery}.
 Jedoch ergibt sich aus einer kleineren Batch-Size ein Leistungs-Problem: die Berechnung des Fehlerwerts und die anschließende Optimierung der Gewichte wird häufiger durchgeführt.
-Das führt logischerweise zu einer längeren Traingsdauer pro Epoche.
+Das führt logischerweise zu einer längeren Trainingsdauer pro Epoche.
 Deshalb muss ein Kompromiss gefunden werden.
 \newline
 
 \(32\) wird in Papers oder Tutorials häufig als ein guter Standartwert angegeben \cite{default-batch-size}.
 Jedoch sollen in der Studienarbeit mehre Architekturen mit einer großen Anzahl an Hyperparametern untersucht werden.
 Gleichzeit sind die verfügbaren Ressourcen begrenzt, weshalb eine größere Batch-Size eine schnellere Hyperparameter-Suchen ermöglichen würde.
-Aus diesem Grund wird für die erste Untersuchung auch eine Batch-Size von \(64\) aufgenommen.
+Aus diesem Grund wird für die erste Untersuchung neben der Batch-Size von \(32\) auch \(64\) getestet.
 
 \todo[]{begründung und welche werte und warum} 
 \subsubsection{Dropout}
-Sowohl Dropout als auch Smoothness sind vor allem für einen persönlichen Erkenntnisgewinn mit aufgenommen worden.
+Beim Dropout wird ein Teil der Neuronen einer Schicht während dem Training ignoriert.
 
 
 \todo[]{begründung und welche werte und warum} 
@@ -299,7 +302,7 @@ Die Smoothness entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-ones
 
 Alle festgelegten Hyperparameter finden sich in der folgenden Tabelle \ref{table:hyperparameter} nochmals zusammengefasst.
 Dementsprechend müssen insgesamt 72 Kombinationen pro Architektur getestet werden. \todo{72 nicht korrekt}
-Es ist jedoch anzumerken, dass spätere Anpassungen an der Hyperparameter-Auswahl weiterhin möglich sind.
+Es ist jedoch anzumerken, dass spätere Anpassungen an der Hyperparameter-Auswahl möglich sind.
 Vor allem falls es sich heraus stellt, dass einige Werte in keiner Kombination gute Ergebnisse erzeugen.
 
 \todo{tabelle nicht korrekt}
@@ -314,7 +317,7 @@ Vor allem falls es sich heraus stellt, dass einige Werte in keiner Kombination g
 		Learning-Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
 		Learning-Rate Generator     & 2e-3, 2e-4, 3e-4
 	\end{tabular}
-	\caption{Hyperparameter Auswahl}
+	\caption{Allgemeine Hyperparameter Auswahl}
 \end{table}
 
 \subsection{Trainingsablauf}
