@@ -104,7 +104,7 @@ Keras stellt eine weitere Abstraktion-Stufe dar, wodurch Modelle sehr einfach be
 Aufgrund der Vorteile des Tensorboard und Keras, wurde sich für TensorFlow als DeepLearning Framework entschieden.
 
 \section{General Adversarial Network}
-Der Begriff GAN \textit{(General Adversarial Network)} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
+Der Begriff \acrfull{GAN} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
 Das Wort bezeichnet ein Konstrukt aus 2 neuronalen Netzen, die sich gegenseitig trainieren.
 Durch das spezielle Training gelingt die Generierung von realistischen synthetischen Daten.
 Solche Daten können dann zum Beispiel für das Training anderer neuronalen Netze \cite{gan-application-augmenting-training-data}, in der Bildverarbeitung \cite{gan-application-upscaling, gan-application-blending} und vielen weiteren Anwendungsgebieten verwendet werden \cite{gan-application-dna-optimizes-protein-functions, gan-application-audio-synthesis}.
@@ -116,7 +116,7 @@ Solche Daten können dann zum Beispiel für das Training anderer neuronalen Netz
 	\caption{Generative Adversarial Network (Bild von Thalles Silva \cite{img-gan})}
 \end{figure}
 
-Die beiden Netze eines GANs werden in den Generator und den Discriminator unterschieden.
+Die beiden Netze eines \acrshort{GAN}s werden in den Generator und den Discriminator unterschieden.
 Aufgabe des Generators ist die Generierung von synthetischen Daten.
 Dafür wandelt er eine zufälligen Eingabe in einen möglichst realistischen Output um.
 Die zufällige Eingabe dient dabei als Basis für die Ausgabedaten.
@@ -130,27 +130,35 @@ Ziel des Generators hingegen ist es, den Discriminator zu täuschen und die gene
 \newline
 
 Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei die Ausgabe des Discriminators die zu optimierende Größe ist.
-Das bedeutet, der Generator versucht die Genauigkeit des Discriminators zu verringern, während der Discriminator sie erhöhen möchte. \cite{gan-minimax} 
+Das bedeutet, der Generator versucht die Genauigkeit des Discriminators zu verringern, während der Discriminator sie erhöhen möchte. \cite{gan-minimax}
+Dieses Spiel kann auch als Formel \cite[S. 2]{mirza2014conditional} dargestellt werden: 
+\begin{equation}
+	\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)} [\log D(x)] + \mathbb{E}_{z \sim p_z(z)} [\log(1 - D(G(z)))]
+\end{equation}
 
 \section{Ausprägungen von GANs}
-In diesem Kapitel werden verschiedene Architekturmodelle von GANs vorgestellt.
-Das ist insbesondere wichtig, da die zugehörigen Bezeichnungen nicht klar definiert sind.
-Die Unterschiede entstehen durch die verwendeten Layern oder Funktionsweise der GANs.
+In diesem Kapitel werden verschiedene Architekturmodelle von \acrshort{GAN}s vorgestellt.
+Das ist deshalb wichtig, da die zugehörigen Bezeichnungen in der Literatur nicht klar definiert sind.
+So werden je nach Kontext der Arbeit sowohl Cycle-GANs als auch Conditional GANs als CGANs bezeichnet.
+Namen für die unterschiedlichen Ausprägungen zu haben ist jedoch von großer Bedeutung, um die Arbeit effizienter beschreiben zu können.
 
 \subsection{CGAN}
-CGANs oder Conditional GANs \cite{mirza2014conditional, gan-conditional} erlauben die Beeinflussung der Generierung durch Labels.
+Das \acrfull{CGAN} \cite{mirza2014conditional, gan-conditional} erlaubt die Beeinflussung der Generierung durch Labels.
 Dazu erhalten der Generator und Discriminator das Datenlabel als einen weiteren Input.
 So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
+\newline
 
-Der Prozess, der auch als Min-Max Spiel bezeichnet werden kann, wird durch die Folgende Formel aus \cite[S. 3]{mirza2014conditional} verdeutlicht.
-Dabei steht das $y$ für die Bedingung, bei $x$ um die Trainingsdaten und bei $z$ handelt es sich Zufallszahlen, die beim Generator für die Generierung benötigt werden.
-
-\[ \min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)} [\log D(x|y)] + \mathbb{E}_{z \sim p_z(z)} [\log(1 - D(G(z|y)))] \]
-
-Sobald das GAN zufriedenstellend trainiert ist, können so labelspezifische Daten generiert werden.
+Sobald das \acrshort{GAN} zufriedenstellend trainiert ist, können so labelspezifische Daten generiert werden.
 Das kann in der Praxis sehr günstig sein, wenn zum Beispiel das Krankheitsbild einer bestimmten Krankheit generiert werden soll.
-Aber die Nutzung des Conditional Discriminators erlaubt beispielsweise die Identifizierung einer bestimmten Krankheit auf einem Bild.
+Die Nutzung des Conditional Discriminators erlaubt zusätzlich die Identifizierung einer bestimmten Krankheit auf einem Bild.
+\newline
+
+Der Lernprozess, der auch als Min-Max Spiel bezeichnet werden kann, wird auch durch die Folgende Formel aus \cite[S. 3]{mirza2014conditional} verdeutlicht.
+Dabei steht das $y$ für die Bedingung, bei $x$ um die Trainingsdaten und bei $z$ handelt es sich Zufallszahlen, die beim Generator für die Generierung benötigt werden.
+\begin{equation}
+	\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)} [\log D(x|y)] + \mathbb{E}_{z \sim p_z(z)} [\log(1 - D(G(z|y)))]
+\end{equation}
 
 \subsection{Dense-GAN}
 Eine Dense-GAN nutzt sowohl für Discriminator als auch für den Generator Dense Layer beziehungsweise Fully Connected Layer.
@@ -189,15 +197,19 @@ Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Arc
 \section{Bewertung von GAN-Trainingserfolgen - FID}
 % TODO quelle: https://wandb.ai/ayush-thakur/gan-evaluation/reports/How-to-Evaluate-GANs-using-Frechet-Inception-Distance-FID---Vmlldzo0MTAxOTI
 Die Bewertung von Trainingserfolgen durch GANs ist nicht trivial, denn für die Bewertung muss die Qualität der generierten Bilder eingeschätzt werden.
-Solch eine Bewertung erlaubt der \acrfull{FID} Score, der eine Weiterentwicklung des Inception Scores darstellt \cite{are-gans-created-equally}.
-\newline
+Erstmals in \cite{fid} wurde dafür der \acrfull{FID} aufgezeigt.
 
-Der \acrshort{FID} Index bewertet dabei 2 Eigenschaften der Bilder.
-Zum einen wird die Qualität der Bilder mit den Trainingsdaten verglichen.
-Zum anderen wird die Vielfalt der generierten Bilder einbezogen und dadurch beispielsweise auch ein Mode-Collapse negativ bewertet. \todo{mode collapse erklären}
-Die genaue Berechnung beschreibt die nachfolgende Formel, wobei $\mu$ und $\sigma$ die mittlere absolute Abweichung und Standardabweichungen der normalverteilten Daten $X$ und $Y$ (echte und synthetische Bilder) darstellt.
-\todo[inline]{Formel ist falsch.. - die ist allgemein, die für neuronale netze ist anders, steht z.b. bei wikipedia (schneller zu finden) oder auch in \cite[S. 2]{are-gans-created-equally} (für zitat)}
-\[d(X, Y) = (\mu_X - \mu_Y)^2 + (\sigma_X - \sigma_Y)^2 \]
+Für die Berechnung des \acrshort{FID} werden zunächst die Ausgaben eines Layers des Inception Nets von Trainingsdaten und generierte Daten gesammelt.
+Danach wird aus den Werten der Embeddingschicht der Durchschnitt und die Kovarianz berechnet und verrechnet.
+Die nachfolgende Formel \cite[S. 2]{are-gans-created-equally} zeigt die genaue Berechnung auf, wobei sich $x$ und $g$ auf die Trainingsdaten und genierten Daten beziehen.
+
+\begin{equation}
+	\FID(x, g) = ||\mu_x - \mu_g||_2^2 + \Tr(\Sigma_x + \Sigma_g - 2(\Sigma_x \Sigma_g)^{\frac{1}{2}})
+\end{equation}
+
+Die \acrshort{FID} erlaubt die Einschätzung der Qualität der Bilder korrelierend zu menschlichen Einschätzungen.
+% TODO mode collapse erklären
+Auch die Vielfalt wird bewertet, indem zum Beispiel Mode-Collaps als negativ bewertet wird und gleichzeitig eine relative Robustheit gegenüber Rauschen besteht (im Vergleich zum Inception Score \cite{are-gans-created-equally}). 
 
 \section{Verfahren zur Bestimmung von Hyperparametern}
 \label{chapter:verfahren-bestimmung-hyperparameter}
