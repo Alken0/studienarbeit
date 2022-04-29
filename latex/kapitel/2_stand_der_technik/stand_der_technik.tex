@@ -9,8 +9,9 @@ Außerdem werden verschiedene Frameworks erläutert, die die Implementierung von
 Schließlich werden auch verwandte Arbeiten beleuchtet, auf deren Forschungsstand aufgebaut werden kann.
 
 \section{Neuronale Netze}
-\todo{Quelle \cite{hyperparameters-search}}
-\todo[inline]{im text prüfen, ob die farben richtig genannt werden}
+Künstliche Neuronale Netze stellen ein Teilgebiet des Bereichs Künstliche Intelligenz dar.
+Durch sie können komplexe Aufgaben, wie Gesichtserkennung, Erkennung von Betrugsfällen oder die Generierung von Bildern mit Computerprogrammen gelöst werden.
+In der folgenden Abbildung ist eine Beispielarchitektur visualisiert:
 
 \begin{figure}[H]
 	\centering
@@ -23,9 +24,6 @@ Schließlich werden auch verwandte Arbeiten beleuchtet, auf deren Forschungsstan
 	\label{img:neural-networks}
 \end{figure}
 
-Künstliche Neuronale Netze stellen ein Teilgebiet des Bereichs Künstliche Intelligenz dar.
-Durch sie können komplexe Aufgaben, wie Gesichtserkennung, Erkennung von Betrugsfällen oder die Generierung von Bildern mit Computerprogrammen gelöst werden.
-\newline
 
 Neuronale Netze bestehen aus synthetischen Neuronen, wobei sich beides am jeweiligen biologischen Vorbild orientiert.
 In der Grafik \cref{img:neural-networks} sind die Neuronen als farbige Kreise gekennzeichnet.
@@ -33,30 +31,35 @@ Die Aufgabe eines Neurons besteht in der Umwandlung eines oder mehrere Eingangss
 Für die Umwandlung wird die Summe aller Eingaben berechnet und auf eine Activation-Function angewendet.
 Der resultierende Wert wird an alle Ausgaben weitergegeben.
 Der Prozess wird durch die folgende Formel mit der Aktivierungsfunktion $\varphi$ verdeutlicht:
-\[ Ausgabe = \varphi ( \sum_{n=0}^N Eingabe[n] )\]
+
+\begin{equation}
+	Ausgabe = \varphi ( \sum_{n=0}^N Eingabe[n] )
+\end{equation}
 
 Neuronen sind in der Regel in Schichten sortiert, die jeweils mit der vorherigen Schicht verbunden sind.
 Damit die Neuronen der verschiedenen Schichten miteinander kommunizieren können, gibt es Übergänge, die in \cref{img:neural-networks} als schwarze Linien dargestellt sind.
 Jeder Übergang besitzt einen Weight, das mit dem zu übertragenden Wert multipliziert wird.
-Dadurch wird die Komplexität des Modells erhöht, wodurch komplexere Aufgaben gelöst werden können.
+So wird die Komplexität des Modells erhöht, wodurch schwierigere Aufgaben gelöst werden können.
 \newline
 
-Neuronale Netze werden nicht im klassischen Sinne programmiert, sondern stattdessen definierte Netzarchitekturen trainiert.
-Der Trainingsprozess orientiert sich dabei wieder an natürlichen Lernvorgängen.
-Dabei gibt es verschiedene Herangehensweisen wie unter anderem Supervised oder Unsupervised Learning.
+Neuronale Netze werden nicht im klassischen Sinne programmiert, stattdessen werden definierte Netzarchitekturen trainiert.
+Der Trainingsprozess orientiert sich hierbei wieder an natürlichen Lernvorgängen.
+Dazu gehören unter anderem Supervised- und Unsupervised-Learning.
 Bei ersterem existiert im Gegensatz zu letzterem eine vorgegebene Lösung für jede Eingabe.
-Beide Verfahren, und nicht an dieser Stelle genannte, haben Vor- und Nachteile, ihre Anwendung ergibt sich meistens aus den vorhanden Daten und gewünschten Ergebnissen.
-Darauf soll aber nicht weiter eingegangen werden.
-Ziel des Trainings ist die Anpassung der Weights der Übergänge zwischen den Neuronen.
+Beide Verfahren haben Vor- und Nachteile, ihre Anwendung ergibt sich in der Regel aus den vorliegenden Daten und gewünschten Ergebnissen.
+
+Ziel des Trainings ist die Anpassung der Weights, der Übergänge zwischen den Neuronen.
 Sie werden im Kontext des Trainingsprozesses auch Parameter genannt.
 Durch die Anpassung der Parameter passt sich das Netz den Daten an und erlaubt so verschiedenste Aufgaben zu lösen.
+So können dann beispielsweise Gesichter in Bildern oder Betrugsfälle in Abbuchungen erkannt werden.
 \newline
 
 Für das Training müssen zusätzliche Konfigurationen festgelegt werden, die Hyperparameter genannt werden.
 Im Gegensatz zu den Parametern neuronaler Netze werden sie durch das Training nicht verändert.
-Bei Hyperparametern handelt es sich zum Beispiel um die Lernrate oder Lossfunction \cite{hyperparameters-gan-using-genetic-algorithm}.
-Die Bestimmung von Hyperparametern ist wichtig für den Trainingserfolg des Modells und sollte für jeden Datensatz neu bestimmt werden.
-Es sind auch nicht alle Hyperparameter gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate zählt zu den dominanteren Faktoren \cite{learning-rate-most-important}.
+Bei Hyperparametern handelt es sich zum Beispiel um die Lernrate, Lossfunction oder auch die Anzahl an Neuronen in einer bestimmten Schicht \cite{hyperparameters-gan-using-genetic-algorithm}.
+Die Auswahl an Hyperparametern hat einen sehr großen Einfluss auf den Trainingserfolg von Modellen.
+Zusätzlich unterscheiden sich optimale Hyperparameter je nach Architektur und zugrundelegenden Daten weswegen sie immer neu bestimmt werden sollten. \todo{quelle}
+Es sind auch nicht alle Hyperparameter gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate hat einen besonders großen Einfluss auf den Trainingserfolg \cite{learning-rate-most-important}.
 Die Suche nach optimalen Hyperparametern ist sehr komplex, weswegen spezielle Suchverfahren entwickelt wurden. \todo{Überleitung zu Hyperparam Suchverfahren?}
 
 \section{DeepLearning Framework}
