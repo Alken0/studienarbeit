@@ -1,0 +1,77 @@
+%!TEX root = ../main.tex
+
+\newcommand{\Titel}{8. Protokoll}
+\newcommand{\Teilnehmer}{Jonas Bürgel, Patrick Welter}
+\newcommand{\DatumUndZeit}{21.03.2022 20:00-20:15}
+\newcommand{\Ort}{Discord Meeting}
+\newcommand{\Thema}{Erweiterung GAN: Anpassungen zur Qualitätssteigerung}
+\input{protokolle/Titelseite}
+
+\section{Aufgaben der letzten Besprechung}
+\begin{description}
+	\item[Verbesserung der Architektur] 4 Architekturen getestet \todoperson{Jonas, Patrick} \halfcheck
+	\item[Verbesserung der Anmerkungen] Markus Kritik \todoperson{Jonas, Patrick} \fullcheck
+	\item[Dokumentation] Methodik und Implementierung \todoperson{Jonas, Patrick} \halfcheck
+	\item[Protokoll] \todoperson{Jonas} \fullcheck
+\end{description}
+
+%Meilensteine
+%Besondere Erkenntnisse der letzten Woche
+%Beschlüsse, Änderungen, Vorgaben
+%Kritische Probleme 
+
+\section{Beschlüsse und Anmerkungen}
+\begin{description}[style=nextline]
+	\item[Architekturen]
+	Damit der Trainingsablauf nicht jedes mal geändert werden muss, sollen alle Architekturen die gleichen Ein- und Ausgaben erhalten. 
+	Das muss auch in der Dokumentation festgehalten werden!
+	
+	\item[Trainingsergebnisse festhalten]
+	Da die jetzigen Ergebnisse auch für die Analyse der Studienarbeit relevant sind, muss immer ein Commit mit dem derzeitigen Code-Stand + die Ergebnisse in Git hochgeladen werden. 
+	So können die Ergebnisse später besser nachvollzogen werden.
+\end{description}
+
+\section{Qualitätssichernde Maßnahmen}
+Besprechung möglicher auftretender Risiken und Absicherung der Qualitätssichernden Maßnahmen.
+\begin{description}[style=nextline]
+	\item[Review und Dokumentation \hfill \fullcheck]
+	Die Dokumentation erfolgt, das Kapitel \textit{Stand der Technik} ist abgeschlossen.
+	
+	%Überprüfung und ggf. Anpassung des Zeitplans und der Meilensteine. Dokumentation des aktuellen Stands und detaillierte Planung des nächsten Sprints.
+	\item[Risikoanalyse \hfill \fullcheck]
+	Die generierten Bilder sehen noch nicht zufriedenstellend aus, obwohl 4 stark unterschiedliche Architekturen ausprobiert wurden.
+	Eventuell werden keine sehr guten Architekturen gefunden, was zum Risiko \textit{Komplexität} gehört.
+	
+	Als Gegenmaßnahme wird ein Gespräch mit Markus vereinbart werden, um über das weitere Vorgehen zu diskutieren.
+	
+	\item[Pair-Programming \hfill \fullcheck]
+	Mithilfe von Pair-Programming wurde der Code durch das 4-Augen-Prinzip überprüft.
+	
+	%wöchentliche Analyse der definierten Risiken. Frühzeitiges Erkennen und Bekämpfen aufkommender Probleme.
+	%Durchführung von Unit-Tests und Integration-Tests. Implementierung und Nutzung einer Testumgebung (Nutzeroberfläche) zur Darstellung von Ergebnissen.
+	
+\end{description}
+
+\section{Aufgabenverteilung und weiteres Vorgehen}
+\begin{description}[style=nextline]
+	\item[Auswahl Verfahren Hyperparameteroptimierung \todoperson{Jonas, Patrick}]
+	Es existieren verschiedene Verfahren zu Optimierung von Hyperparametern.
+	Aus allen Verfahren muss ein passendes für die Studienarbeit ausgewählt und festgehalten werden.
+	
+	\item[Hyperparameteroptimierung aller Architekturen \todoperson{Patrick}] 
+	Durch eine ausführliche Hyperparameter-Optimierung könnten die Architekturen bessere Ergebnisse liefern.
+	Da keine Architektur bis jetzt sehr gute Ergebnisse gezeigt hat, werden alle Architekturen ausprobiert.
+	
+	\item[Besprechung mit Markus bezüglich Ergebnissen vereinbaren \todoperson{Jonas}]
+	Bezüglich des Weiteren Vorgehens, falls keine guten Ergebnisse erreicht werden.
+	
+	\item[Dokumentation \todoperson{Jonas, Patrick}]
+	Übertragung der bisher gesammelten Erkenntnisse in das Latex-Dokument.
+	
+	\item[Protokoll \todoperson{Jonas}]
+	Aktuelles Protokoll verfassen und abschicken.
+\end{description}
+\begin{description}
+	\item[Nächstes Treffen] Sprint Planning \& Review am 04.04.2022
+\end{description}
+
