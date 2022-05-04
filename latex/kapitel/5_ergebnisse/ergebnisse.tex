@@ -35,7 +35,18 @@ Bei den gewählten Werten lassen sich kaum Tendenzen erkennen, wie in der Abbild
 	\label{ergebnis:densegan-hyper-smoot-drop}
 \end{figure}
 
-\todo{vltt noch learning rate?}
+Bei der Lernrate wurden die besten Ergebnisse bei gleichen Werten für Diskriminator und Generator erreicht.  
+In der Abbildung \ref{ergebnis:densegan-lr} ist zu erkennen, dass bei einer Lernrate von \(2e-3\) (a), die niedrigsten FID-Werte erreicht wurden.
+Ähnlich niedrige Werte wurden mit Lernraten zwischen \(2e-4\) und \(3e-4\) erreicht, wie im rechten Teil (b) zu erkennen ist.
+ 
+ \begin{figure}[H]
+ 	\centering
+ 	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/hyperparameter_lr_same.PNG}}
+ 	\qquad
+ 	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/hyperparameter_lr_low.PNG}}
+ 	\caption{Einfluss der Lernrate auf die FID-Werte}
+ 	\label{ergebnis:densegan-lr}
+ \end{figure}
 
 \subsection{Bilder}
 Wie bereits beschrieben, werden neben den Hyperparameter und Metriken auch generierte Bilddaten protokolliert.
