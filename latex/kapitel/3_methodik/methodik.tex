@@ -2,12 +2,19 @@
 % !TeX spellcheck = de_DE
 
 \chapter{Methodik}
-In diesem Kapitel werden zunächst Eigenschaften der Trainingsdaten erläutert.
+In diesem Kapitel wird die Generierung des Datensatzes beschrieben.
 Dabei wird auf die Bildeigenschaften und Besonderheiten der dargestellten Figuren in den Bildern eingegangen.
-Danach erfolgt eine Festlegung der Kriterien für ein erfolgreiche trainiertes 'GAN', das Grundlage für spätere Vergleiche von Trainingserfolgen sein wird.
+Außerdem werden die Anforderungen an die Architekturen beschrieben, sowie Ablauf und Kriterien für ein erfolgreiches Training vorgestellt.
 
 \section{Trainingsdaten}
 Das Dataset wurde im Rahmen der Studienarbeit generiert und besteht für das Training aus 1500 Bildern.
+
+Zwar gibt es bereits Datensätze mit solchen Bildern \cite{dataset:four-shapes, dataset:2d-geometric-shapes-dataset}, im Rahmen der Studienarbeit werden jedoch keine vorgefertigten Datensätze verwendet.
+Denn die Generierung eigener Bilder erlaubt eine größere Kontrolle über Eigenschaften der Bilder und Inhalte, als vorgefertigte Sets.
+%TODO schlechte begründung
+
+Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden kann, wird die Generierung deterministisch reproduzierbar und dokumentiert sein.
+
 Die 1500 Bilder teilen sich dabei in jeweils 500 Bilder pro Formklasse (Dreieck, Kreis, Quadrat) auf.
 Die genauen Eigenschaften werden in den folgenden Abschnitten beschrieben.
 

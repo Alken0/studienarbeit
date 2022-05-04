@@ -2,11 +2,10 @@
 % !TeX spellcheck = de_DE
 
 \chapter{Stand der Technik}
-Dieses Kapitel behandelt den Forschungsstand, auf dem diese Arbeit aufbaut.
-Ziel ist es, eine gemeinsame Basis für diverse Themengebiete zu schaffen.
+Dieses Kapitel behandelt den Forschungsstand.
 Dazu gehören neuronale Netze, GANs inklusive zugehöriger Fachbegriffe, Namen und Methodiken.
 Außerdem werden verschiedene Frameworks erläutert, die die Implementierung von Netzarchitekturen erleichtern.
-Schließlich werden auch verwandte Arbeiten beleuchtet, auf deren Forschungsstand aufgebaut werden kann.
+Schließlich werden auch verwandte Arbeiten beleuchtet.
 
 \section{Neuronale Netze}
 Künstliche Neuronale Netze stellen ein Teilgebiet des Bereichs Künstliche Intelligenz dar.
@@ -15,37 +14,34 @@ In der folgenden Abbildung ist eine Beispielarchitektur visualisiert:
 
 \begin{figure}[H]
 	\centering
-	\begin{neuralnetwork} 
-		\inputlayer[count=2, bias=false]{} 
-		\hiddenlayer[count=5, bias=false]{} \linklayers
-		\outputlayer[count=1]{} \linklayers
-	\end{neuralnetwork} 
-	\caption{Neuronales Netz}
+	\includegraphics[width=12cm]{kapitel/2_stand_der_technik/img/neural-network.png}
+	\caption[Darstellung eines Neuronalen Netzes]{Darstellung eines Neuronalen Netzes.}
 	\label{img:neural-networks}
 \end{figure}
 
-
 Neuronale Netze bestehen aus synthetischen Neuronen, wobei sich beides am jeweiligen biologischen Vorbild orientiert.
 In der Grafik \cref{img:neural-networks} sind die Neuronen als farbige Kreise gekennzeichnet.
-Die Aufgabe eines Neurons besteht in der Umwandlung eines oder mehrere Eingangssignale in eine Ausgangssignal.
-Für die Umwandlung wird die Summe aller Eingaben berechnet und auf eine Activation-Function angewendet.
-Der resultierende Wert wird an alle Ausgaben weitergegeben.
-Der Prozess wird durch die folgende Formel mit der Aktivierungsfunktion $\varphi$ verdeutlicht:
-
-\begin{equation}
-	Ausgabe = \varphi ( \sum_{n=0}^N Eingabe[n] )
-\end{equation}
+Die Aufgabe eines Neurons besteht in der Umwandlung eines oder mehrere Eingangssignale in ein Ausgangssignal.
+Für die Umwandlung wird beispielsweise die Summe aller Eingaben berechnet, auf eine Aktivierungsfunktion angewendet und an alle Ausgaben weitergegeben.
+\newline
 
 Neuronen sind in der Regel in Schichten sortiert, die jeweils mit der vorherigen Schicht verbunden sind.
 Damit die Neuronen der verschiedenen Schichten miteinander kommunizieren können, gibt es Übergänge, die in \cref{img:neural-networks} als schwarze Linien dargestellt sind.
-Jeder Übergang besitzt einen Weight, das mit dem zu übertragenden Wert multipliziert wird.
+Jeder Übergang besitzt ein Gewicht, das mit dem zu übertragenden Wert multipliziert wird.
 So wird die Komplexität des Modells erhöht, wodurch schwierigere Aufgaben gelöst werden können.
 \newline
+
+Die Berechnung des Ausgabewertes wird durch die folgende Formel mit dem Ausgabewert $y$, Eingaben $x$, Gewichte für die jeweiligen Eingaben $w$ und Aktivierungsfunktion $\varphi$ verdeutlicht:
+
+\begin{equation}
+	y = \varphi ( \sum_{n=0}^N x_n * w_n).
+\end{equation}
+
 
 Neuronale Netze werden nicht im klassischen Sinne programmiert, stattdessen werden definierte Netzarchitekturen trainiert.
 Der Trainingsprozess orientiert sich hierbei wieder an natürlichen Lernvorgängen.
 Dazu gehören unter anderem Supervised- und Unsupervised-Learning.
-Bei ersterem existiert im Gegensatz zu letzterem eine vorgegebene Lösung für jede Eingabe.
+Der Unterschied zwischen den Verfahren liegt in der Existenz eines vorgegebenen Erwartungswertes für jede Eingabe.
 Beide Verfahren haben Vor- und Nachteile, ihre Anwendung ergibt sich in der Regel aus den vorliegenden Daten und gewünschten Ergebnissen.
 
 Ziel des Trainings ist die Anpassung der Weights, der Übergänge zwischen den Neuronen.
@@ -56,11 +52,13 @@ So können dann beispielsweise Gesichter in Bildern oder Betrugsfälle in Abbuch
 
 Für das Training müssen zusätzliche Konfigurationen festgelegt werden, die Hyperparameter genannt werden.
 Im Gegensatz zu den Parametern neuronaler Netze werden sie durch das Training nicht verändert.
-Bei Hyperparametern handelt es sich zum Beispiel um die Lernrate, Lossfunction oder auch die Anzahl an Neuronen in einer bestimmten Schicht \cite{hyperparameters-gan-using-genetic-algorithm}.
+Bei Hyperparametern handelt es sich zum Beispiel um die Anzahl an Neuronen in einer bestimmten Schicht \cite{hyperparameters-gan-using-genetic-algorithm}.
 Die Auswahl an Hyperparametern hat einen sehr großen Einfluss auf den Trainingserfolg von Modellen.
-Zusätzlich unterscheiden sich optimale Hyperparameter je nach Architektur und zugrundelegenden Daten weswegen sie immer neu bestimmt werden sollten. \todo{quelle}
+Zusätzlich unterscheiden sich optimale Hyperparameter je nach Architektur und zugrundelegenden Daten, weswegen eine eigene Hyperparametersuche immer sinnvoll ist. \todo{quelle}
 Es sind auch nicht alle Hyperparameter gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate hat einen besonders großen Einfluss auf den Trainingserfolg \cite{learning-rate-most-important}.
 Die Suche nach optimalen Hyperparametern ist sehr komplex, weswegen spezielle Suchverfahren entwickelt wurden. \todo{Überleitung zu Hyperparam Suchverfahren?}
+
+\todo[inline, shadow]{Layer beschreiben}
 
 \section{DeepLearning Framework}
 Die Implementierung von DeepLearning-Algorithmen ist im Bereich der Künstlichen Intelligenzen eine bedeutende Thematik.
@@ -69,39 +67,42 @@ Deshalb existieren über verschiedene Abstraktions-Level diverse Frameworks und 
 \newline
 
 Aufgrund der hohen Rechenkern-Anzahl und der daraus resultierende Multithreading-Charakteristik, eignen sich Grafikkarten besonders gut für DeepLearning-Berechnungen \cite{gpu-for-dl}.
-Grafikarten Hersteller stellen dafür Low-Level-APIs bereit, in der Routinen wie Matrix-Multiplikationen oder Aktivierungs-Funktionen hardware-beschleunigt werden.
+Grafikarten Hersteller stellen dafür Low-Level-APIs bereit, in denen Routinen wie Matrix-Multiplikationen oder Aktivierungs-Funktionen hardware-beschleunigt werden.
 Dabei kann in den Zugang zu allgemeinen GPU-Operationen (API-Beispiel: CUDA) oder speziellen Funktionen für DeepLearning und Neuronale Netze (API-Beispiel: cuDNN) unterschieden werden.
-Das spätere Training wird auf einer GeForce GTX 1070 \cite{gtx-1070} durchgeführt.
-Die dazu korrespondierende Low-Level-APIs sind die von Nvidia entwickelten und bereits erwähnten Bibliotheken CUDA \cite{cuda-doc} und cuDNN \cite{cudnn-doc}.  
 \newline
 
 Als Entwickler von DeepLearning-Anwendungen sind jedoch solche hardwarenahen Aufrufe häufig zu aufwendig.
 Deshalb haben sich in der Industrie und Forschung DeepLearning Frameworks entwickelt, welche Algorithmen weiter zusammenfassen und abstrahieren.
-Zu den am weitesten verbreiteten gehören unter anderem PyTorch, Caffe, TensorFlow und MXNet \cite[S. 2018]{dl-framework-evaluation}. \todo{bessere quelle}
-Auch wenn sie sich einige architektonische Ansätze teilen, unterscheiden sich die Frameworks jedoch in der genauen Implementierung und Technik \cite[S. 2018, 2020]{dl-framework-evaluation}.
+Zu den am weitesten verbreiteten gehören unter anderem PyTorch, Caffe, TensorFlow und MXNet \cite{dl-framework-evaluation}. \todo{bessere quelle}
+Auch wenn sie sich einige architektonische Ansätze teilen, unterscheiden sich die Frameworks jedoch in der genauen Implementierung und Technik \cite{dl-framework-evaluation}.
 Der größte Unterschied ist jedoch die Popularität der Frameworks.
 Gemessen an Github Sternen sind TensorFlow (164k) \cite{github-tensorflow} und PyTorch (55k) \cite{github-pytorch} die bekanntesten, weshalb sie im Folgenden näher analysiert werden.
  
 \subsection{TensorFlow und PyTorch}
+%TODO in Methodik?
 TensorFlow und PyTorch weichen in einigen technischen Eigenschaften, wie der Graphen Definition und dem verteilten Training von aneinander ab \cite{pytorch-vs-tensorflow}.
 Allerdings sind diese Charakteristiken im Rahmen der allgemeinen Architektur Untersuchung wenig relevant.
 Für die Evaluierung selbst ist eine gute Visualisierung der Trainingsdaten und -ergebnisse wichtig.
 Außerdem soll die Schnittstelle möglichst einfach sein, damit ohne großen Aufwand verschiedene Architekturen implementiert und getestet werden können.
+Mittels Tensorboard bietet Tensorflow hierbei eine natives und sehr umfangreiches Werkzeug an.
+PyTorch besitzt keine vergleichbaren Funktionen, stattdessen gibt es einen offiziellen Anleitungsartikel zur Integration mit Tensorboard \cite{pytorch-tensorboard-offical-documentation}.
 
-\subsubsection{Tensorboard}
+Aufgrund der nativen Unterstützung von Tensorboard wurde sich für TensorFlow als DeepLearning Framework entschieden.
+
+\subsection{Tensorboard}
 Hinsichtlich der Visualisierung bietet TensorFlow das direkt integrierte Tensorboard.
 Ohne großen Mehraufwand können so Metriken visualisiert, Modell-Graphen dargestellt oder generierte Bilder verglichen werden \cite{tensorboard}.
+PyTorch besitzt keine vergleichbaren nativen Visualisierungstool, aber eine Möglichkeit zur Darstellung in Tensorboard.
 
-\subsubsection{Keras}
+\subsection{Keras}
 Zwar ist TensorFlow im Vergleich zu CUDA bereits eine High-Level-API, allerdings fallen die API-Aufrufe weiterhin sehr detailliert aus.
 Dadurch sind hoch flexible Modelle und Training-Loops möglich.
 Bei optimierten Anwendungen garantiert das große Freiheiten, ist jedoch im Rahmen der Studienarbeit zu umständlich und komplex.
 Da in dieser Arbeit grundlegende Architekturen untersucht werden sollen, wird zusätzlich die Keras API \cite{keras} verwendet.
 Ursprünglich als unabhängiges Framework entwickelt, ist Keras seit TensorFlow 2.0 ein fester Bestandteil der Bibliothek.
 Keras stellt eine weitere Abstraktion-Stufe dar, wodurch Modelle sehr einfach beschrieben und vordefinierte Traings-Loops verwendet werden können.
-\newline
 
-Aufgrund der Vorteile des Tensorboard und Keras, wurde sich für TensorFlow als DeepLearning Framework entschieden.
+
 
 \section{General Adversarial Network}
 Der Begriff \acrfull{GAN} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
@@ -118,47 +119,47 @@ Solche Daten können dann zum Beispiel für das Training anderer neuronalen Netz
 
 Die beiden Netze eines \acrshort{GAN}s werden in den Generator und den Discriminator unterschieden.
 Aufgabe des Generators ist die Generierung von synthetischen Daten.
-Dafür wandelt er eine zufälligen Eingabe in einen möglichst realistischen Output um.
-Die zufällige Eingabe dient dabei als Basis für die Ausgabedaten.
+Dafür wandelt er eine zufällige Eingabe in einen möglichst realistischen Output um.
+Die zufällige Eingabe dient als Basis für die Ausgabedaten.
 Das ist notwendig, da der Umwandlungsprozess selbst deterministisch ist, aber trotzdem eine Vielzahl an unterschiedlichen Daten generiert werden soll.
 \newline
 
 Der Output des Generators wird vom Discriminator klassifiziert.
 Dafür wird er sowohl auf die generierten Daten als auch einen Bestand an echten Daten trainiert.
-Sein Ziel ist es dann, die falschen Daten des Generators zu identifizieren.
+Sein Ziel ist es, die falschen Daten des Generators zu identifizieren.
 Ziel des Generators hingegen ist es, den Discriminator zu täuschen und die generierten Daten als echt wirken zu lassen.
 \newline
 
-Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei die Ausgabe des Discriminators die zu optimierende Größe ist.
+Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei dem die Ausgabe des Discriminators die zu optimierende Größe ist.
 Das bedeutet, der Generator versucht die Genauigkeit des Discriminators zu verringern, während der Discriminator sie erhöhen möchte. \cite{gan-minimax}
-Dieses Spiel kann auch als Formel \cite[S. 2]{mirza2014conditional} dargestellt werden: 
-\begin{equation}
-	\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)} [\log D(x)] + \mathbb{E}_{z \sim p_z(z)} [\log(1 - D(G(z)))]
-\end{equation}
 
 \section{Ausprägungen von GANs}
-In diesem Kapitel werden verschiedene Architekturmodelle von \acrshort{GAN}s vorgestellt.
+In diesem Kapitel die Architekturmodelle CGAN, Dense-GAN und DC-GAN vorgestellt.
 Das ist deshalb wichtig, da die zugehörigen Bezeichnungen in der Literatur nicht klar definiert sind.
-So werden je nach Kontext der Arbeit sowohl Cycle-GANs als auch Conditional GANs als CGANs bezeichnet.
-Namen für die unterschiedlichen Ausprägungen zu haben ist jedoch von großer Bedeutung, um die Arbeit effizienter beschreiben zu können.
+So werden beispielsweise je nach Kontext der Arbeit sowohl Cycle-GANs als auch Conditional GANs als CGANs bezeichnet.
 
 \subsection{CGAN}
+\todo[inline, shadow]{verständlich?}
 Das \acrfull{CGAN} \cite{mirza2014conditional, gan-conditional} erlaubt die Beeinflussung der Generierung durch Labels.
-Dazu erhalten der Generator und Discriminator das Datenlabel als einen weiteren Input.
-So kann der Discriminator aus den echten Daten lernen, dass Daten bei bestimmten Labeln bestimmte Eigenschaften haben.
+Dafür wird der normale Trainingsablauf eines GANs durch Labels erweitert, wie in der Abbildung dargestellt.
+\begin{figure}[H]
+	\centering
+	% Dokument: https://drive.google.com/file/d/1qso4iFm3YGvxG3NmwlUdatspkJdja00B/view?usp=sharing
+	% beim Export auf 300% Zoom stellen
+	\includegraphics[width=14cm]{kapitel/2_stand_der_technik/img/cgan-vs-gan.drawio.png}
+	\caption[Flowchart Trainingsprozess GAN und CGAN]{Flowchart Trainingsprozess GAN (nur durchgestrichene Pfeile) und CGAN (alle Pfeile)}
+	\label{flowchart-cgan-vs-gan}
+\end{figure}
+
+Das Datenlabel $y$ wird sowohl für die Generierung der Bilder, als auch bei der Verifizierung durch den Discriminator genutzt.
+Dafür erhalten sowohl Discriminator als auch Generator eine weitere Eingabe.
+So kann der Discriminator den Zusammenhang zwischen Label und bestimmten Eigenschaften der Daten lernen.
 Dadurch ist dann der Generator gezwungen, diese Eigenschaften zu berücksichtigen, um den Discriminator wieder zu täuschen.
 \newline
 
 Sobald das \acrshort{GAN} zufriedenstellend trainiert ist, können so labelspezifische Daten generiert werden.
 Das kann in der Praxis sehr günstig sein, wenn zum Beispiel das Krankheitsbild einer bestimmten Krankheit generiert werden soll.
 Die Nutzung des Conditional Discriminators erlaubt zusätzlich die Identifizierung einer bestimmten Krankheit auf einem Bild.
-\newline
-
-Der Lernprozess, der auch als Min-Max Spiel bezeichnet werden kann, wird auch durch die Folgende Formel aus \cite[S. 3]{mirza2014conditional} verdeutlicht.
-Dabei steht das $y$ für die Bedingung, bei $x$ um die Trainingsdaten und bei $z$ handelt es sich Zufallszahlen, die beim Generator für die Generierung benötigt werden.
-\begin{equation}
-	\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{data}(x)} [\log D(x|y)] + \mathbb{E}_{z \sim p_z(z)} [\log(1 - D(G(z|y)))]
-\end{equation}
 
 \subsection{Dense-GAN}
 Eine Dense-GAN nutzt sowohl für Discriminator als auch für den Generator Dense Layer beziehungsweise Fully Connected Layer.
@@ -184,14 +185,14 @@ Im letzten Schritt des Discriminators existiert in der Regel ein Dense Layer, um
 
 Vorteil dieser Architektur sind die vergleichsweise wenigen zu lernenden Parameter.
 Die geringe Anzahl an Parametern sind der Tatsache geschuldet, dass es pro Ausgabe-Dimension nur einen Filter für das Convolutional Layers gibt.
-Dadurch ist auch die Parameteranzahl der Convolutional Layern unabhängig von der Bildgröße.
+Dadurch ist auch die Parameteranzahl der Convolutional Layer unabhängig von der Bildgröße.
 
 Zusätzlich zur geringen Parameteranzahl fördern die Filter auch das Verständnis von Zusammenhängen zwischen benachbarten Pixeln.
 Die Zusammenhänge werden dabei implizit durch die Architektur vorgegeben und müssen nicht erst aufwändig gelernt werden.
 \newline
 
-Die Tatsache, dass die Filter der Convolutional Layer so viel vorgeben ist jedoch auch gleichzeitig ein Nachteil der Architektur.
-Sollten die Beziehungen zwischen nahen Datenpunkten nicht existieren, werden falsche Zusammenhänge impliziert, was zu schlechteren Ergebnissen führen kann.
+Die Tatsache, dass die Filter der Convolutional Layer Zusammenhänge zwischen benachbarten Datenpunkten implizieren ist auch gleichzeitig ein Nachteil der Architektur.
+Sollten die Beziehungen zwischen nahen Datenpunkten nicht existieren, können falsche Zusammenhänge vorausgesetzt werden, was zu schlechteren Ergebnissen führen kann.
 Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Architektur, aber dafür effizienter.
 
 \section{Bewertung von GAN-Trainingserfolgen - FID}
@@ -201,22 +202,29 @@ Erstmals in \cite{fid} wurde dafür der \acrfull{FID} aufgezeigt.
 
 Für die Berechnung des \acrshort{FID} werden zunächst die Ausgaben eines Layers des Inception Nets von Trainingsdaten und generierte Daten gesammelt.
 Danach wird aus den Werten der Embeddingschicht der Durchschnitt und die Kovarianz berechnet und verrechnet.
-Die nachfolgende Formel \cite[S. 2]{are-gans-created-equally} zeigt die genaue Berechnung auf, wobei sich $x$ und $g$ auf die Trainingsdaten und genierten Daten beziehen.
+Die nachfolgende Formel \cite{are-gans-created-equally} zeigt die genaue Berechnung auf, wobei sich $x$ und $g$ auf die Trainingsdaten und genierten Daten beziehen
 
 \begin{equation}
-	\FID(x, g) = ||\mu_x - \mu_g||_2^2 + \Tr(\Sigma_x + \Sigma_g - 2(\Sigma_x \Sigma_g)^{\frac{1}{2}})
+	\FID(x, g) = ||\mu_x - \mu_g||_2^2 + \Tr(\Sigma_x + \Sigma_g - 2(\Sigma_x \Sigma_g)^{\frac{1}{2}}).
 \end{equation}
 
 Die \acrshort{FID} erlaubt die Einschätzung der Qualität der Bilder korrelierend zu menschlichen Einschätzungen.
 % TODO mode collapse erklären
 Auch die Vielfalt wird bewertet, indem zum Beispiel Mode-Collaps als negativ bewertet wird und gleichzeitig eine relative Robustheit gegenüber Rauschen besteht (im Vergleich zum Inception Score \cite{are-gans-created-equally}). 
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=16cm]{kapitel/2_stand_der_technik/img/fid-example.png}
+	\caption[Beispiel von unterschiedlichen FID-Werten]{Beispiele unterschiedlicher FID-Werte aus \cite{fid}.\\ \textbf{Oben Links:} gaußsches Rauschen; \textbf{Oben Mitte:} gaußscher Weichzeichner; \textbf{Oben Rechts:} schwarze Rechtecke; \textbf{Unten Links:} verwirbelte Bilder; \textbf{Unten Mitte:} Salt and Pepper Noise; \textbf{Unten Rechts:} CelebA Datensatz mit ImageNet Bildern versetzt }
+	\label{flowchart-cgan-vs-gan}
+\end{figure}
+
 \section{Verfahren zur Bestimmung von Hyperparametern}
 \label{chapter:verfahren-bestimmung-hyperparameter}
 \todo{Quelle \cite{hyperparameters-search}}
 
 Die Bestimmung guter Hyperparameter ist im Rahmen der Arbeit von großer Bedeutung, da verschiedene Architekturen auf ihre Effektivität und Effizienz untersucht werden sollen.
-Bei gleichen Hyperparametern für verschiedene Architekturen wäre dies ein unfairer Vergleich.
+Der Vergleich verschiedener Architekturen mit gleichen Hyperparametern ist hingegen nicht fair, da der Einfluss der Hyperparameter auf das Ergebnis so groß ist.
 \newline
 
 Für die Suche nach optimalen Hyperparametern gibt es verschieden Verfahren, die im Folgend vorgestellt werden.
@@ -225,21 +233,17 @@ Die Verfahren werden zusätzlich mit der manuellen Suche verglichen, um eine all
 
 \subsection{Manuelle Suche}
 Die manuelle Suche ist das simpelste vorgestellt Verfahren.
-Hierfür werden nur die Hyperparameter vor jedem Trainingsdurchlauf manuell festgelegt.
+Hierfür werden nur die Hyperparameter vor jedem Training manuell festgelegt.
 Nach einem Trainingsdurchlauf können dann die Ergebnisse analysiert, Hyperparameter angepasst und die verbesserte Version erneut trainiert werden.
 
 %Die manuelle Suche ist vor allem bei unwichtigen Hyperparametern sinnvoll, da dort bekannte Standardwerte gesetzt werden können.
 %Für eine gründliche Suche aller Hyperparameter ist die manuelle Suche allerdings viel zu aufwändig.
 
 \subsection{Grid Search}
-Bei der Grid Search handelt es sich um eine sehr traditionelle Technik, die gut mit einem Brute-Force Ansatz vergleichbar ist \cite{hyperparameters-grid-search}.
-\newline
-
-Für die Suche werden zunächst die zu untersuchenden Hyperparameter ausgewählt.
+Bei der Grid Search \cite{hyperparameters-grid-search} werden zunächst die zu untersuchenden Hyperparameter ausgewählt.
 Danach erfolgt die Definition eines Suchintervalls inklusive Intervallschritten für jeden Hyperparameter.
 Schließlich wird das neuronale Netzwerk für jede Kombination der Hyperparameterwerte trainiert und die Ergebnisse der einzelnen Durchläufe festgehalten.
 Die Trainingsdurchläufe können dabei parallel stattfinden.
-Dadurch entsteht zwar ein erhöhter Speicherbedarf, jedoch wird die Trainingszeit stark beschleunigt.
 
 Nach dem Training ist es dann möglich, die einzelnen Ergebnisse zu vergleichen.
 Dabei können dann Schemata erkannt und Kombinationen aussortiert werden.
@@ -248,17 +252,25 @@ Dabei können dann Schemata erkannt und Kombinationen aussortiert werden.
 
 Insgesamt ist Grid Search sehr simpel zu implementieren, aber auch sehr ressourcenaufwändig.
 Der exakte Aufwand hängt dabei stark von der Anzahl der möglichen Kombinationen der Hyperparameterwerte ab.
-Da es sich bei den Kombinationen um ein ein Kreuzprodukt handelt, wächst der Aufwand mit der Anzahl an Werten sehr stark an.
+Da die Anzahl der Kombinationen der Hyperparameter exponentiell \todo{begründen?} wächst, nimmt auch der Aufwand mit der Anzahl an Werten sehr stark zu.
 Durch die Möglichkeit von Parallelisierung findet die Grid Search in der Regel bessere Parameter als die sequentielle manuelle Suche in der gleichen Zeit \cite{hyperparameters-random-search}.
 
 \subsection{Random Search}
 Die Random Search \cite{hyperparameters-random-search} funktioniert ähnlich wie die Grid Search, nur werden zufällige Werte statt einem festgelegten Werteraster erzeugt.
-\newline
-
-Die zufälligen Werte haben den Vorteil, dass es weniger Werte-Überlagerungen im Vergleich zur den Raster-Kombinationen gibt.
+Die zufälligen Werte haben den Vorteil, dass es weniger Werte-Überlagerungen im Vergleich zur den Raster-Kombinationen gibt, wie in \cref{randomsearch-vs-gridsearch} dargestellt.
 Deswegen kann die zufällige Suche bei gleich vielen Durchläufen ein größeres Spektrum an Ergebnissen abdecken.
 Mittels \textit{Automatic Relevance Determination} \cite{automatic-relevance-determination} ist es dann möglich, den Einfluss und Wertebereich der einzelnen Hyperparameter darzustellen.
-\newline
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{kapitel/2_stand_der_technik/img/random-vs-grid-search1.png}
+	\caption[Vergleich zwischen Grid Search und Random Search]{
+		Abbildung von 9 Optimierungsversuche der Funktion $f(x,y)=g(x)+h(x) \approx g(x)$.
+		Über den Quadraten ist $g(x)$ und links $h(x)$ abgebildet.
+		Während die Grid Search im Versuch nur 3 unterschiedliche Werte austestet, schafft die Random Search eine Suche über 9 verschiedene Punkte.
+		\cite{hyperparameters-random-search}}
+	\label{randomsearch-vs-gridsearch}
+\end{figure}
 
 Vorteil der Random Search im Vergleich zur Grid Search ist, dass keine Hyperparameter festgelegt werden müssen.
 Das erlaubt eine unvoreingenommene Herangehensweise an die Suche.
@@ -266,7 +278,7 @@ Das erlaubt eine unvoreingenommene Herangehensweise an die Suche.
 
 Problem der Random Search ist vor allem, dass die Räume der guten Hyperparameter (\textit{Search Space}) sehr klein sind.
 Dadurch ist nicht gewährleistet, dass ein zufälliger Wert auch den Raum der optimalen Werte trifft.
-Jedoch erzielen Hyperparametersuchen mittels Random Search in der Regel trotzdem (sehr) gute Ergebnisse.
+Jedoch erzielen Hyperparametersuchen mittels Random Search in der Regel trotzdem gute Ergebnisse.
 Dem Grid Search Verfahren ist die Random Search allerdings nicht prinzipiell überlegen \cite{hyperparameters-random-search}.
 \newline
 
@@ -295,14 +307,12 @@ Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum 
 
 \section{Related Work}
 \label{chapter:related-work}
-In diesem Kapitel werden ähnliche Werke vorgestellt, die einen Bezug zu dieser Arbeit haben.
-Allerdings existieren keine Werke, die sich exakt mit dem gleichen Thema beschäftigen.
-Jedoch gibt es trotzdem Gemeinsamkeiten zu anderen Arbeiten, an denen sich in diesem Projekt orientiert werden kann.
-Das ist insbesondere der Fall, wenn die Daten ähnlich sind.
-Ähnlichkeit bedeutet in dem Fall eine ähnliche Bildgröße oder Farbe.
+Da die verwendeten Daten selbstständig generiert sind, gibt es keine anderen Arbeiten, die sich mit exakt den gleichen Daten beschäftigen.
+In diesem Kapitel werden stattdessen Arbeiten vorgestellt, die sich mit ähnlichen Daten beschäftigen.
+Ähnlichkeit ist insbesondere bei der Bildgröße und Anzahl der Farbekanäle wichtig, da ansonsten die Architekturen zu stark angepasst werden müssen, um sie auf den generierten Datensatz anzuwenden.
 
 \subsection{CGAN - MNIST}
-Das Paper \textit{Conditional Generative Adversarial Nets} \cite{mirza2014conditional} befasst sich allgemein mit der Erweiterung von GANs durch Conditions. \todo{anderes Wort als Conditions?}
+Das Paper \textit{Conditional Generative Adversarial Nets} \cite{mirza2014conditional} befasst sich allgemein mit der Erweiterung von GANs durch Bedingungen.
 Die vorgestellten CGANs werden hierfür auf die Datensets MNIST und Flickr trainiert.
 Ziel ist dabei nicht, eine optimale Netzarchitektur oder Ergebnisse zu erzielen.
 Stattdessen stellt die Arbeit einen Machbarkeitsbeweis für CGANs im Allgemeinen dar.
