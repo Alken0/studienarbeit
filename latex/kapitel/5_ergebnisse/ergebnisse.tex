@@ -20,31 +20,48 @@ Damit lässt sich leicht evaluieren, welche Hyperparameter die besten Ergebnisse
 Auf der linken Seite sind alle Hyperparameter aufgelistet.
 Die Abkürzung \textit{GEN} steht dabei für den Generator und \textit{DIS} repräsentiert den Diskriminator.
 Außerdem können die einzelnen Graphen in einem Farbverlauf von Rot nach Blau einsortiert werden.
+Dadurch kann der Einfluss von einzelnen Hyperparametern deutlich visualisiert werden.
+\newline
+
 In der Abbildung \ref{ergebnis:densegan-hyper} wurde nach der BatchSize sortiert.
+Es ist deutlich zu erkennen, dass ein Wert von 32 (hier blau) bessere FID-Werte als 64 (hier rot) erzielt.
+Im Gegensatz dazu steht die Smoothness und der Dropout.
+Bei den gewählten Werten lassen sich kaum Tendenzen erkennen, wie in der Abbildung \ref{ergebnis:densegan-hyper-smoot-drop} visualisiert ist.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textheight]{kapitel/5_ergebnisse/densegan/hyperparameter_dropout_smooth.PNG}
+	\caption{Einfluss von Smoothness und Dropout auf das Dense-GAN}
+	\label{ergebnis:densegan-hyper-smoot-drop}
+\end{figure}
+
+\todo{vltt noch learning rate?}
 
 \subsection{Bilder}
 Wie bereits beschrieben, werden neben den Hyperparameter und Metriken auch generierte Bilddaten protokolliert.
 Neben den FID-Werten, kann so die generierten Ergebnisse subjektiv Bewerter werden.
-Die subjektiv besten Figuren sind in der Abbildung \ref{ergebnis:densegan-good-example} zu sehen.
-Die Figuren mit den besten FID-Werten werden in der Abbildung  \ref{ergebnis:densegan-best-fid} gezeigt.
+Die subjektiv besten Figuren sind in der Abbildung \ref{ergebnis:densegan-best} (a) zu sehen.
+Die Figuren mit den besten FID-Werten werden in der Abbildung  \ref{ergebnis:densegan-best} (b) gezeigt.
 Es lässt sich leicht erkennen, das die subjektive Bewertung und FID-Werte nicht übereinstimmen.
 
-\todo{pack bilder nebneinander}
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=0.4\textheight]{kapitel/5_ergebnisse/densegan/good_example.png}
-	\caption{Gutes Beispiel des Dense-GAN}
-	\label{ergebnis:densegan-good-example}
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/good_example.png}}
+	\qquad
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/best_fid.png}}
+	\caption{Beste Ergebnisse bemessen nach subjektiver Bewertung und FID-Werte}
+	\label{ergebnis:densegan-best}
 \end{figure}
+
+Da das erste Beispiel gute Ergebnisse erzeugt, wurde ein GAN mit den gleichen Hyperparametern für 1000 Epochen trainiert.
+Auch wenn eine große Menge an Bildartefakte zu erkennen ist, stechen die Kanten der Formen deutlicher heraus (siehe Abbildung \ref{ergebnis:densegan-good-example-long}).
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=0.4\textheight]{kapitel/5_ergebnisse/densegan/best_fid.png}
-	\caption{Beste FID Werte des Dense-GAN}
-	\label{ergebnis:densegan-best-fid}
+	\includegraphics[height=0.4\textheight]{kapitel/5_ergebnisse/densegan/good_example_long.png}
+	\caption{Ergebnis von 1000 Epochen Training}
+	\label{ergebnis:densegan-good-example-long}
 \end{figure}
-
-\subsection{Long Run}
 
 \section{DC-GAN-Late-Label}
 \begin{itemize}
