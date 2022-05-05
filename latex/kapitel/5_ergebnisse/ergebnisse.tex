@@ -44,7 +44,7 @@ In der Abbildung \ref{ergebnis:densegan-lr} ist zu erkennen, dass bei einer Lern
  	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/hyperparameter_lr_same.PNG}}
  	\qquad
  	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/hyperparameter_lr_low.PNG}}
- 	\caption{Einfluss der Lernrate auf die FID-Werte}
+ 	\caption{Einfluss der Lernrate auf die FID-Werte des DENSE-GAN}
  	\label{ergebnis:densegan-lr}
  \end{figure}
 
@@ -74,11 +74,63 @@ Auch wenn eine große Menge an Bildartefakte zu erkennen ist, stechen die Kanten
 	\label{ergebnis:densegan-good-example-long}
 \end{figure}
 
-\section{DC-GAN-Late-Label}
-\begin{itemize}
-	\item Tensorboard Graph -> beste Hyperparameter?
-	\item 'beste' Bilder
-\end{itemize}
+\section{DC-GAN}
+Im Vergleich zum Dense-GAN, sind wie in Abbildung \ref{ergebnis:dcgan-hyper} zu sehen, weniger Hyperparameter Kombinationen getestet worden.
+Dadurch ist das Tensorboard weniger dicht befüllt und deutlich übersichtlicher.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textheight]{kapitel/5_ergebnisse/dcgan/hyperparameter.PNG}
+	\caption{Hyperparameter-Ansicht des DC-GAN}
+	\label{ergebnis:dcgan-hyper}
+\end{figure}
+
+Die kleinere BatchSize von 16 wirkt sich postive auf die FID-Werte des Kreis und Quadrats aus.
+Nur beim FID-Wert der Dreiecke gibt es einen deutlichen Ausreißer, welcher eine BatchSize von 32 bevorzugt.
+\newline
+
+Die Smoothness fällt bei dieser Hyperparametersuche heraus.
+Der Dropout jedoch, hat nur einen kleinen Einfluss auf das Ergebnis. 
+Das kann in Abbildung \ref{ergebnis:dcgan-hyper-dropout} betrachtet werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textheight]{kapitel/5_ergebnisse/dcgan/hyperparameter_droupout.PNG}
+	\caption{Einfluss des Droupouts auf das DC-GAN}
+	\label{ergebnis:dcgan-hyper-dropout}
+\end{figure}
+
+Bei einer beidseitigen Lernrate von \(2e-3\), sind zwar die FID-Werte der Quadrate tendenziell klein, jedoch gilt das nicht für die anderen beiden Figuren.
+Dies kann man gut in der Abbildung \ref{ergebnis:dcgan-lr} (a) erkennen.
+Im Gegenzug ist bei einer deutlich kleineren Diskriminator-Lernrate im Bereich von \(2e-4\) bis \(3e-4\) und gleichbleibenden Generator-Lernrate von \(2e-3\), das Ergebnis umgekehrt.
+In der Abbildung \ref{ergebnis:densegan-lr} (b) wird visualisiert, dass die FID-Werte der Kreise und Dreiecke minimal werden.
+Zwar nimmt die Metrik für das Quadrat nicht den kleinsten Wert an, jedoch bewegen sich die Ergebnisse auch hier im niedrigen Bereich. 
+
+\begin{figure}[H]
+	\centering
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/dcgan/hyperparameter_lr_same.PNG}}
+	\qquad
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/dcgan/hyperparameter_lr_not_same.PNG}}
+	\caption{Einfluss der Lernrate auf die FID-Werte des DC-GAN}
+	\label{ergebnis:dcgan-lr}
+\end{figure}
+
+\subsection{Bilder}
+Die niedrigsten FID-Werte wurden jeweils bei anderen Hyperparameter-Kombinationen erreicht.
+Sie können in der Abbildung \ref{ergebnis:dcgan-fid} betrachtet werden, wobei die besten Kreise in (a), Quadrate in (b) und Dreiecke in (c) zu sehen sind.
+In der subjektiven Suche konnte kein Training gefunden werden, welches eine Generierung von glaubhaften Bildern ermöglicht.
+
+
+\begin{figure}[H]
+	\centering
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/dcgan/fid_circle.png}}
+	\qquad
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/dcgan/fid_rec.png}}
+	\qquad
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/dcgan/fid_tri.png}}
+	\caption{Niedrigsten FID-Werte beim DC-GAN}
+	\label{ergebnis:dcgan-fid}
+\end{figure}
 
 \section{DC Generator und Dense Discriminator}
 
