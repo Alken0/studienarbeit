@@ -216,8 +216,65 @@ Auch die Vielfalt wird bewertet, indem zum Beispiel Mode-Collaps als negativ bew
 	\centering
 	\includegraphics[width=16cm]{kapitel/2_stand_der_technik/img/fid-example.png}
 	\caption[Beispiel von unterschiedlichen FID-Werten]{Beispiele unterschiedlicher FID-Werte aus \cite{fid}.\\ \textbf{Oben Links:} gaußsches Rauschen; \textbf{Oben Mitte:} gaußscher Weichzeichner; \textbf{Oben Rechts:} schwarze Rechtecke; \textbf{Unten Links:} verwirbelte Bilder; \textbf{Unten Mitte:} Salt and Pepper Noise; \textbf{Unten Rechts:} CelebA Datensatz mit ImageNet Bildern versetzt }
-	\label{flowchart-cgan-vs-gan}
+	\label{fid-example}
 \end{figure}
+
+\section{Hyperparameter}
+\subsubsection{Learning-Rate}
+Die Learning-Rate entspricht dem Faktor \(\alpha\), welcher die Intensität des Gradientenabstiegs bestimmt:  
+\begin{equation}
+	\theta  =  \theta  - \alpha   \nabla_{ \theta }  J( \theta ).
+\end{equation}
+
+\todo[]{mit quellen backen}
+Bei zu großem \(\alpha\) kann der Trainings-Fehler anfangen zu oszillieren oder sogar größer werden.
+Bei zu kleinem \(\alpha\) konvergiert der Fehler zu langsam oder bleibt in einem lokalen Minimum stehen. 
+Es ist anzumerken, dass die oben gezeigt Formel dem einfachen Gradientenabstieg entspricht.
+Normalerweise werden fortgeschrittenere Algorithmen angewendet, welche jedoch weiterhin auf dem Gradientenabstieg basieren.
+So können weitere Parameter, wie das \textit{Momentum} die Abstiegsweite beeinflussen.
+
+\subsubsection{Batch-Size}
+Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter und wird in unterschiedlichen Tutorials referenziert \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery}.
+Die Batch-Size beschreibt, wie viele Traingsdaten verabeitet werden, um einen Gradientenabstieg der Gewichte durchzuführen.
+Grundsätzlich führt eine kleine Batch-Size zu besseren Ergebnissen.
+Ein Experiment über kleine Batch-Größen im Bezug auf Neuronale Netze kam zu folgenden Ergebnis: 
+
+\begin{displayquote}
+	\enquote{In all cases the best results have been obtained with batch sizes m = 32 or smaller, often as small as m = 2 or m = 4.}
+	\cite[S. 16, Z. 5-7]{small-batch-size}
+\end{displayquote}
+
+Eine kleinere Batch-Size führt dazu, dass der Fehler speziellere Fälle abbilden kann und damit eine Generalisierung unterbunden wird \cite{tutorial:tune-batch-size-machinelearningmastery}.
+Jedoch ergibt sich aus einer kleineren Batch-Size ein Leistungs-Problem: die Berechnung des Fehlerwerts und die anschließende Optimierung der Gewichte wird häufiger durchgeführt.
+Das führt logischerweise zu einer längeren Trainingsdauer pro Epoche.
+Deshalb muss ein Kompromiss gefunden werden.
+$32$ und $64$ wird in Papers oder Tutorials häufig als ein guter Standartwert angegeben \cite{default-batch-size}. \todo{64 auch? (nur hinzugefügt, damit wir die Zahl unten referenzieren können)}
+
+\subsubsection{Dropout}
+Der Dropout definiert die Größe eines zufälligen Anteils an Neuronen, die dann inklusive ihrer Verbindungen im Training deaktiviert werden.
+Das führt dazu, dass immer andere Neuronen das Ergebnis beeinflussen, was Overfitting entgegenwirkt \cite{JMLR:v15:srivastava14a}.
+Bei Overfitting lernt das neuronale Netz Besonderheiten der Trainingsdaten, die aber in der Realität nicht vorkommen.
+Dadurch erzielt es sehr gute Ergebnisse im Training, spätestens bei der Anwendung ist die Leistung jedoch verhältnismäßig schlecht.
+
+% TODO https://machinelearningmastery.com/dropout-for-regularizing-deep-neural-networks/
+
+\subsubsection{Smoothness - Onesided Label Smoothing}
+Onesided Label Smoothing entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-onesided-label-smoothing}.
+Sie verändert den Loss, indem sie den Optimalwert für das gewünschte Ergebnis anpasst.
+Dafür wird die optimale Ausgabe des Discriminators von 1 oder 0 auf beispielsweise 0.9 oder 0.1 gesetzt.
+Der Prozess hilft besonders gegen Adversarial Examples.
+Adversarial Examples sind sehr geringe Unterschiede in den Bildern, die die Klassifikation des Discriminators aber sehr stark beeinflussen.
+Sollte der Generator diese Änderungen lernen, kann er den Discriminator täuschen, ohne dass sich die Bildqualität erhöht.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{kapitel/2_stand_der_technik/img/adversrial-example.png}
+	\caption[Adversarial Example]{Durch das (nicht sichtbare) zusammenführen der 2 Bilder, wird der Panda fälschlicherweise als Gibbon klassifiziert}
+	\label{smoothness-adversarial-example}
+\end{figure}
+
+\todo{Smoothness durch Onesided Label Smoothing ersetzen oder erklären, dass beides das gleiche ist?}
+
 
 \section{Verfahren zur Bestimmung von Hyperparametern}
 \label{chapter:verfahren-bestimmung-hyperparameter}
@@ -304,6 +361,9 @@ Dadurch kann mit sehr großen Mengen an Hyperparametern umgegangen werden.
 
 Allerdings ist der Genetic Algorithm vergleichsweise langsam, da die Evolutionsschritte sequentiell ablaufen müssen.
 Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum ist der Genetic Algorithm effizienter als eine Grid Search \cite{hyperparameters-search-comparison-focus-genetic}.
+
+\section{Datensätze}
+\todo[inline, shadow]{\cite{dataset:four-shapes, dataset:2d-geometric-shapes-dataset} erklären}
 
 \section{Related Work}
 \label{chapter:related-work}

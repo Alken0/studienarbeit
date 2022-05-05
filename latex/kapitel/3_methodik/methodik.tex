@@ -7,16 +7,15 @@ Dabei wird auf die Bildeigenschaften und Besonderheiten der dargestellten Figure
 Außerdem werden die Anforderungen an die Architekturen beschrieben, sowie Ablauf und Kriterien für ein erfolgreiches Training vorgestellt.
 
 \section{Trainingsdaten}
-Das Dataset wurde im Rahmen der Studienarbeit generiert und besteht für das Training aus 1500 Bildern.
-
-Zwar gibt es bereits Datensätze mit solchen Bildern \cite{dataset:four-shapes, dataset:2d-geometric-shapes-dataset}, im Rahmen der Studienarbeit werden jedoch keine vorgefertigten Datensätze verwendet.
-Denn die Generierung eigener Bilder erlaubt eine größere Kontrolle über Eigenschaften der Bilder und Inhalte, als vorgefertigte Sets.
-%TODO schlechte begründung
-
-Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden kann, wird die Generierung deterministisch reproduzierbar und dokumentiert sein.
-
+Das Dataset wurde im Rahmen der Studienarbeit generiert und besteht aus 1500 Trainingsbildern.
 Die 1500 Bilder teilen sich dabei in jeweils 500 Bilder pro Formklasse (Dreieck, Kreis, Quadrat) auf.
 Die genauen Eigenschaften werden in den folgenden Abschnitten beschrieben.
+
+\subsection{Eigener Datensatz}
+Zwar gibt es bereits Datensätze mit geometrischen Formen auf Bildern, im Rahmen der Studienarbeit werden jedoch keine vorgefertigten Datensätze verwendet.
+Denn die verfügbaren Datensätze entsprechen nicht genau den Anforderungen der Studienarbeit, da die Bilder zum Beispiel farbig, Figuren gedreht oder die Bildgröße nicht mit den Anforderungen übereinstimmt.
+Eine Anpassung der Datensätze wäre umständlicher als die Generierung eigener Bilder und würde sowieso einen Vergleich mit anderen GANs, die auf den veröffentlichten Datensätzen basieren, erschweren.
+Damit trotzdem eine Vergleichbarkeit zu anderen Arbeiten gewährleistet werden kann, wird die Generierung deterministisch reproduzierbar und dokumentiert sein.
 
 \subsection{Generierung}
 Bei den Trainingsdaten handelt es sich um synthetisch generierte Bilder mit geometrischen Figuren. 
@@ -38,12 +37,15 @@ Auf jedem Bild ist eine geometrische Form abgebildet.
 Bei den geometrischen Formen handelt es sich um gleichseitige Dreiecke, Quadrate und Kreise.
 Die Formen unterscheiden sich in Größe und Position auf dem Bild.
 Andere Transformationen, wie beispielsweise Rotationen, werden nicht angewendet.
+Es wird auch kein Rauschen, Weichzeichnen oder Salt and Pepper Noise auf die Bilder angewendet.
 \newline
 
 Die Quadrate und gleichseitigen Dreiecke sind zwischen 5 und 16 Pixel groß.
 Die Größe bezieht sich dabei auf die Seitenlänge der Seiten.
 Die Kreise sind zwischen 5 und 10 Pixel groß.
 Hierbei gibt der Wert den Radius des Kreises an.
+Die Mindest- und Maximalgrößen sind wichtig, damit die Formen unterscheidbar bleiben.
+Bei einer Größe von beispielsweise einem Pixel, wären Kreis, Quadrat und Dreieck identisch.
 \newline
 
 Die Formen sind so im Bild positioniert, dass sie Seitenränder touchieren können.
@@ -68,31 +70,23 @@ Allerdings ist eine Form immer vollständig im Bild abgebildet und wird vom Bild
 \end{figure}
 
 \section{Verfahren zur Hyperparametersuche}
-Zur Auswahl von Hyperparametern gibt es verschiedene Verfahren.
-Dazu gehören unter anderem die Manuelle Suche, Grid Search, Random Search und Genetic Algorithms (siehe \cref{chapter:verfahren-bestimmung-hyperparameter}).
-In diesem Abschnitt werden die verschiedenen Verfahren verglichen und zusätzliche Anpassungen erläutert.
+\todo[inline, shadow]{einleitung?}
 
 \subsection{Kriterien}
-\todo[inline, shadow]{irgendwo hardware festhalten}
 In diesem Abschnitt werden Kriterien für die Auswahl eines geeigneten Hyperparameter Suchverfahrens ausgewählt.
-Die Kriterien dienen als Basis für die Bewertung der Suchverfahren im nächsten Schritt.
 
 \subsubsection{Automatisierbarkeit}
 Ziel ist es, pro Nacht eine Architektur zu trainieren.
 Deswegen ist es wichtig, dass das Verfahren vollkommen automatisiert ablaufen kann.
 
 \subsubsection{Ressourcenbedarf}
-Das Verfahren darf in keinem Fall während oder nach einer Trainingsiteration so viel zusätzlichen Speicher belegen, dass das Training fehlschlägt.
-Denn Trainingsabläufe sollen primär über Nacht durchgeführt werden, wodurch Fehlschläge erst sehr spät entdeckt werden.
-\newline
-
-Dabei ist anzumerken, dass die Hardware den Trainingsprozess stark beeinflusst.
-So ist der verfügbare Arbeits- und Grafikkartenspeicher nicht ausreichend, um Trainingsdurchläufe stark zu parallelisieren.
+Das Verfahren darf in keinem Fall während oder nach einer Trainingsiteration so viel zusätzlichen Speicher belegen, dass das Training oder das Speichern der Logs fehlschlägt.
+Der verfügbare Arbeits- und Grafikkartenspeicher nicht ausreichend, um Trainingsdurchläufe stark zu parallelisieren.
 
 \subsubsection{Laufzeit}
 Die Laufzeit der Hyperparametersuche ist von entscheidender Bedeutung.
 Denn die verwendete Hardware ist nicht ausreichend, um jegliche Kombinationen von Hyperparametern in einer vernünftigen Zeit zu testen.
-Als zeitliche Begrenzung dient dabei die Ausführung in einer Nacht von 8h.
+Als zeitliche Begrenzung dient dabei die Ausführung von allerhöchstens 8h.
 \newline
 
 Jedoch ist zu beachten, dass auch der Trainingsprozess als solcher viel Zeit in Anspruch nimmt.
@@ -178,10 +172,25 @@ Insbesondere unter der Annahme, dass sich die Hyperparameter stetig anpassen und
 
 Für die Implementierung stellt Tensorflow eine Optimierungsfunktion bereit.
 Jedoch unterstützt die Funktion keine eigenen Trainingsabläufe, oder es ist nicht dokumentiert.
-Aufgrund der fehlenden Informationslage ist der tatsächliche Aufwand nur schwer einschätzbar. \todo{nochmal recherchieren?}
+Aufgrund der fehlenden Informationslage ist der tatsächliche Aufwand nur schwer einschätzbar. %TODO \todo{nochmal recherchieren?}
 Er sollte jedoch deutlich höher liegen, als bei den anderen beiden Verfahren.
 
 \subsection{Bewertung}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{l|c|c|c}
+		                        & Grid Search & Random Search & Genetic Algorithm \\
+		Automatisierbarkeit     &      +      &       +       &         +         \\
+		Ressourcenbedarf        &      +      &       +       &         o         \\
+		Laufzeit                &      +      &       +       &         -         \\
+		Effektivität            &      o      &       o       &        ++         \\
+		Implementierungsaufwand &      +      &       o       &         -
+	\end{tabular}
+	\caption{Bewertung der Hyperparameterverfahren}
+\end{table}
+
+
 Die manuelle Suche ist viel zu aufwändig und für moderne Suchen nicht mehr zeitgemäß, da eine Automatisierung fehlt.
 Für eine derart intensive Suche fehlen die Ressourcen und der dabei entstehende Aufwand wiegt auch nicht den Nutzen auf.
 \newline
@@ -196,7 +205,7 @@ Sowohl die Grid Search als auch die Random Search sind geeignete Verfahren im Ra
 Sie sind sich so ähnlich, dass auch ihre Vorteile und Nachteile sich nicht stark unterscheiden.
 Die Verfahren sind vor allem aufgrund ihrer geringen Laufzeit bei wenigen Hyperparametern und der trotzdem guten Effektivität gewählt.
 
-Ausschlaggebend unterscheiden tun sich die Verfahren nur in der Implementierung.
+Ausschlaggebend unterscheiden sich die Verfahren nur in der Implementierung.
 Hierbei ist die Grid Search der Random Search etwas überlegen und wird deshalb implementiert.
 
 \section{Training}
@@ -392,8 +401,9 @@ Dabei wird bei jeder Architektur die Modelle nach einem oder mehreren Merkmalen 
 Damit sollen verschiedene Philosophien und Techniken verglichen werden.
 Gleichzeit ist es Ziel, den Einfluss verschiedener Hyperparameter zu evaluieren.
 
-\subsection{API}
+\subsection{API (Gemeinsamkeiten)}
 \todo{was sollte hier gesagt werden?}
+\todo{weglassen?}
 Um alle möglichen Architekturen in das Training einbinden zu können müssen sie die gleichen Ein- und Ausgaben besitzen.
 Die Anforderungen an die Ein- und Ausgabe wie folgt definiert.
 \newline
