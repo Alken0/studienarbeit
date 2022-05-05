@@ -2,10 +2,11 @@
 % !TeX spellcheck = de_DE
 
 \chapter{Ergebnisse}
+Die protokollierten Metriken und Ergebnissen der Hyperparamerter-Suche können über das Tensorboard betrachtet und analysiert werden.
+In diesem Kapitel soll für jede untersuchte Architektur zwei Ansichten aufgezeigt werden: die Hyperparameter und die generierten Bilder.
 
 \section{Dense-GAN}
-Über das Tensorboard können die generierten Daten in verschiedenen Ansichten angezeigt werden.
-Die wichtigste ist die Hyperparameter-Ansicht.
+Die Hyperparameter-Ansicht ist die hilfreichere Datenquelle von beiden.
 Wie in Abbildung \ref{ergebnis:densegan-hyper} zu erkennen ist, werden nicht nur alle Parameterkombinationen angezeigt.
 Es wird auch dargestellt, zu welchen Metriken diese Kombinationen geführt haben.
 Damit lässt sich leicht evaluieren, welche Hyperparameter die besten Ergebnisse erzeugt haben.
@@ -69,7 +70,7 @@ Auch wenn eine große Menge an Bildartefakte zu erkennen ist, stechen die Kanten
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[height=0.4\textheight]{kapitel/5_ergebnisse/densegan/good_example_long.png}
+	\includegraphics[height=0.35\textheight]{kapitel/5_ergebnisse/densegan/good_example_long.png}
 	\caption{Ergebnis von 1000 Epochen Training}
 	\label{ergebnis:densegan-good-example-long}
 \end{figure}
