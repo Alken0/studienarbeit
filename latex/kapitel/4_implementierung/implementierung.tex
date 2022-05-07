@@ -28,11 +28,23 @@ CUDA erlaubt die Ausführung der Trainings auf der GPU, was den Trainingsprozess
 \subsection{Konfiguration}
 \label{chapter:configuration-hyperparams}
 Für das Projekt existieren diverse Hyperparameter, wie zum Beispiel die Anzahl an Bildern pro Label oder auch die exakten Werte für Hyperparameter.
-\newline
-
-Alle Konfigurationen können innerhalb der Dateien \textit{configuration.py} und \textit{hyperparameters.py} eingesehen und bearbeitet werden.
+Alle Konfigurationen können innerhalb der Dateien \textit{configuration.py} und \textit{hyperparameters.py}  bearbeitet werden.
 Je nach Hyperparameter müssen dann die Bilder erneut generiert werden.
-\newline
+
+\begin{figure}[H]
+	\centering
+	\subfloat[
+		\centering 
+		configuration.py
+	]{{\includegraphics[height=8cm]{kapitel/4_implementierung/img/configuration.py.png} }}
+	\qquad
+	\subfloat[
+		\centering 
+		hyparameters.py
+	]{{\includegraphics[height=8cm]{kapitel/4_implementierung/img/hyperparameters.py.png} }}
+	\caption{Auszüge aus den Konfigurationsdateien}
+	\label{imgs:config-hyperparams}
+\end{figure}
 
 Hyperparameter, die in der Datei \textit{configuration.py} als Wert den Text \textit{'set by hyperparameters'} haben, werden während des Trainings überschrieben.
 Um die Hyperparameter zu ändern, muss die Datei \textit{hyperparameters.py} angepasst werden.
@@ -58,27 +70,22 @@ Das Tensorboard kann mit dem Befehl \textit{tensorboard --logdir=data/logs/<mode
 Während der Arbeit wurden verschiedene Optimierungen vorgenommen, um entweder Ressourcen zu sparen oder den Trainingsprozess zu beschleunigen.
 Die Optimierungen werden im Folgenden vorgestellt.
 
-\subsection{Eigene Trainingsfunktion}\todo{Verständlich?}
+\subsection{Eigene Trainingsfunktion}
 Tensorflow bietet eine Standardfunktion zum Traininieren von Neuronalen Netzen mit \textit{model.fit} an.
 Die Funktion wird auf ein Model angewendet und führt eine Trainingsepoche auf einen übergebenen Datensatz mit zu übergebenden Parametern durch.
 Die Funktion ist für simple Trainingsabläufe wie das Trainieren eines Klassifikatoren sehr gut geeignet.
-Allerdings ist sie für den Trainingsablauf bei GANs ineffizient.
+Allerdings ist sie für den Trainingsablauf bei GANs ineffizient, da sie die beiden Modelle komplett separat trainiert.
 \newline
 
-Bei einem GAN müssen Generator und Discriminator beide trainiert werden.
-Dafür benötigt der Generator den Losswert des Discriminators auf seine generierten Daten $loss_{unecht} = d(X_{unecht})$.
-Der Discriminator soll lernen unechte von echten Daten zu Unterscheiden.
-Hierzu kann er mithilfe von Supervised Learning trainiert werden.
-Um den Fehler über beide Datensets zu bestimmen müssen die folgenden Operationen ausgeführt werden $loss_{unecht} = d(X_{unecht})$ und $loss_{echt} = d(X_{echt})$.
-\newline
-
-Im Trainingsprozess gibt es somit eine Überschneidung, der $loss_{unecht} = d(X_{unecht})$.
-Um diesen Losswert wiederzuverwenden benötigt es eine eigene Trainingsfunktion.
-Auf der Tensorflow Webseite ist dafür auch eine Alternative Lernfunktion angegeben, die statt \textit{model.fit} verwendet wird \cite{tensorflow-gan-learn-step}.
+Statt die Modelle einzeln zu trainieren, können die Losswerte von beiden Modellen verwendet werden.
+Denn für einen Trainingsdurchlauf wird der Loss des Discriminators der echten und unechten Daten berechnet.
+Der Discriminator benötigt für den Lernprozess beide Losswerte, der Generator nur den Loss des Discriminators für die unechten Daten.
+Damit die Losswerte wiederverwendet werden können, wird eine eigene Trainingsfunktion benötigt.
+Auf der Tensorflow Webseite ist dafür auch eine alternative Lernfunktion angegeben, die statt \textit{model.fit} verwendet wird \cite{tensorflow-gan-learn-step}.
 
 \subsection{Matplotlib}
 Für die Erstellung der Logs werden diverse Bilder erzeugt und abgespeichert.
-Bei der Nutzung von Matplotlib muss dafür für jedes Bild zunächst eine Figure erstellt werden.
+Bei der Nutzung von Matplotlib muss dafür für jedes Bild zunächst eine Figur erstellt werden.
 Die Figure wird benötigt, um das Bild zu konfigurieren.
 Es ist dabei nicht möglich, die Figures für verschiedene Bilder vernünftig wiederzuverwenden.
 \newline
@@ -99,7 +106,7 @@ Dadurch ist sichergestellt, dass auch lange Trainingsperioden durchgeführt werd
 
 \subsection{Tensorflow-Keras}
 Bei der Hyperparameteroptimierung werden verschiedene Modelle erzeugt und trainiert.
-Tensorflow ist nicht dafür ausgelegt, in einem Durchgang sehr viele Unterschiedliche Modelle zu trainieren.
+Tensorflow ist nicht dafür ausgelegt, in einem Durchgang sehr viele unterschiedliche Modelle zu trainieren.
 Es existiert deshalb keine Automatismus, der nicht mehr benötigte Modell im Hintergrund aufräumt.
 Dadurch kommt es zu einem stetig steigendem Arbeitsspeicher-Verbrauch.
 \newline
@@ -114,7 +121,7 @@ Um eine möglichst optimale Speichernutzung zu gewährleisten wird die Methode n
 So wird verhindert, dass Tensorflow gleichzeitig mehr als ein Modell bekannt ist.
 
 \section{Daten-Generator}
-Die Daten für das Training vom GAN sind synthetisch generiert mit einem eigens Implementierten Generators.
+Die Daten für das Training vom GAN sind synthetisch generiert mit einem eigens implementierten Generators.
 Der Code für den Generator befindet sich in der Datei \textit{generator.py}.
 Die Generierung der Bilder findet automatisch statt, sollte in der Datei \textit{main.py} der Boolean \textit{GENERATE\_IMAGES} auf True gesetzt sein.
 \newline
