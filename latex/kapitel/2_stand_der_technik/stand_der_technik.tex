@@ -37,6 +37,7 @@ Die Berechnung des Ausgabewertes wird durch die folgende Formel mit dem Ausgabew
 	y = \varphi ( \sum_{n=0}^N x_n * w_n).
 \end{equation}
 
+\subsection{Training}
 Neuronale Netze werden nicht im klassischen Sinne programmiert, stattdessen werden definierte Netzarchitekturen trainiert.
 Der Trainingsprozess orientiert sich hierbei wieder an natürlichen Lernvorgängen.
 Dazu gehören unter anderem Supervised- und Unsupervised-Learning.
@@ -57,7 +58,56 @@ Zusätzlich unterscheiden sich optimale Hyperparameter je nach Architektur und z
 Es sind auch nicht alle Hyperparameter gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate hat einen besonders großen Einfluss auf den Trainingserfolg \cite{learning-rate-most-important}.
 Die Suche nach optimalen Hyperparametern ist sehr komplex, weswegen spezielle Suchverfahren entwickelt wurden. \todo{Überleitung zu Hyperparam Suchverfahren?}
 
-\todo[inline, shadow]{Layer beschreiben}
+\subsection{Verschiedene Schichten}
+Wie bereits erwähnt, werden Neuronale Netze mittels Schichten aufgebaut.
+Es existieren verschiedene Typen von Schichten, welche jeweils ganz bestimmte Aufgaben übernehmen.
+Die wichtigsten Arten sollen in der folgenden Aufzählung kurz erläutert werden.
+
+\subsubsection{InputLayer und OutputLayer}
+Diese beiden Schichten gehören nicht zu der Blackbox, die ein Neuronales Netz charakterisiert.
+Wie man bereits in der Abbildung \ref{img:neural-networks} erkennen konnte, werden über diese beiden Schichten mit dem Modell interagiert.
+Das InputLayer definiert, welche Formfaktor die zu verarbeiteten Daten haben müssen.
+Diese Daten sind immer in der Form eines Tensors gegeben und können sich über mehrere Dimensionen spannen. 
+So repräsentiert die Formangabe \textit{[3, 50]} eine Matrix mit drei Reihen und 50 Spalten.
+Diese Formangabe spielt auch bei anderen Schichten innerhalb des Neuronalen Netzes eine Rolle.
+So hat jede einzelne Schicht eine Input- und Output-Größe.
+\newline
+
+Das OutputLayer ist normalerweise keine spezielle, dedizierte Schicht.
+In der Regel, repräsentiert die letzte im Modell angeschlossene Schicht die Ausgabe.
+
+\subsubsection{DenseLayer}
+Das DenseLayer ist eine so genanntes \textit{deeply connected Layer}.
+Das bedeutet, dass jedes Neuron mit jedem Neuron der vorherigen Schicht verbunden ist.
+Auch dies kann in der Abbildung \ref{img:neural-networks} beobachtet werden, wobei beide blauen Schichten diesem Typ entsprechen.
+Diese Eigenschaft macht das DenseLayer zu einem der weitestverbreiteten Schichten innerhalb Neuronaler Netze \cite{dense-layer}.
+Vor allem im Bereich der Klassifizierung wird es häufig eingesetzt.
+
+\subsection{ConvolutionalLayer und ConvolutionalTransposeLayer}
+
+
+\subsubsection{FlattenLayer und ReshapeLayer} 
+\todo{das hier erklären?}
+
+\subsubsection{ActivationLayer und BatchNormalization}
+Aktivierungsfunktionen sind ein wichtiges Werkzeug innerhalb Neuronaler Netze.
+Sie bilden ein großes Spektrum an Werten auf einen kleinen Bereich ab.
+Beliebte Funktionen sind dabei LeakyReLU, Tanh oder Softmax.
+Häufig kann man sie am Ende eines Modells finden.
+Nicht selten stellen sie das OutputLayer eines Netzes dar.
+Jedoch werden sie auch innerhalb der HiddenLayer verwendet.
+Sie folgen häufig auf Dense oder ConvolutionalLayer.
+\newline
+
+
+
+
+
+\subsubsection{MultiplyLayer}
+Diese Schicht repräsentiert, wie der Name vermuten lässt, einen arithmetischen Operator.
+Es werden mehrere Input-Tensoren zu einem Output-Tensor multipliziert.
+Dabei muss natürlich sichergestellt werden, das alle hineingegebene Tensoren den gleichen Formfaktor besitzen.
+Diese Schicht wird eine große Rolle bei der Architekturen von GANs spielen, da dort zwei Inputs zu einem Output vereinigt werden müssen.
 
 \section{General Adversarial Network}
 Der Begriff \acrfull{GAN} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
