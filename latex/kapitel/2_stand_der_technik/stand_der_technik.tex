@@ -37,7 +37,6 @@ Die Berechnung des Ausgabewertes wird durch die folgende Formel mit dem Ausgabew
 	y = \varphi ( \sum_{n=0}^N x_n * w_n).
 \end{equation}
 
-
 Neuronale Netze werden nicht im klassischen Sinne programmiert, stattdessen werden definierte Netzarchitekturen trainiert.
 Der Trainingsprozess orientiert sich hierbei wieder an natürlichen Lernvorgängen.
 Dazu gehören unter anderem Supervised- und Unsupervised-Learning.
@@ -59,50 +58,6 @@ Es sind auch nicht alle Hyperparameter gleichbedeutend für den Trainingserfolg,
 Die Suche nach optimalen Hyperparametern ist sehr komplex, weswegen spezielle Suchverfahren entwickelt wurden. \todo{Überleitung zu Hyperparam Suchverfahren?}
 
 \todo[inline, shadow]{Layer beschreiben}
-
-\section{DeepLearning Framework}
-Die Implementierung von DeepLearning-Algorithmen ist im Bereich der Künstlichen Intelligenzen eine bedeutende Thematik.
-Vor allem die effiziente Ausnutzungen gegebener Hardware stellt eine enorme Herausforderung dar. 
-Deshalb existieren über verschiedene Abstraktions-Level diverse Frameworks und Bibliotheken, welche die Arbeit deutlich erleichtern.
-\newline
-
-Aufgrund der hohen Rechenkern-Anzahl und der daraus resultierende Multithreading-Charakteristik, eignen sich Grafikkarten besonders gut für DeepLearning-Berechnungen \cite{gpu-for-dl}.
-Grafikarten Hersteller stellen dafür Low-Level-APIs bereit, in denen Routinen wie Matrix-Multiplikationen oder Aktivierungs-Funktionen hardware-beschleunigt werden.
-Dabei kann in den Zugang zu allgemeinen GPU-Operationen (API-Beispiel: CUDA) oder speziellen Funktionen für DeepLearning und Neuronale Netze (API-Beispiel: cuDNN) unterschieden werden.
-\newline
-
-Als Entwickler von DeepLearning-Anwendungen sind jedoch solche hardwarenahen Aufrufe häufig zu aufwendig.
-Deshalb haben sich in der Industrie und Forschung DeepLearning Frameworks entwickelt, welche Algorithmen weiter zusammenfassen und abstrahieren.
-Zu den am weitesten verbreiteten gehören unter anderem PyTorch, Caffe, TensorFlow und MXNet \cite{dl-framework-evaluation}. \todo{bessere quelle}
-Auch wenn sie sich einige architektonische Ansätze teilen, unterscheiden sich die Frameworks jedoch in der genauen Implementierung und Technik \cite{dl-framework-evaluation}.
-Der größte Unterschied ist jedoch die Popularität der Frameworks.
-Gemessen an Github Sternen sind TensorFlow (164k) \cite{github-tensorflow} und PyTorch (55k) \cite{github-pytorch} die bekanntesten, weshalb sie im Folgenden näher analysiert werden.
- 
-\subsection{TensorFlow und PyTorch}
-%TODO in Methodik?
-TensorFlow und PyTorch weichen in einigen technischen Eigenschaften, wie der Graphen Definition und dem verteilten Training von aneinander ab \cite{pytorch-vs-tensorflow}.
-Allerdings sind diese Charakteristiken im Rahmen der allgemeinen Architektur Untersuchung wenig relevant.
-Für die Evaluierung selbst ist eine gute Visualisierung der Trainingsdaten und -ergebnisse wichtig.
-Außerdem soll die Schnittstelle möglichst einfach sein, damit ohne großen Aufwand verschiedene Architekturen implementiert und getestet werden können.
-Mittels Tensorboard bietet Tensorflow hierbei eine natives und sehr umfangreiches Werkzeug an.
-PyTorch besitzt keine vergleichbaren Funktionen, stattdessen gibt es einen offiziellen Anleitungsartikel zur Integration mit Tensorboard \cite{pytorch-tensorboard-offical-documentation}.
-
-Aufgrund der nativen Unterstützung von Tensorboard wurde sich für TensorFlow als DeepLearning Framework entschieden.
-
-\subsection{Tensorboard}
-Hinsichtlich der Visualisierung bietet TensorFlow das direkt integrierte Tensorboard.
-Ohne großen Mehraufwand können so Metriken visualisiert, Modell-Graphen dargestellt oder generierte Bilder verglichen werden \cite{tensorboard}.
-PyTorch besitzt keine vergleichbaren nativen Visualisierungstool, aber eine Möglichkeit zur Darstellung in Tensorboard.
-
-\subsection{Keras}
-Zwar ist TensorFlow im Vergleich zu CUDA bereits eine High-Level-API, allerdings fallen die API-Aufrufe weiterhin sehr detailliert aus.
-Dadurch sind hoch flexible Modelle und Training-Loops möglich.
-Bei optimierten Anwendungen garantiert das große Freiheiten, ist jedoch im Rahmen der Studienarbeit zu umständlich und komplex.
-Da in dieser Arbeit grundlegende Architekturen untersucht werden sollen, wird zusätzlich die Keras API \cite{keras} verwendet.
-Ursprünglich als unabhängiges Framework entwickelt, ist Keras seit TensorFlow 2.0 ein fester Bestandteil der Bibliothek.
-Keras stellt eine weitere Abstraktion-Stufe dar, wodurch Modelle sehr einfach beschrieben und vordefinierte Traings-Loops verwendet werden können.
-
-
 
 \section{General Adversarial Network}
 Der Begriff \acrfull{GAN} ist auf Ian Goodfellow zurückzuführen \cite{gan-original-paper}.
@@ -133,12 +88,12 @@ Ziel des Generators hingegen ist es, den Discriminator zu täuschen und die gene
 Ian Goodfellow bezeichnet den Lernprozess auch als Minimax-Spiel, bei dem die Ausgabe des Discriminators die zu optimierende Größe ist.
 Das bedeutet, der Generator versucht die Genauigkeit des Discriminators zu verringern, während der Discriminator sie erhöhen möchte. \cite{gan-minimax}
 
-\section{Ausprägungen von GANs}
+\subsection{Ausprägungen von GANs}
 In diesem Kapitel die Architekturmodelle CGAN, Dense-GAN und DC-GAN vorgestellt.
 Das ist deshalb wichtig, da die zugehörigen Bezeichnungen in der Literatur nicht klar definiert sind.
 So werden beispielsweise je nach Kontext der Arbeit sowohl Cycle-GANs als auch Conditional GANs als CGANs bezeichnet.
 
-\subsection{CGAN}
+\subsubsection{CGAN}
 \todo[inline, shadow]{verständlich?}
 Das \acrfull{CGAN} \cite{mirza2014conditional, gan-conditional} erlaubt die Beeinflussung der Generierung durch Labels.
 Dafür wird der normale Trainingsablauf eines GANs durch Labels erweitert, wie in der Abbildung dargestellt.
@@ -161,7 +116,7 @@ Sobald das \acrshort{GAN} zufriedenstellend trainiert ist, können so labelspezi
 Das kann in der Praxis sehr günstig sein, wenn zum Beispiel das Krankheitsbild einer bestimmten Krankheit generiert werden soll.
 Die Nutzung des Conditional Discriminators erlaubt zusätzlich die Identifizierung einer bestimmten Krankheit auf einem Bild.
 
-\subsection{Dense-GAN}
+\subsubsection{Dense-GAN}
 Eine Dense-GAN nutzt sowohl für Discriminator als auch für den Generator Dense Layer beziehungsweise Fully Connected Layer.
 Dense Layer bestehen aus Neuronen, die jeweils mit jeder Ausgabe der vorherigen Schicht verknüpft sind.
 \newline
@@ -174,7 +129,7 @@ Nachteil sind die vielen zu lernenden Parameter.
 Pro Schicht ergeben sich $|weights| = inputs * outputs$, was bei größeren Architekturen einen erheblichen Lernaufwand bedeutet.
 Insbesondere im Vergleich zu Convolutional Layern macht dies einen enormen Unterschied.
 
-\subsection{DC-GAN}
+\subsubsection{DC-GAN}
 \todo{Belege}
 Ein DC-GAN oder auch Deep Convolutional GAN besteht hauptsächlich aus Convolutional Layern.
 Im Generator finden vor allem Convolutional Transposed Layer ihre Anwendung.
@@ -195,7 +150,10 @@ Die Tatsache, dass die Filter der Convolutional Layer Zusammenhänge zwischen be
 Sollten die Beziehungen zwischen nahen Datenpunkten nicht existieren, können falsche Zusammenhänge vorausgesetzt werden, was zu schlechteren Ergebnissen führen kann.
 Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Architektur, aber dafür effizienter.
 
-\section{Bewertung von GAN-Trainingserfolgen - FID}
+\section{Metriken}
+\subsection{Accuracy}
+\todo{falls in ergebnisse verwendet werden wird. evtl auch loss}
+\subsection{FID}	
 % TODO quelle: https://wandb.ai/ayush-thakur/gan-evaluation/reports/How-to-Evaluate-GANs-using-Frechet-Inception-Distance-FID---Vmlldzo0MTAxOTI
 Die Bewertung von Trainingserfolgen durch GANs ist nicht trivial, denn für die Bewertung muss die Qualität der generierten Bilder eingeschätzt werden.
 Erstmals in \cite{fid} wurde dafür der \acrfull{FID} aufgezeigt.
@@ -220,6 +178,9 @@ Auch die Vielfalt wird bewertet, indem zum Beispiel Mode-Collaps als negativ bew
 \end{figure}
 
 \section{Hyperparameter}
+\todo{was ist ein hyperparemter?}
+\subsection{Auswahl an Hyperparametern}
+
 \subsubsection{Learning-Rate}
 Die Learning-Rate entspricht dem Faktor \(\alpha\), welcher die Intensität des Gradientenabstiegs bestimmt:  
 \begin{equation}
@@ -232,6 +193,11 @@ Bei zu kleinem \(\alpha\) konvergiert der Fehler zu langsam oder bleibt in einem
 Es ist anzumerken, dass die oben gezeigt Formel dem einfachen Gradientenabstieg entspricht.
 Normalerweise werden fortgeschrittenere Algorithmen angewendet, welche jedoch weiterhin auf dem Gradientenabstieg basieren.
 So können weitere Parameter, wie das \textit{Momentum} die Abstiegsweite beeinflussen.
+\newline
+
+Für alle Architekturen wird der Adam-Optimierungs-Algorithmus angewendet.
+\todo{warum? 1. bekannt / standart, 2. schnelle ergebnisse}
+\todo{wie funktioniert er grob?}
 
 \subsubsection{Batch-Size}
 Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter und wird in unterschiedlichen Tutorials referenziert \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery}.
@@ -247,8 +213,6 @@ Ein Experiment über kleine Batch-Größen im Bezug auf Neuronale Netze kam zu f
 Eine kleinere Batch-Size führt dazu, dass der Fehler speziellere Fälle abbilden kann und damit eine Generalisierung unterbunden wird \cite{tutorial:tune-batch-size-machinelearningmastery}.
 Jedoch ergibt sich aus einer kleineren Batch-Size ein Leistungs-Problem: die Berechnung des Fehlerwerts und die anschließende Optimierung der Gewichte wird häufiger durchgeführt.
 Das führt logischerweise zu einer längeren Trainingsdauer pro Epoche.
-Deshalb muss ein Kompromiss gefunden werden.
-$32$ und $64$ wird in Papers oder Tutorials häufig als ein guter Standartwert angegeben \cite{default-batch-size}. \todo{64 auch? (nur hinzugefügt, damit wir die Zahl unten referenzieren können)}
 
 \subsubsection{Dropout}
 Der Dropout definiert die Größe eines zufälligen Anteils an Neuronen, die dann inklusive ihrer Verbindungen im Training deaktiviert werden.
@@ -275,8 +239,7 @@ Sollte der Generator diese Änderungen lernen, kann er den Discriminator täusch
 
 \todo{Smoothness durch Onesided Label Smoothing ersetzen oder erklären, dass beides das gleiche ist?}
 
-
-\section{Verfahren zur Bestimmung von Hyperparametern}
+\subsection{Verfahren zur Bestimmung von Hyperparametern}
 \label{chapter:verfahren-bestimmung-hyperparameter}
 \todo{Quelle \cite{hyperparameters-search}}
 
@@ -288,7 +251,7 @@ Für die Suche nach optimalen Hyperparametern gibt es verschieden Verfahren, die
 Dabei wird sich auf die Grid Search, Random Search und den Genetic Algorithm beschränkt, da diese die beliebtesten Algorithmen zur Optimierung sind \cite{hyperparameters-search-comparison-focus-genetic}.
 Die Verfahren werden zusätzlich mit der manuellen Suche verglichen, um eine allgemeinere Einschätzung gewährleisten zu können.
 
-\subsection{Manuelle Suche}
+\subsubsection{Manuelle Suche}
 Die manuelle Suche ist das simpelste vorgestellt Verfahren.
 Hierfür werden nur die Hyperparameter vor jedem Training manuell festgelegt.
 Nach einem Trainingsdurchlauf können dann die Ergebnisse analysiert, Hyperparameter angepasst und die verbesserte Version erneut trainiert werden.
@@ -296,7 +259,7 @@ Nach einem Trainingsdurchlauf können dann die Ergebnisse analysiert, Hyperparam
 %Die manuelle Suche ist vor allem bei unwichtigen Hyperparametern sinnvoll, da dort bekannte Standardwerte gesetzt werden können.
 %Für eine gründliche Suche aller Hyperparameter ist die manuelle Suche allerdings viel zu aufwändig.
 
-\subsection{Grid Search}
+\subsubsection{Grid Search}
 Bei der Grid Search \cite{hyperparameters-grid-search} werden zunächst die zu untersuchenden Hyperparameter ausgewählt.
 Danach erfolgt die Definition eines Suchintervalls inklusive Intervallschritten für jeden Hyperparameter.
 Schließlich wird das neuronale Netzwerk für jede Kombination der Hyperparameterwerte trainiert und die Ergebnisse der einzelnen Durchläufe festgehalten.
@@ -312,7 +275,7 @@ Der exakte Aufwand hängt dabei stark von der Anzahl der möglichen Kombinatione
 Da die Anzahl der Kombinationen der Hyperparameter exponentiell \todo{begründen?} wächst, nimmt auch der Aufwand mit der Anzahl an Werten sehr stark zu.
 Durch die Möglichkeit von Parallelisierung findet die Grid Search in der Regel bessere Parameter als die sequentielle manuelle Suche in der gleichen Zeit \cite{hyperparameters-random-search}.
 
-\subsection{Random Search}
+\subsubsection{Random Search}
 Die Random Search \cite{hyperparameters-random-search} funktioniert ähnlich wie die Grid Search, nur werden zufällige Werte statt einem festgelegten Werteraster erzeugt.
 Die zufälligen Werte haben den Vorteil, dass es weniger Werte-Überlagerungen im Vergleich zur den Raster-Kombinationen gibt, wie in \cref{randomsearch-vs-gridsearch} dargestellt.
 Deswegen kann die zufällige Suche bei gleich vielen Durchläufen ein größeres Spektrum an Ergebnissen abdecken.
@@ -343,7 +306,7 @@ Aufgrund ihrer Ähnlichkeit teilt sich die Random Search auch das Problem der Re
 Sobald ein sehr großes Spektrum an Hyperparametern untersucht werden soll, benötigt sie sehr viel Zeit.
 Je nach zusätzlichen Optimierungen für die Wahl der Zufallswerte lässt sich die Random Search auch nicht unbedingt parallelisieren, was zu einer sehr langen Laufzeit führen kann.
 
-\subsection{Genetic Algorithm}
+\subsubsection{Genetic Algorithm}
 Der Genetic Algorithm \cite{hyperparameters-genetic-algorithm} wandelt die Hyperparametersuche in einen evolutionären Entwicklungsprozess um.
 Der Evolutionsaspekt des Algorithmus ist dabei eine Anlehnung an die natürliche Entwicklung in der Natur.
 Diese Entwicklung zeichnet sich durch die Operatoren \textit{Selektion}, \textit{Kombination} und \textit{Mutation} aus, die der Algorithmus verwendet .
@@ -362,8 +325,47 @@ Dadurch kann mit sehr großen Mengen an Hyperparametern umgegangen werden.
 Allerdings ist der Genetic Algorithm vergleichsweise langsam, da die Evolutionsschritte sequentiell ablaufen müssen.
 Erst bei einer hohen Anzahl an Hyperparametern oder einem sehr großen Suchraum ist der Genetic Algorithm effizienter als eine Grid Search \cite{hyperparameters-search-comparison-focus-genetic}.
 
-\section{Datensätze}
-\todo[inline, shadow]{\cite{dataset:four-shapes, dataset:2d-geometric-shapes-dataset} erklären}
+\section{DeepLearning Framework}
+Die Implementierung von DeepLearning-Algorithmen ist im Bereich der Künstlichen Intelligenzen eine bedeutende Thematik.
+Vor allem die effiziente Ausnutzungen gegebener Hardware stellt eine enorme Herausforderung dar. 
+Deshalb existieren über verschiedene Abstraktions-Level diverse Frameworks und Bibliotheken, welche die Arbeit deutlich erleichtern.
+\newline
+
+Aufgrund der hohen Rechenkern-Anzahl und der daraus resultierende Multithreading-Charakteristik, eignen sich Grafikkarten besonders gut für DeepLearning-Berechnungen \cite{gpu-for-dl}.
+Grafikarten Hersteller stellen dafür Low-Level-APIs bereit, in denen Routinen wie Matrix-Multiplikationen oder Aktivierungs-Funktionen hardware-beschleunigt werden.
+Dabei kann in den Zugang zu allgemeinen GPU-Operationen (API-Beispiel: CUDA) oder speziellen Funktionen für DeepLearning und Neuronale Netze (API-Beispiel: cuDNN) unterschieden werden.
+\newline
+
+Als Entwickler von DeepLearning-Anwendungen sind jedoch solche hardwarenahen Aufrufe häufig zu aufwendig.
+Deshalb haben sich in der Industrie und Forschung DeepLearning Frameworks entwickelt, welche Algorithmen weiter zusammenfassen und abstrahieren.
+Zu den am weitesten verbreiteten gehören unter anderem PyTorch, Caffe, TensorFlow und MXNet \cite{dl-framework-evaluation}. \todo{bessere quelle}
+Auch wenn sie sich einige architektonische Ansätze teilen, unterscheiden sich die Frameworks jedoch in der genauen Implementierung und Technik \cite{dl-framework-evaluation}.
+Der größte Unterschied ist jedoch die Popularität der Frameworks.
+Gemessen an Github Sternen sind TensorFlow (164k) \cite{github-tensorflow} und PyTorch (55k) \cite{github-pytorch} die bekanntesten, weshalb sie im Folgenden näher analysiert werden.
+
+\subsection{TensorFlow und PyTorch}
+%TODO in Methodik?
+TensorFlow und PyTorch weichen in einigen technischen Eigenschaften, wie der Graphen Definition und dem verteilten Training von aneinander ab \cite{pytorch-vs-tensorflow}.
+Allerdings sind diese Charakteristiken im Rahmen der allgemeinen Architektur Untersuchung wenig relevant.
+Für die Evaluierung selbst ist eine gute Visualisierung der Trainingsdaten und -ergebnisse wichtig.
+Außerdem soll die Schnittstelle möglichst einfach sein, damit ohne großen Aufwand verschiedene Architekturen implementiert und getestet werden können.
+Mittels Tensorboard bietet Tensorflow hierbei eine natives und sehr umfangreiches Werkzeug an.
+PyTorch besitzt keine vergleichbaren Funktionen, stattdessen gibt es einen offiziellen Anleitungsartikel zur Integration mit Tensorboard \cite{pytorch-tensorboard-offical-documentation}.
+
+Aufgrund der nativen Unterstützung von Tensorboard wurde sich für TensorFlow als DeepLearning Framework entschieden.
+
+\subsection{Tensorboard}
+Hinsichtlich der Visualisierung bietet TensorFlow das direkt integrierte Tensorboard.
+Ohne großen Mehraufwand können so Metriken visualisiert, Modell-Graphen dargestellt oder generierte Bilder verglichen werden \cite{tensorboard}.
+PyTorch besitzt keine vergleichbaren nativen Visualisierungstool, aber eine Möglichkeit zur Darstellung in Tensorboard.
+
+\subsection{Keras}
+Zwar ist TensorFlow im Vergleich zu CUDA bereits eine High-Level-API, allerdings fallen die API-Aufrufe weiterhin sehr detailliert aus.
+Dadurch sind hoch flexible Modelle und Training-Loops möglich.
+Bei optimierten Anwendungen garantiert das große Freiheiten, ist jedoch im Rahmen der Studienarbeit zu umständlich und komplex.
+Da in dieser Arbeit grundlegende Architekturen untersucht werden sollen, wird zusätzlich die Keras API \cite{keras} verwendet.
+Ursprünglich als unabhängiges Framework entwickelt, ist Keras seit TensorFlow 2.0 ein fester Bestandteil der Bibliothek.
+Keras stellt eine weitere Abstraktion-Stufe dar, wodurch Modelle sehr einfach beschrieben und vordefinierte Traings-Loops verwendet werden können.
 
 \section{Related Work}
 \label{chapter:related-work}
