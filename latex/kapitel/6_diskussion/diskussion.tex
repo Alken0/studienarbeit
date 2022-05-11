@@ -2,101 +2,73 @@
 % !TeX spellcheck = de_DE
 
 \chapter{Diskussion}
-%TODO Aufbau nach: https://www.scribbr.de/aufbau-und-gliederung/diskussion-bachelorarbeit/
-
-In Rahmen der Studienarbeit wurden diverse CGAN Architekturen zur Generierung von geometrischen Figuren untersucht.
-Bei den Figuren handelt es sich um Kreise, Quadrate und Dreiecke, die in unterschiedlicher Größe auf dem Bild verteilt sein können.
-Je nach Eingabelabel soll dann das GAN bestimmte Figuren generieren.
-Für den Vergleich wurden alle Architekturen mit der jeweiligen Hyperparametersuche für 100 Epochen auf die Bilder trainiert.
-In diesem Kapitel werden die Ergebnisse analysiert, interpretiert und eingeordnet.
+Ziel der Studienarbeit ist es, möglichst gute Architekturen inklusive Hyperparameterkombinationen zu finden.
+Dafür werden in diesem Kapitel die Trainingsergebnisse des Dense-, und DC-GANs verglichen und interpretiert.
 
 \section{Zusammenfassung der Ergebnisse}
 Die besten Ergebnisse erzielt das Dense GAN, das ausschließlich aus Dense Layern besteht.
 Es ist in der Lage erkennbare Figuren zu erzeugen, die vom vorgegebenen Label abhängig sind.
-Allerdings hat das Dense GAN Schwierigkeiten mit Rauschen.
-So sind immer wieder kleinere Pixelfragmente im Hintergrund zu sehen, die nicht zur eigentlichen Figur gehören.
+Dabei ist anzumerken, dass der beste FID-Wert nicht mit den subjektiv besten Ergebnissen übereinstimmt.
 \newline
 
-Alle anderen Architekturen besitzen Convolutional Layer, wobei es sich entweder Discriminator, Generator oder bei beiden Netze um Deep Convolutional Networks handelt.
-All diese Architekturen haben deutlich weniger Probleme mit Hintergrundrauschen.
-Jedoch ist die Qualität der Bilder trotzdem deutlich schlechter als beim Dense GAN.
-Hauptproblem ist, dass immer ein bis zwei Einheitsfiguren erzeugt werden, statt den gewünschten Figuren.
-Die Einheitsfiguren ähneln am ehesten dem Quadrat oder Kreis und werden vom GAN an verschiedenen Stellen in unterschiedlichen Größen im Bild platziert.
-Zwar handelt es sich nicht um einen Mode Collapse, weil sich die Bilder unterscheiden, das Label wird aber auch nicht erkennbar in den Gernierungsprozess einbezogen.
+Nach einem zusätzlichen Training einer vielversprechenden Architektur sind die Figuren auch deutlich klarer abgebildet.
+Allerdings hat das Dense GAN immer starke Schwierigkeiten mit Rauschen.
+So sind zum einen immer Pixelfragmente im Bild zu erkennen, zum anderen besitzen die Formen keine klaren Ränder.
+
+\begin{figure}[H]
+	\centering
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/good_example.png}}
+	\qquad
+	\subfloat[][]{\includegraphics[height=0.35\textheight]{kapitel/5_ergebnisse/densegan/good_example_long.png}}
+	\label{ergebnis:densegan-zusammenfassung}
+	\caption[]{\textbf{a)} die subjektiv besten Ergebnisse nach regulärem Training; \textbf{b)} Ergebnisse nach zusätzlichem Training; \\auf beiden Bildern lässt sich starkes Rauschen erkennen}
+\end{figure}
+
+Probleme mit Rauschen existieren beim DC-GAN fast gar nicht, die Figuren sind alle sehr klar abgebildet.
+Es existieren auch vergleichsweise wenig zusätzliche Pixelfragmente und wenn gibt es zumindest ähnliche Formmerkmale bei beiden Fragmenten, wie in \cref{ergebnis:dcgan-fid-zusammenfassung} zu sehen.
+\newline
+
+Allerdings ist die Bildqualität der DC-GAN-Bilder deutlich schlechter.
+Oftmals wird eine Figur erzeugt, die Merkmale mehrere Kategorien besitzt.
+Dadurch lässt sich nicht immer eindeutig eine Figur zuordnen.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/dcgan/fid_circle.png}
+	\label{ergebnis:dcgan-fid-zusammenfassung}
+	\caption[]{\textbf{Oben Links:} ein Kreis mit einer geraden Kante; \textbf{Mitte Rechts:} zwei Pixelfragmente mit den schrägen Kanten eines Dreiecks}
+\end{figure}
+
 
 \section{Interpretation der Ergebnisse}
-Zunächst zeigt sich, dass die Kombination aus Dense und Deep Convolutional GAN keinen Vorteil gegenüber Architektur-Reinformen verschafft.
-Stattdessen verhalten sie sich sehr ähnlich zu den Deep Convolutional GANs.
+Beide Architekturen erzeugen Bilder, die Gemeinsamkeiten mit den Trainingsdaten aufzeigen.
+Unterschiede gibt es vor allem beim Rauschen und der Unterscheidbarkeit der Figuren.
 
-Die besten Ergebnisse erzielt das Dense GAN.
-Alle anderen 
-\subsubsection{Convolutional Layer im Vergleich zu Dense Layern}
-Die Ergebnisse zeigen deutlich, dass die Convolutinonal Layer keinen positiven Einfluss auf das Endresultat haben, auch nicht in Kombination mit Dense Layern.
-Stattdessen neigen sie viel mehr zu einer Einheitsfiguren, die eine Mischung aus Kreis und Quadrat darstellt.
-Alleine das Dense-GAN schafft, Figuren korrekt nach Label darzustellen.
+\subsubsection{Rauschen}
+Das Dense-GAN hat größere Probleme mit Rauschen.
+Das lässt sich auf die Layerarchitektur zurück führen, da im Gegensatz zu Convolutional Layern die Pixel separater betrachtet werden.
+So erzeugt das DC-GAN zusätzliche Figuren als Fragmente, während beim Dense-GAN einzelne Pixel falsch eingefärbt werden.
 
-Hingegen ein positiver Aspekt bei der Vewendung von Convolutional Layern ist die Absenz oder zumindest deutliche Reduktion von Hintergrundrauschen.
-In diesem Bereich hat das Dense GAN deutlich mehr Probleme.
-
-\subsubsection{Labelsensitivität}
-Wie bereits angesprochen zeigen die Ergebnisse, dass alle GANs bis auf das Dense-GAN erhebliche Probleme haben, korrekte Bilder nach Label zu erzeugen.
-Statt verschiedenen Formen wird oftmals nur eine Standardform produziert, die einer Mischung aus Kreis und Quadrat ähnlich ist.
-Es handelt sich dabei zwar um keinen mode-collapse, da die Figuren immer unterschiedlich aussehen, aber die GANs sind nicht Label-sensitiv.
-
-Das könnte daran liegen, dass sich die Figuren bei geringer verpixelter Auflösung ähneln.
-Insbesondere, wenn die Figuren kleiner auf dem Bild abgebildet sind, als die maximale Bildgröße erlauben würde.
-Dadurch könnte ein Ungleichgewicht gegenüber der Dreiecksfigur entstehen, was dann den Lernprozess beeinflusst.
-\newline
-
-
-
-Interessant ist auch die 
-
-\begin{enumerate}
-	\item GAN hat Label nicht richtig beachtet
-	\begin{enumerate}
-		\item Formen (Kreis, Quadrat) zu ähnlich?
-	\end{enumerate}
-
-	\item gemischte Architektur kein Vorteil
-	\begin{enumerate}
-		\item weil dc-gan allgemein nicht gut?
-		\item weil sie nicht gut zusammen trainieren?
-	\end{enumerate}
-
-	\item FID
-	\begin{enumerate}
-		\item FID Wert nicht so aussagekräftig wie angepriesen
-		\item weil Bilder untypisch klar definiert sind?
-	\end{enumerate}
-\end{enumerate}
+\subsubsection{Unterscheidbarkeit der Formen}
+Beide GANs neigen zur Vermischung von Eigenschaften unterschiedlicher Figuren, zum Beispiel ein Kreis mit einer geraden Kante.
+Durch das prototypische Zusatztraining beim Dense GAN nehmen die Ähnlichkeiten zwischen den Figuren aber ab.
 
 \section{Beschränkung der Forschung}
-\begin{enumerate}
-	\item Hardware
-	\begin{enumerate}
-		\item geringe Anzahl an Hyperparametern
-		\item eventuell zu kleine Netze?
-	\end{enumerate}
-\end{enumerate}
+Für das Training und somit auch die Ergebnisse war insbesondere die verfügbare Hardware ein große Beschränkung.
+Mit besserer Hardware hätten unter anderem mehr Hyperparameterkombinationen ausprobiert oder ein deutlich längeres Training durchgeführt werden.
+\newline
+
+Die Trainingsdaten besitzen auch kein Bildrauschen oder ähnliche Verfälschungen.
+Das würde das Training zusätzlich erschweren, aber gleichzeitig die entstehenden Netze robuster machen.
 
 \section{Ausblick}
-% TODO Empfehlungen für weiterführende Forschung
-\begin{enumerate}
-	\item Bilder mehr preprocessen?
-	\begin{enumerate}
-		\item oft werden Bilder gecroppt/skaliert um bestimmte Größe zu passen
-		\item unterschiedliche Position der Formen zu schwer?
-		\item Viereck und Kreis ähneln sich relativ stark im Vergleich zum Dreieck
-		\item durch sehr klare definierte Formen sehr hohe Ansprüche ans Ergebnis
-	\end{enumerate}
+Für zukünftige Forschung lassen sich insbesondere die Trainingsdaten weiter anpassen und die angesprochene Verfälschung der Bilder einbauen.
+Außerdem besteht die Möglichkeit die Figuren auf den Figuren alle zu zentrieren und skalieren, sodass sie das Bild komplett ausfüllen.
+Das ist insofern interessant, als dass das mit Algorithmen möglich ist, es wird kein Training benötigt.
+Folglich könnten die Daten in der Vorverarbeitung (Preprocessing) dementsprechend angepasst werden.
+Dann könnte ein Vergleich zwischen vorverarbeiteten und unvorverarbeiteten Daten gezogen werden.
+\newline
 
-	\item Architektur mit erst Dense dann Großflächigen Convolutional Layer am Ende gegen Rauschen?
-
-	\item bessere Hardware verwenden
-	\begin{enumerate}
-		\item Genetic Algorithm
-		\item evt sogar Architektur allgemein die Layer als HP definieren
-		\item mehr Epochen trainieren
-	\end{enumerate}
-\end{enumerate}
+Des Weiteren können die vorgestellten Architekturen weiter trainiert werden.
+Wie durch das Dense GAN gezeigt, können die Ergebnisse mit mehr Training noch weiter verbessert werden.
+Zusätzlich könnten bei viel Hardware Kapazitäten auch die Hyperparameter noch einmal mit dem Genetic Algorithm optimiert werden.
