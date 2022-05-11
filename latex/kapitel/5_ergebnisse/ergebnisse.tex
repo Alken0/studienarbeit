@@ -37,17 +37,17 @@ Bei den gewählten Werten lassen sich kaum Tendenzen erkennen, wie in der Abbild
 \end{figure}
 
 Bei der Lernrate wurden die besten Ergebnisse bei gleichen Werten für Diskriminator und Generator erreicht.  
-In der Abbildung \ref{ergebnis:densegan-lr} ist zu erkennen, dass bei einer Lernrate von \(2e-3\) (a), die niedrigsten FID-Werte erreicht wurden.
-Ähnlich niedrige Werte wurden mit Lernraten zwischen \(2e-4\) und \(3e-4\) erreicht, wie im rechten Teil (b) zu erkennen ist.
- 
- \begin{figure}[H]
- 	\centering
- 	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/hyperparameter_lr_same.PNG}}
- 	\qquad
- 	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/hyperparameter_lr_low.PNG}}
- 	\caption{Einfluss der Lernrate auf die FID-Werte des DENSE-GAN}
- 	\label{ergebnis:densegan-lr}
- \end{figure}
+In der Abbildung \ref{ergebnis:densegan-lr} ist zu erkennen, dass bei einer Lernrate von $2\mathrm{e}{-3}$ (a), die niedrigsten FID-Werte erreicht wurden.
+Ähnlich niedrige Werte wurden mit Lernraten zwischen $2\mathrm{e}{-4}$ und $3\mathrm{e}{-4}$ erreicht, wie im rechten Teil (b) zu erkennen ist.
+
+\begin{figure}[H]
+	\centering
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/hyperparameter_lr_same.PNG}}
+	\qquad
+	\subfloat[][]{\includegraphics[width=0.45\linewidth]{kapitel/5_ergebnisse/densegan/hyperparameter_lr_low.PNG}}
+	\caption{Einfluss der Lernrate auf die FID-Werte des Dense-GAN}
+	\label{ergebnis:densegan-lr}
+\end{figure}
 
 \subsection{Bilder}
 Wie bereits beschrieben, werden neben den Hyperparameter und Metriken auch generierte Bilddaten protokolliert.
@@ -101,9 +101,9 @@ Das kann in Abbildung \ref{ergebnis:dcgan-hyper-dropout} betrachtet werden.
 	\label{ergebnis:dcgan-hyper-dropout}
 \end{figure}
 
-Bei einer beidseitigen Lernrate von \(2e-3\), sind zwar die FID-Werte der Quadrate tendenziell klein, jedoch gilt das nicht für die anderen beiden Figuren.
+Bei einer beidseitigen Lernrate von $2\mathrm{e}{-3}$, sind zwar die FID-Werte der Quadrate tendenziell klein, jedoch gilt das nicht für die anderen beiden Figuren.
 Dies kann man gut in der Abbildung \ref{ergebnis:dcgan-lr} (a) erkennen.
-Im Gegenzug ist bei einer deutlich kleineren Diskriminator-Lernrate im Bereich von \(2e-4\) bis \(3e-4\) und gleichbleibenden Generator-Lernrate von \(2e-3\), das Ergebnis umgekehrt.
+Im Gegenzug ist bei einer deutlich kleineren Diskriminator-Lernrate im Bereich von $2\mathrm{e}{-4}$ bis $3\mathrm{e}{-4}$ und gleichbleibenden Generator-Lernrate von $2\mathrm{e}{-3}$, das Ergebnis umgekehrt.
 In der Abbildung \ref{ergebnis:densegan-lr} (b) wird visualisiert, dass die FID-Werte der Kreise und Dreiecke minimal werden.
 Zwar nimmt die Metrik für das Quadrat nicht den kleinsten Wert an, jedoch bewegen sich die Ergebnisse auch hier im niedrigen Bereich. 
 
@@ -132,14 +132,3 @@ In der subjektiven Suche konnte kein Training gefunden werden, welches eine Gene
 	\caption{Niedrigsten FID-Werte beim DC-GAN}
 	\label{ergebnis:dcgan-fid}
 \end{figure}
-
-\section{DC Generator und Dense Discriminator}
-
-\section{Dense Generator und DC Discriminator}
-
-\section{DC-GAN-Medical-Inspired}
-\begin{itemize}
-	\item Tensorboard grafik
-	\item Beste Bilder
-	\item Hyperparameter Analyse
-\end{itemize}
