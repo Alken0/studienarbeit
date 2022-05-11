@@ -69,6 +69,179 @@ Allerdings ist eine Form immer vollständig im Bild abgebildet und wird vom Bild
 	\caption{Auswahl an zufällig generierten Trainingsbilder}
 \end{figure}
 
+\section{Bewertungskriterien}
+\todo[inline,shadow]{Vor Training schieben! (und nochmal gucken, ob es dann passt, weil FID wird in Logs benutzt)}
+\todo[inline, shadow]{FID in Stand der Technik erklären}
+Damit ein Vergleich zwischen den Architekturen gezogen werden kann, müssen Kriterien für ein erfolgreich trainiertes GAN klar definiert werden.
+Als Erfolgskriterien zählen in diesem Fall die Varietät der generierten Bilder und die Korrektheit der generierten Figuren.
+Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
+
+\subsection{Varietät}
+Die Varietät bezieht zum einen auf die Ähnlichkeit zwischen Trainingsbildern und den generierten Bildern der GANs.
+Die Ähnlichkeit zwischen diesen beiden Bildersets beschreibt, wie gut das GAN 'etwas neues schaffen' kann, oder ob es nur Trainingsbilder dupliziert.
+Sollte die Ähnlichkeit sehr gering sein, werden viele 'neue' Bilder generiert, was sehr positiv zu bewerten ist.
+\newline
+
+Zudem bezieht sich die Varietät auf die generierten Bilder untereinander.
+Sie sollten auch möglichst verschieden sein, was oftmals nicht der Fall ist.
+Das Phänomen ist als 'mode-collapse' bekannt. \todo{ist mode-collapse im stand der technik?}
+% https://scikit-image.org/docs/0.12.x/api/skimage.measure.html#skimage.measure.compare_ssim
+
+\subsection{Korrektheit}
+Neben der Varietät besitzt auch die Korrektheit eine hohe Bedeutung für die Bewertung der GANs.
+Dafür muss sichergestellt werden, dass die richtige Figur zum zugehörigen Label generiert wurde und erkennbar ist.
+Die Figuren müssen außerdem den gleichen Kriterien wie die Trainingsdaten genügen, das heißt, die Figuren sollten zum Beispiel vollständig innerhalb des Bildes abgebildet sein.
+\newline
+
+Ein weiterer wichtiger Aspekt der Bilder ist das Verhalten im Hintergrund der Figur.
+So sollten im Hintergrund möglichst keine anderen Figuren oder Pixelfragmente erzeugt werden.
+
+\subsection{Bestimmung}
+Sowohl Varietät als auch Korrektheit können mit der \acrlong{FID} \cite{frechet-inception-distance} gemessen werden.
+Dadurch wird ein objektiver Vergleich zwischen den Architekturen gewährleistet.
+\newline
+
+Zusätzlich erfolgt eine manuelle Überprüfung der Endresultate.
+Eine manuelle Überprüfung ist zwar subjektiv, verhindert allerdings, dass gute Ergebnisse aufgrund von Ungenauigkeiten der \acrshort{FID} übersehen werden.
+
+\section{Training}
+Im Trainingsprozess werden verschiedene Architekturen mit unterschiedlichen Hyperparametern getestet.
+Die ausgewählten Architekturen orientieren sich an bereits existierender Forschung und Tutorials (siehe \cref{chapter:related-work}).
+Insbesondere aufgrund der Label-Abhängigkeit (im Rahmen der Studienarbeit entsteht ein Conditional-GAN) werden jedoch Anpassungen erfolgen.
+
+
+\subsection{Auswahl zu optimierender Hyperparameter}
+Die eigentliche Suche und Optimierung der Hyperparameter läuft automatisch ab.
+Allerdings können aufgrund von endlichen Ressourcen nicht alle Hyperparameter-Kombinationen getestet werden.
+Darum muss sich zuvor manuell auf die vielversprechenden Hyperparameter beschränkt werden.
+\newline
+
+Natürlich existieren so genannte Auto-Machine-Learning Systeme, welche ohne Vorauswahl vollautomatisch Architektur und Hyperparameter optimieren können. 
+Jedoch erreichen diese nicht immer die gleiche Leistung wie manuell optimierte Modelle.
+So zeigt eine Versuch aus dem Jahre 2021, dass die Bibliothek AutoKeras \cite{auto-keras} auch nach 24 Stunden Optimierungs-Zeit nicht die Genauigkeit eines von Hand eingestellten Modells erreicht \cite[S. 2036]{dl-framework-evaluation}.
+\newline
+
+Die auszuwählenden Hyperparameter sollen dabei zum einen eine vergleichsweise hohe Auswirkung auf den Trainingserfolg haben.
+Zum anderen sollen sie sehr allgemein sein, um sie gleichermaßen auf die verschiedenen Architekturen anwenden zu können.
+Das garantiert eine bessere Vergleichbarkeit zwischen den Architekturen.
+\newline
+
+Die Hyperparameter \textit{Batch-Size}, \textit{Learning-Rate Generator}, \textit{Learning-Rate Discriminator}, \textit{Dropout} und \textit{Smoothness} entsprechen diesen Voraussetzungen.
+
+\subsubsection{Learning-Rate}
+Die Learning-Rate entspricht dem Faktor \(\alpha\), welcher die Intensität des Gradientenabstiegs bestimmt:  
+
+\[\theta_{}  =  \theta_{}  - \alpha   \nabla_{ \theta }  J( \theta )  \]
+
+\todo[]{mit quellen backen}
+Bei zu großem \(\alpha\) kann der Trainings-Fehler anfangen zu oszillieren oder sogar größer werden.
+Bei zu kleinem \(\alpha\) konvergiert der Fehler zu langsam oder bleibt in einem lokalen Minimum stehen. 
+Es ist anzumerken, dass die oben gezeigt Formel dem einfachen Gradientenabstieg entspricht.
+Normalerweise werden fortgeschrittenere Algorithmen angewendet, welche jedoch weiterhin auf dem Gradientenabstieg basieren.
+So können weitere Parameter, wie das \textit{Momentum} die Abstiegsweite beeinflussen.
+\newline
+
+Daraus lässt sich schließen, dass im Fall von Adam die Lernrate vor allem am Anfang des Trainings bedeutend ist.
+Nichtsdestotrotz hat die Learning-Rate auch einen großen Einfluss auf das Ergebnis und gilt allgemein als einer der wichtigsten Hyperparameter \cite[S. 447]{learning-rate-most-important}. 
+\newline
+
+Die Signifikanz sticht vor allem bei einem GAN heraus, da dort die Learning-Rate für Generator und Discriminator unabhängig gesetzt werden kann.
+Unterschiedliche Werte können dazu führen, dass eines der Modelle seinen Gegenspieler völlig dominiert.
+Auf der anderen Seite, können mittels unterschiedlichen Parameter etwaige Schwächen eines Modells ausgeglichen werden.
+Es ist also dementsprechend wichtig, mehrere Kombinationen von verschiedenen Lernraten zu untersuchen.
+\newline
+
+Vor der Studienarbeit gesammelte Erfahrungen haben gezeigt, das eine Lernrate im Bereich von \(2e-3\) bis \(2e-5\) für die geplanten Modelle gut funktionieren.
+Außerdem wurden diese Werte häufig in Adam-bezogene Tutorials referenziert \cite{adam-tutorial}.
+Für die Hyperparamter-Suche werden deshalb für Generator und Discriminator die gleichen vier Lernraten festgelegt:
+
+\begin{center} \(2e-3\), \(2e-4\), \(3e-4\) und \(2e-5\). \end{center}
+
+Einerseits ist so ein symmetrischen Training mit guten Erfahrungswerten möglich.
+Anderseits sollen durch die gewählten Werte asymmetrische Trainings mit drei verschiedenen Abständen untersucht werden:
+\begin{itemize}
+	\item ein sehr großer Abstand von zwei Dezimalstellen
+	\item ein großer Abstand von einer Dezimalstelle
+	\item ein kleiner Abstand von \(1e-4\)
+\end{itemize}	
+
+\subsubsection{Batch-Size}
+
+Deshalb muss ein Kompromiss gefunden werden.
+\newline
+
+\(32\) wird in Papers oder Tutorials häufig als ein guter Standartwert angegeben \cite{default-batch-size}.
+Jedoch sollen in der Studienarbeit mehre Architekturen mit einer großen Anzahl an Hyperparametern untersucht werden.
+Gleichzeit sind die verfügbaren Ressourcen begrenzt, weshalb eine größere Batch-Size eine schnellere Hyperparameter-Suchen ermöglichen würde.
+Aus diesem Grund wird für die erste Untersuchung neben der Batch-Size von \(32\) auch \(64\) getestet.
+
+\todo[]{begründung und welche werte und warum} 
+\subsubsection{Dropout}
+Beim Dropout wird ein gewisser Teil der Neuronen einer Schicht deaktiviert.
+Das passiert jedoch nur während dem Training und führt dazu, -> gegen overfitting
+https://machinelearningmastery.com/dropout-for-regularizing-deep-neural-networks/
+
+
+
+\todo[]{begründung und welche werte und warum} 
+\subsubsection{Smoothness}
+Die Smoothness entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-onesided-label-smoothing}.
+\newline
+
+Alle festgelegten Hyperparameter finden sich in der folgenden Tabelle \ref{table:hyperparameter} nochmals zusammengefasst.
+Dementsprechend müssen insgesamt 72 Kombinationen pro Architektur getestet werden. \todo{72 nicht korrekt}
+Es ist jedoch anzumerken, dass spätere Anpassungen an der Hyperparameter-Auswahl möglich sind.
+Vor allem falls es sich heraus stellt, dass einige Werte in keiner Kombination gute Ergebnisse erzeugen.
+
+\todo{tabelle nicht korrekt}
+\begin{table}[H]
+	\centering
+	\label{table:hyperparameter}
+	\begin{tabular}{l l}
+		Name                        & Werte            \\ \hline
+		Batch Size                  & 16, 32           \\
+		Dropout                     & 0.3, 0.4         \\
+		Smoothness                  & 0, 0.1           \\
+		Learning-Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
+		Learning-Rate Generator     & 2e-3, 2e-4, 3e-4
+	\end{tabular}
+	\caption{Allgemeine Hyperparameter Auswahl}
+\end{table}
+
+\subsection{Trainingsablauf}
+Vor der Implementierung und Analyse der verschiedenen Architekturen werden zunächst die Trainingsdaten generiert.
+Danach erfolgt die Implementierung einer neuen Architektur und Festlegung der Hyperparameter.
+Schließlich wird das Training durchgeführt.
+Beim Training wird automatisch eine Grid Search durchgeführt und Logs für diverse Werte berechnet.
+Die Logs können im Anschluss mithilfe von Tensorboard visualisiert werden.
+
+\subsection{Logs}
+Während des Trainings wird eine Reihe von Logs zur Analyse erzeugt.
+Alle Metriken in den Logs werden dabei auf Testdaten angewendet, um ein Overfitting erkennen zu können.
+Die genauen Werte und die mit dem Logging verknüpften Intentionen werden im Folgenden erläutert.
+\newline
+
+Während dem Training werden mehrere Werte geloggt.
+Ein Wert ist dabei der Loss, sowohl für den Generator, als auch für den Discriminator.
+Der Loss wird für jede Epoche geloggt und ist vor allem zur Analyse des Trainingsprozesses interessant.
+So können schlechte Trainingsdurchläufe schon früher abgebrochen werden und zugehörige Architekturen verbessert werden.
+\newline
+
+Für die Auswertung sind vor allem die generierten Bilder und der \acrshort{FID}-Index relevant.
+Die Bilder werden nach jeder Epoche mit einer immer identischen Latent-Dim erzeugt.
+Dadurch ist eine bessere Vergleichbarkeit gewährleistet.
+Tensorboard erlaubt dann eine Ansicht mit Zeitachse, um den Lernprozess über die verschiedenen Epochen beobachten zu können.
+\newline
+
+Der \acrshort{FID}-Index ist sehr aufwändig zu berechnen.
+Deshalb wird er erst am Ende mit den finalen Bildern erzeugt.
+Bei einem Overfitting könnten so theoretisch schlechtere Ergebnisse für ein Modell entstehen.
+Durch eine zusätzliche manuelle Analyse über die einzelnen Epochen und der vergleichsweise geringen Epochenanzahl ist das Risiko einer potentiellen Verfälschung der Ergebnisse jedoch sehr gering.
+\newline
+
+Die gesammelten Daten sind alle nach Architektur und Hyperparameterkombination unterteilt abgespeichert.
+Die Unterteilung erlaubt die Auswahl einer möglichst optimalen Kombination aus beidem.
+
 \section{Verfahren zur Hyperparametersuche}
 \todo[inline, shadow]{einleitung?}
 
@@ -208,193 +381,6 @@ Die Verfahren sind vor allem aufgrund ihrer geringen Laufzeit bei wenigen Hyperp
 Ausschlaggebend unterscheiden sich die Verfahren nur in der Implementierung.
 Hierbei ist die Grid Search der Random Search etwas überlegen und wird deshalb implementiert.
 
-\section{Training}
-Im Trainingsprozess werden verschiedene Architekturen mit unterschiedlichen Hyperparametern getestet.
-Die ausgewählten Architekturen orientieren sich an bereits existierender Forschung und Tutorials (siehe \cref{chapter:related-work}).
-Insbesondere aufgrund der Label-Abhängigkeit (im Rahmen der Studienarbeit entsteht ein Conditional-GAN) werden jedoch Anpassungen erfolgen.
-
-
-\subsection{Auswahl zu optimierender Hyperparameter}
-Die eigentliche Suche und Optimierung der Hyperparameter läuft automatisch ab.
-Allerdings können aufgrund von endlichen Ressourcen nicht alle Hyperparameter-Kombinationen getestet werden.
-Darum muss sich zuvor manuell auf die vielversprechenden Hyperparameter beschränkt werden.
-\newline
-
-Natürlich existieren so genannte Auto-Machine-Learning Systeme, welche ohne Vorauswahl vollautomatisch Architektur und Hyperparameter optimieren können. 
-Jedoch erreichen diese nicht immer die gleiche Leistung wie manuell optimierte Modelle.
-So zeigt eine Versuch aus dem Jahre 2021, dass die Bibliothek AutoKeras \cite{auto-keras} auch nach 24 Stunden Optimierungs-Zeit nicht die Genauigkeit eines von Hand eingestellten Modells erreicht \cite[S. 2036]{dl-framework-evaluation}.
-\newline
-
-Die auszuwählenden Hyperparameter sollen dabei zum einen eine vergleichsweise hohe Auswirkung auf den Trainingserfolg haben.
-Zum anderen sollen sie sehr allgemein sein, um sie gleichermaßen auf die verschiedenen Architekturen anwenden zu können.
-Das garantiert eine bessere Vergleichbarkeit zwischen den Architekturen.
-\newline
-
-Die Hyperparameter \textit{Batch-Size}, \textit{Learning-Rate Generator}, \textit{Learning-Rate Discriminator}, \textit{Dropout} und \textit{Smoothness} entsprechen diesen Voraussetzungen.
-
-\subsubsection{Learning-Rate}
-Die Learning-Rate entspricht dem Faktor \(\alpha\), welcher die Intensität des Gradientenabstiegs bestimmt:  
-
-\[\theta_{}  =  \theta_{}  - \alpha   \nabla_{ \theta }  J( \theta )  \]
-
-\todo[]{mit quellen backen}
-Bei zu großem \(\alpha\) kann der Trainings-Fehler anfangen zu oszillieren oder sogar größer werden.
-Bei zu kleinem \(\alpha\) konvergiert der Fehler zu langsam oder bleibt in einem lokalen Minimum stehen. 
-Es ist anzumerken, dass die oben gezeigt Formel dem einfachen Gradientenabstieg entspricht.
-Normalerweise werden fortgeschrittenere Algorithmen angewendet, welche jedoch weiterhin auf dem Gradientenabstieg basieren.
-So können weitere Parameter, wie das \textit{Momentum} die Abstiegsweite beeinflussen.
-\newline
-
-Für alle Architekturen wird der Adam-Optimierungs-Algorithmus angewendet.
-\todo{warum? 1. bekannt / standart, 2. schnelle ergebnisse}
-\todo{wie funktioniert er grob?}
-Daraus lässt sich schließen, dass im Fall von Adam die Lernrate vor allem am Anfang des Trainings bedeutend ist.
-Nichtsdestotrotz hat die Learning-Rate auch einen großen Einfluss auf das Ergebnis und gilt allgemein als einer der wichtigsten Hyperparameter \cite[S. 447]{learning-rate-most-important}. 
-\newline
-
-Die Signifikanz sticht vor allem bei einem GAN heraus, da dort die Learning-Rate für Generator und Discriminator unabhängig gesetzt werden kann.
-Unterschiedliche Werte können dazu führen, dass eines der Modelle seinen Gegenspieler völlig dominiert.
-Auf der anderen Seite, können mittels unterschiedlichen Parameter etwaige Schwächen eines Modells ausgeglichen werden.
-Es ist also dementsprechend wichtig, mehrere Kombinationen von verschiedenen Lernraten zu untersuchen.
-\newline
-
-Vor der Studienarbeit gesammelte Erfahrungen haben gezeigt, das eine Lernrate im Bereich von \(2e-3\) bis \(2e-5\) für die geplanten Modelle gut funktionieren.
-Außerdem wurden diese Werte häufig in Adam-bezogene Tutorials referenziert \cite{adam-tutorial}.
-Für die Hyperparamter-Suche werden deshalb für Generator und Discriminator die gleichen vier Lernraten festgelegt:
-
-\begin{center} \(2e-3\), \(2e-4\), \(3e-4\) und \(2e-5\). \end{center}
- 
-Einerseits ist so ein symmetrischen Training mit guten Erfahrungswerten möglich.
-Anderseits sollen durch die gewählten Werte asymmetrische Trainings mit drei verschiedenen Abständen untersucht werden:
-\begin{itemize}
-	\item ein sehr großer Abstand von zwei Dezimalstellen
-	\item ein großer Abstand von einer Dezimalstelle
-	\item ein kleiner Abstand von \(1e-4\)
-\end{itemize}	
-
-\subsubsection{Batch-Size}
-Ähnlich wie die Learning-Rate ist auch die Batch-Size ein sehr beliebter Hyperparameter und wird in unterschiedlichen Tutorials referenziert \cite{tutorial:tune-batch-size-analyticsvidhya, tutorial:tune-batch-size-machinelearningmastery}.
-Die Batch-Size beschreibt, wie viele Traingsdaten verabeitet werden, um einen Gradientenabstieg der Gewichte durchzuführen.
-Grundsätzlich führt eine kleine Batch-Size zu besseren Ergebnissen.
-Ein Experiment über kleine Batch-Größen im Bezug auf Neuronale Netze kam zu folgenden Ergebnis: 
-
-\begin{center}
-	\enquote{In all cases the best results have been obtained with batch sizes m = 32 or smaller, often as small as m = 2 or m = 4.}\cite[S. 16, Z. 5-7]{small-batch-size}
-\end{center}
-
-Eine kleinere Batch-Size führt dazu, dass der Fehler speziellere Fälle abbilden kann und damit eine Generalisierung unterbunden wird \cite{tutorial:tune-batch-size-machinelearningmastery}.
-Jedoch ergibt sich aus einer kleineren Batch-Size ein Leistungs-Problem: die Berechnung des Fehlerwerts und die anschließende Optimierung der Gewichte wird häufiger durchgeführt.
-Das führt logischerweise zu einer längeren Trainingsdauer pro Epoche.
-Deshalb muss ein Kompromiss gefunden werden.
-\newline
-
-\(32\) wird in Papers oder Tutorials häufig als ein guter Standartwert angegeben \cite{default-batch-size}.
-Jedoch sollen in der Studienarbeit mehre Architekturen mit einer großen Anzahl an Hyperparametern untersucht werden.
-Gleichzeit sind die verfügbaren Ressourcen begrenzt, weshalb eine größere Batch-Size eine schnellere Hyperparameter-Suchen ermöglichen würde.
-Aus diesem Grund wird für die erste Untersuchung neben der Batch-Size von \(32\) auch \(64\) getestet.
-
-\todo[]{begründung und welche werte und warum} 
-\subsubsection{Dropout}
-Beim Dropout wird ein gewisser Teil der Neuronen einer Schicht deaktiviert.
-Das passiert jedoch nur während dem Training und führt dazu, -> gegen overfitting
-https://machinelearningmastery.com/dropout-for-regularizing-deep-neural-networks/
-
-
-
-\todo[]{begründung und welche werte und warum} 
-\subsubsection{Smoothness}
-Die Smoothness entstammt einer Idee von Ian Goodfellow \cite{ian-goodfellow-onesided-label-smoothing}.
-\newline
-
-Alle festgelegten Hyperparameter finden sich in der folgenden Tabelle \ref{table:hyperparameter} nochmals zusammengefasst.
-Dementsprechend müssen insgesamt 72 Kombinationen pro Architektur getestet werden. \todo{72 nicht korrekt}
-Es ist jedoch anzumerken, dass spätere Anpassungen an der Hyperparameter-Auswahl möglich sind.
-Vor allem falls es sich heraus stellt, dass einige Werte in keiner Kombination gute Ergebnisse erzeugen.
-
-\todo{tabelle nicht korrekt}
-\begin{table}[H]
-	\centering
-	\label{table:hyperparameter}
-	\begin{tabular}{l l}
-		Name                        & Werte            \\ \hline
-		Batch Size                  & 16, 32           \\
-		Dropout                     & 0.3, 0.4         \\
-		Smoothness                  & 0, 0.1           \\
-		Learning-Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
-		Learning-Rate Generator     & 2e-3, 2e-4, 3e-4
-	\end{tabular}
-	\caption{Allgemeine Hyperparameter Auswahl}
-\end{table}
-
-\subsection{Trainingsablauf}
-Vor der Implementierung und Analyse der verschiedenen Architekturen werden zunächst die Trainingsdaten generiert.
-Danach erfolgt die Implementierung einer neuen Architektur und Festlegung der Hyperparameter.
-Schließlich wird das Training durchgeführt.
-Beim Training wird automatisch eine Grid Search durchgeführt und Logs für diverse Werte berechnet.
-Die Logs können im Anschluss mithilfe von Tensorboard visualisiert werden.
-
-\subsection{Logs}
-Während des Trainings wird eine Reihe von Logs zur Analyse erzeugt.
-Alle Metriken in den Logs werden dabei auf Testdaten angewendet, um ein Overfitting erkennen zu können.
-Die genauen Werte und die mit dem Logging verknüpften Intentionen werden im Folgenden erläutert.
-\newline
-
-Während dem Training werden mehrere Werte geloggt.
-Ein Wert ist dabei der Loss, sowohl für den Generator, als auch für den Discriminator.
-Der Loss wird für jede Epoche geloggt und ist vor allem zur Analyse des Trainingsprozesses interessant.
-So können schlechte Trainingsdurchläufe schon früher abgebrochen werden und zugehörige Architekturen verbessert werden.
-\newline
-
-Für die Auswertung sind vor allem die generierten Bilder und der \acrshort{FID}-Index relevant.
-Die Bilder werden nach jeder Epoche mit einer immer identischen Latent-Dim erzeugt.
-Dadurch ist eine bessere Vergleichbarkeit gewährleistet.
-Tensorboard erlaubt dann eine Ansicht mit Zeitachse, um den Lernprozess über die verschiedenen Epochen beobachten zu können.
-\newline
-
-Der \acrshort{FID}-Index ist sehr aufwändig zu berechnen.
-Deshalb wird er erst am Ende mit den finalen Bildern erzeugt.
-Bei einem Overfitting könnten so theoretisch schlechtere Ergebnisse für ein Modell entstehen.
-Durch eine zusätzliche manuelle Analyse über die einzelnen Epochen und der vergleichsweise geringen Epochenanzahl ist das Risiko einer potentiellen Verfälschung der Ergebnisse jedoch sehr gering.
-\newline
-
-Die gesammelten Daten sind alle nach Architektur und Hyperparameterkombination unterteilt abgespeichert.
-Die Unterteilung erlaubt die Auswahl einer möglichst optimalen Kombination aus beidem.
-
-\section{Bewertungskriterien}
-\todo[inline,shadow]{Vor Training schieben! (und nochmal gucken, ob es dann passt, weil FID wird in Logs benutzt)}
-\todo[inline, shadow]{FID in Stand der Technik erklären}
-Damit ein Vergleich zwischen den Architekturen gezogen werden kann, müssen Kriterien für ein erfolgreich trainiertes GAN klar definiert werden.
-Als Erfolgskriterien zählen in diesem Fall die Varietät der generierten Bilder und die Korrektheit der generierten Figuren.
-Beide Kriterien werden im Folgenden noch einmal genauer erläutert.
-
-\subsection{Varietät}
-Die Varietät bezieht zum einen auf die Ähnlichkeit zwischen Trainingsbildern und den generierten Bildern der GANs.
-Die Ähnlichkeit zwischen diesen beiden Bildersets beschreibt, wie gut das GAN 'etwas neues schaffen' kann, oder ob es nur Trainingsbilder dupliziert.
-Sollte die Ähnlichkeit sehr gering sein, werden viele 'neue' Bilder generiert, was sehr positiv zu bewerten ist.
-\newline
-
-Zudem bezieht sich die Varietät auf die generierten Bilder untereinander.
-Sie sollten auch möglichst verschieden sein, was oftmals nicht der Fall ist.
-Das Phänomen ist als 'mode-collapse' bekannt. \todo{ist mode-collapse im stand der technik?}
-% https://scikit-image.org/docs/0.12.x/api/skimage.measure.html#skimage.measure.compare_ssim
-
-\subsection{Korrektheit}
-Neben der Varietät besitzt auch die Korrektheit eine hohe Bedeutung für die Bewertung der GANs.
-Dafür muss sichergestellt werden, dass die richtige Figur zum zugehörigen Label generiert wurde und erkennbar ist.
-Die Figuren müssen außerdem den gleichen Kriterien wie die Trainingsdaten genügen, das heißt, die Figuren sollten zum Beispiel vollständig innerhalb des Bildes abgebildet sein.
-\newline
-
-Ein weiterer wichtiger Aspekt der Bilder ist das Verhalten im Hintergrund der Figur.
-So sollten im Hintergrund möglichst keine anderen Figuren oder Pixelfragmente erzeugt werden.
-
-\subsection{Bestimmung}
-Sowohl Varietät als auch Korrektheit können mit der \acrlong{FID} \cite{frechet-inception-distance} gemessen werden.
-Dadurch wird ein objektiver Vergleich zwischen den Architekturen gewährleistet.
-\newline
-
-Zusätzlich erfolgt eine manuelle Überprüfung der Endresultate.
-Eine manuelle Überprüfung ist zwar subjektiv, verhindert allerdings, dass gute Ergebnisse aufgrund von Ungenauigkeiten der \acrshort{FID} übersehen werden.
-
 \section{Architekturen}
 Es werden 5 verschiedene Architekturen untersucht.
 Dabei wird bei jeder Architektur die Modelle nach einem oder mehreren Merkmalen designt.
@@ -415,7 +401,6 @@ Die Ausgabe des Generators ist ein Array mit den gleichen Dimensionen, wie ein B
 Der Discriminator erhält als Eingabe ein Bild als Array und zusätzlich ein Label als Zahl.
 Die Ausgabe ist eine Zahl zwischen 1 und -1, die die vorhergesagte Echtheit angibt.
 
-\todo{hier beschreibung der architekturen}
 \subsection{Dense GAN}
 \label{section:dense-gan}
 Das Dense GAN ist an einem Tutorial für das MNIST Datenset inspiriert.\todo{quelle}
@@ -479,79 +464,4 @@ Die Hyperparameter werden mithilfe des Gridsearchverfahrens optimiert.
 		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
 	\end{tabular}
 	\caption{Hyperparameter für das Training des 'DC-GAN-Late-Label's}
-\end{table}
-
-\subsection{DC Generator und Dense Discriminator}
-Das GAN bedient sich des Generators aus dem DC-GAN \cref{section:dc-gan-late-label} und dem Discriminator des Dense-GANs \cref{section:dense-gan}.
-Beide Architekturen wurden zuvor schon verwendet und folglich nicht weiter angepasst werden.
-
-Die Architekturen für den Discriminator \cref{architecture:dcgen-densedis-dis} und Generator \cref{architecture:dcgen-densedis-gen} befinden sich im Anhang.
-Es handelt sich um die gleichen Architekturen, ohne zusätzliche Änderungen.
-
-\subsubsection{Hyperparameter}
-\todo{welche anpassungen aus vorherigen training?}
-\begin{table}[H]
-	\centering
-	\begin{tabular}{l l}
-		Name                        & Werte            \\ \hline
-		Epochen                     & 100              \\
-		Batch Size                  & 16, 32           \\
-		Dropout                     & 0.3, 0.4         \\
-		Smoothness                  & 0, 0.1           \\
-		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
-		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
-	\end{tabular}
-	\caption{Hyperparameter für das Training vom DC-Discriminator und Dense-Generator}
-\end{table}
-
-\subsection{Dense Generator und DC Discriminator}
-Dieses GAN ist eine Kombination aus dem Dense GAN \cref{section:dense-gan} und DC GAN \cref{section:dc-gan-late-label}.
-Dabei ist dem Dense GAN der Generator entnommen und dem DC GAN der Discriminator.
-Beide Architekturen sind bereits an das Datenset angepasst und müssen nicht weiter verändert werden.
-
-Die Architekturen für den Discriminator \cref{architecture:densegen-dcdis-dis} und Generator \cref{architecture:densegen-dcdis-gen} befinden sich im Anhang.
-Es wurden keine Änderungen zu den bereits vorhanden Architekturen vorgenommen.
-
-\subsubsection{Hyperparameter}
-\todo{welche anpassungen aus vorherigen training?}
-\begin{table}[H]
-	\centering
-	\begin{tabular}{l l}
-		Name                        & Werte            \\ \hline
-		Epochen                     & 100              \\
-		Batch Size                  & 16, 32           \\
-		Dropout                     & 0.3, 0.4         \\
-		Smoothness                  & 0, 0.1           \\
-		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
-		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
-	\end{tabular}
-	\caption{Hyperparameter für das Training vom Dense-Generator und DC-Discriminator}
-\end{table}
-
-\subsection{DC-GAN-Medical-Inspired}
-Die Architektur dieses Modells orientiert sich an einem Paper zu COVID Fällen \cite{inspiration-dc-gan-med}.
-Bei den verwendeten Daten im Paper handelt es sich um schwarz-weiß Scans von Lungen zur Identifizierung von COVID-19 Erkrankungen.
-Die Bilder sind deutlich größer als die von uns verwendeten, weshalb die Architektur dementsprechend angepasst werden muss.
-
-Sowohl Discriminator als auch Generator wurden aufgrund der anderen Bildgröße (244x244 anstatt 28x28 Pixel) angepasst.
-Dafür wurde aber nur die Art des Paddings für die einzelnen Layer angepasst.
-Die Architektur besteht dabei hauptsächlich aus Convolutional (Transpose) Layern.
-Die Anzahl der Layer, die jeweiligen Ausgabedimensionen und Filtergrößen bleibt unverändert.
-Dadurch entsteht ein vergleichsweise großes Netz.
-Die genauen Architekturen befinden sich im Anhang, sowohl für den Discriminator \cref{architecture:dcgan-med-dis} als auch für den Generator \cref{architecture:dcgan-med-gen}.
-
-\subsubsection{Hyperparameter}
-\todo{welche anpassungen aus vorherigen training?}
-\begin{table}[H]
-	\centering
-	\begin{tabular}{l l}
-		Name                        & Werte            \\ \hline
-		Epochen                     & 100              \\
-		Batch Size                  & 16, 32           \\
-		Dropout                     & 0.3, 0.4         \\
-		Smoothness                  & 0, 0.1           \\
-		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
-		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
-	\end{tabular}
-	\caption{Hyperparameter für das Training des DC-GANs}
 \end{table}
