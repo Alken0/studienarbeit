@@ -3,8 +3,28 @@
 
 \chapter{Einleitung}
 \section{Ausgangssituation}
-\section{Problemstellung}
-\todo{hier unteranderem die relevanz des themas beschreiben}
-\section{Zielsetzung}
-\section{Vorgehensweise}
+Das Thema 'künstliche neuronale Netze' ist über die letzten Jahre immer populärer geworden.
+Die Netze sind in der Lage diverse Aufgaben zu erledigen, von Gesichts- oder Betrugserkennung, Übersetzungsaufgaben oder die Generierung von täuschend echten Daten.
 
+\section{Problemstellung}
+Allerdings ist es nicht trivial mithilfe von künstliche neuronale Netze gute Ergebnisse in den genannten Bereichen zu erzielen.
+Denn statt vordefinierte Schritte zu programmieren, werden die Netze auf eine große Datenmenge trainiert.
+Das Training ist neben den Daten auch stark von zusätzlichen Konfigurationen, sogenannten Hyperparametern abhängig.
+Diese Vielzahl an Einflussfaktoren macht die Definition einer guten Trainingsumgebung sehr schwer.
+\newline
+
+Die Lösung zu diesem Problem besteht oftmals in der Wiederverwendung bereits bekannter Netze inklusive deren Hyperparametern.
+Das funktioniert allerdings nur solange die Daten auch sehr ähnlich sind.
+
+
+\section{Zielsetzung}
+Für die Studienarbeit wird ein neues Datenset eingeführt, für das dann ein möglichst gutes Netz inklusive Trainingsparametern gefunden werden soll.
+Das erlaubt zukünftigen Entwicklern, eine schnellere und fundierte Entscheidung in Bezug zu Netzen \todo{ford focus - kagga} zu treffen.
+
+\section{Vorgehensweise}
+Im Rahmen der Arbeit werden zunächst die Trainingsdaten generiert.
+Danach erfolgt die Festlegung von Bewertungskriterien an die erzeugten Bilder.
+Hierbei stützen wir uns als objektive Metrik vor allem auf den FID-Wert.
+
+Bei den Architekturen handelt es sich um ein Dense GAN und ein Deep Convolutional GAN, die dann im Trainingsprozess inklusive Hyperparametersuche miteinander verglichen werden.
+Die Trainingsergebnisse werden dann im Anschluss analysiert und Besonderheiten der jeweiligen Architekturen festgehalten.
