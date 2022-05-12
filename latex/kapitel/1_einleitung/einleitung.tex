@@ -5,6 +5,10 @@
 \section{Ausgangssituation}
 Das Thema 'künstliche neuronale Netze' ist über die letzten Jahre immer populärer geworden.
 Die Netze sind in der Lage diverse Aufgaben zu erledigen, von Gesichts- oder Betrugserkennung, Übersetzungsaufgaben oder die Generierung von täuschend echten Daten.
+\newline
+
+Insbesondere die Datengenerierung mithilfe von \acrfull{GAN} ist interessant, da täuschend echte Daten erzeugt werden können, ohne dass Menschen im Trainingsprozess ständig für die Bewertung eingreifen müssen.
+Die Daten können dann unter anderem für das Training anderer künstlicher neuronaler Netze verwendet werden, die Auflösung von Bildern verbessert oder auch neuartige Bilder generiert werden.
 
 \section{Problemstellung}
 Allerdings ist es nicht trivial mithilfe von künstliche neuronale Netze gute Ergebnisse in den genannten Bereichen zu erzielen.
@@ -13,18 +17,25 @@ Das Training ist neben den Daten auch stark von zusätzlichen Konfigurationen, s
 Diese Vielzahl an Einflussfaktoren macht die Definition einer guten Trainingsumgebung sehr schwer.
 \newline
 
-Die Lösung zu diesem Problem besteht oftmals in der Wiederverwendung bereits bekannter Netze inklusive deren Hyperparametern.
-Das funktioniert allerdings nur solange die Daten auch sehr ähnlich sind.
+Eine Datengenerierung kann außerdem durch Bedingungen zur Beeinflussung der Generierungen noch komplexer werden.
+So soll dann zum Beispiel bei einer Datengenerierung nicht nur irgendein authentisches Bild generiert werden, sondern ein Bild mit einem schwarzen Kreis.
+\newline
 
+Die Lösung zu diesem Problem besteht oftmals in der Wiederverwendung bereits bekannter Netze inklusive deren Hyperparametern.
+Das funktioniert allerdings nur solange es Überschneidungen bei den verwendeten Daten und Anforderungen gibt.
 
 \section{Zielsetzung}
-Für die Studienarbeit wird ein neues Datenset eingeführt, für das dann ein möglichst gutes Netz inklusive Trainingsparametern gefunden werden soll.
-Das erlaubt zukünftigen Entwicklern, eine schnellere und fundierte Entscheidung in Bezug zu Netzen \todo{ford focus - kagga} zu treffen.
+Für die Studienarbeit wird ein neues Datenset eingeführt, Bilder geometrischer Figuren enthält, das es in der Form nicht gibt.
+Bei den Figuren handelt es sich um Dreiecke, Quadrate und Kreise, die sich in Größe und Position unterscheiden.
+Es soll dann ein möglichst gutes Netz inklusive Hyperparametern gefunden werden, das eine beeinflussbare Generierung von ähnlichen Bildern erlaubt.
+Beeinflussbar soll die abgebildete Figur sein, nicht jedoch die Position oder Größe.
+
+Ziel ist es, eine Grundlage für zukünftige Forscher oder Entwickler zu schaffen, die ähnliche Probleme lösen sollen.
+Die Ergebnisse der Arbeit dienen dann als Basis für eine schnelle und fundierte Auswahl von verschiedenen Netzarchitekturen und zugehörigen Hyperparametern.
 
 \section{Vorgehensweise}
 Im Rahmen der Arbeit werden zunächst die Trainingsdaten generiert.
 Danach erfolgt die Festlegung von Bewertungskriterien an die erzeugten Bilder.
 Hierbei stützen wir uns als objektive Metrik vor allem auf den FID-Wert.
-
 Bei den Architekturen handelt es sich um ein Dense GAN und ein Deep Convolutional GAN, die dann im Trainingsprozess inklusive Hyperparametersuche miteinander verglichen werden.
-Die Trainingsergebnisse werden dann im Anschluss analysiert und Besonderheiten der jeweiligen Architekturen festgehalten.
+Die Trainingsergebnisse werden dann im Anschluss analysiert und Besonderheiten 
