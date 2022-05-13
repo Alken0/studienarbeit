@@ -1,0 +1,56 @@
+%!TEX root = ../main.tex
+
+\newcommand{\Titel}{Abschlussbericht}
+\input{allgemein/Titelseite}
+
+\section{Umsetzung gesetzter Ziele}
+\subsection{Aufgabenstellung}
+Ziel des Projekts war es, ein möglichst optimales GAN zur Erzeugung von Bildern zu entwickeln.
+Die Bilder enthalten in beliebiger Größe und Position ein Dreieck, Quadrat oder Kreis.
+Der Datensatz wird dafür extra generiert.
+Beim Optimierungsprozess sollen auch die Hyperparameter für die Architekturen angepasst werden.
+\subsection{Ergebnis}
+Es existiert ein Datengenerator zur Erstellung der relevanten Bilder.
+Außerdem wurden verschiedene Architekturen mit jeweils angepassten Hyperparametern trainiert und die Architekturen verglichen.
+Bei den Architekturen handelt es sich um ein Dense-GAN und ein DC-GAN.
+Die besten Ergebnisse liefert das Dense-GAN, das erkennbare Figuren erzeugen kann.
+Die erzeugten Bilder sind jedoch qualitativ nicht so gut, wie die Trainingsdaten.
+\subsection{Abgabebestätigung}
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=12cm]{./allgemein/Abgabebestätigung.png}
+\end{figure}
+\section{Reflexion der Vorgehensweise}
+\subsection{Organisation/Zeitplan}
+Der erstellte Zeitplan konnte überraschender Weise verhältnismäßig gut eingehalten werden, obwohl er über so einen langen Zeitraum ging.
+Trotzdem war der eingebaute Puffer am Ende essentiell, bei wichtigeren Projekten sollte dieser eventuell noch größer ausfallen.
+\subsection{Qualitätssichernde Maßnahmen}
+Zunächst gab es große Sorge bezüglich der Komplexität der Aufgabe.
+Die war tatsächlich auch ein Problem, aber nicht in dem Umfang, wie befürchtet.
+Das lag hauptsächlich an mangelnden Kenntnissen im Bereich 'machine learning' und vor allem auch GANs im speziellen.
+Das meiste Wissen zu den Themen wurde sich erst während der Arbeit angeeignet.
+\newline
+
+Die Hardware war so einschränkend wie von Anfang an einkalkuliert.
+Mit deutlich bessere Hardware ist ein ausgiebigeres Training und eine ausführlichere Hyperparameteroptimierung möglich.
+Dadurch entstehen dann auch bessere Ergebnisse.
+\newline
+
+Die anderen Risiken stellten alle kein großes Problem dar, insbesondere der Code konnte auch durch 'Pair-Programming' immer direkt validiert werden.
+Das ständige gemeinsame Programmieren ist dabei überraschend effektiv, aber trotzdem nur bei kleinen zu schreibenden Codebeständen dauerhaft geeignet.
+Für die Studienarbeit musste nicht viel Code geschrieben werden, weshalb das gemeinsame Programmieren sehr effektiv war.
+\subsection{Arbeitsmittel}
+Es wurde die IDE VisualStudio für den Python-Code verwendet, die weder besonders gut noch schlecht war.
+Für die Latex-Ausarbeitung ist mit TeXstudio geschrieben, was die lokale und mit Git versionierte Bearbeitung der Dokumente erlaubt.
+Das ist vor allem beim gleichzeitigen Schreiben sehr praktisch.
+Allerdings hat Git bei Latex den Nachteil, das Merge-Konflikte nur sehr schwer zu beheben sind, weshalb Absprachen beim Schreiben getroffen werden müssen!
+
+\section{Ausblick}
+Es besteht die Möglichkeit, das GAN noch weiter zu optimieren.
+So könnten wahrscheinlich noch bessere Ergebnisse erzeugt werden.
+Außerdem ist es möglich mit besserer Hardware den gleichen Versuchsaufbau noch einmal durchzuführen und zu überprüfen, inwieweit bessere Ergebnisse erzielt werden können.
+
+\section{Fazit}
+Insbesondere das 'Pair Programming' war überraschend effektiv und kann bei Programmieraufgaben mit geringen Codeumfang definitiv weiterempfohlen werden.
+Das Zeitmanagement des Projekts war auch gut, es ist auf alle Fälle sehr wichtig, früh anzufangen.
+Auch ein Puffer von mindestens 4 Wochen kann in jedem Fall für ein Projekt dieser Länge empfohlen werden!
