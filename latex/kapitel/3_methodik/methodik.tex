@@ -382,41 +382,42 @@ Ausschlaggebend unterscheiden sich die Verfahren nur in der Implementierung.
 Hierbei ist die Grid Search der Random Search etwas überlegen und wird deshalb implementiert.
 
 \section{Architekturen}
-Es werden 5 verschiedene Architekturen untersucht.
-Dabei wird bei jeder Architektur die Modelle nach einem oder mehreren Merkmalen designt.
-Damit sollen verschiedene Philosophien und Techniken verglichen werden.
-Gleichzeit ist es Ziel, den Einfluss verschiedener Hyperparameter zu evaluieren.
+Es werden zwei verschiedene Architekturen untersucht und miteinander verglichen.
+Das Dense GAN soll auf dem Dense Layer basieren, wohingegen das DC GAN sich auf das Convolutional Layer stützt.
+Ziel ist, die beiden Techniken zu vergleichen und den Einfluss verschiedener Hyperparameter zu evaluieren.
 
-\subsection{API (Gemeinsamkeiten)}
-\todo{was sollte hier gesagt werden?}
-\todo{weglassen?}
-Um alle möglichen Architekturen in das Training einbinden zu können müssen sie die gleichen Ein- und Ausgaben besitzen.
-Die Anforderungen an die Ein- und Ausgabe wie folgt definiert.
+\subsection{Gemeinsamkeiten}
+Um beide Architekturen in die Trainingsumgebung einbinden zu können, müssen sie die gleichen Ein- und Ausgaben besitzen.
+Das ermöglicht jedoch nicht nur eine einfachere Implementierung, sondern macht ebenfalls die Evaluierung einfacher.
+Die Anforderungen an die Ein- und Ausgabe sind wie folgt definiert.
 \newline
 
-Der Generator erhält als Eingabe einen 100 Stellen langes Array mit Zufallszahlen (Latent-Dimension) und eine Zahl zwischen 0 und 2, die das Label repräsentiert.
-Die Ausgabe des Generators ist ein Array mit den gleichen Dimensionen, wie ein Bild (28x28x1).
+Der Discriminator erhält als Eingabe ein Bild als Array und zusätzlich ein Label als Skalar.
+Die Bild-Input hat den Formfaktor \textit{[28,28]}, wobei jeder Pixel als Graustufe zwischen \textit{0} und \textit{255} übergeben wird.
+Das Label wird per \textit{Ordinal Encoding} repräsentiert.
+Dabei werden den einzelnen Klassen ein Integer zugewiesen, was in diesem Fall zu einem Skalar zwischen 0 und 2 führt.
+Es wurde sich für dieses Codierung entschieden, da sie verglichen zur \textit{One-Hot Encoding}, bei der die Labels von einem Vektor dargestellt werden, einfacher zu implementieren ist \cite{label_encoding}.
+Die Ausgabe des Discriminators ist eine Zahl zwischen 1 und -1, welche die vorhergesagte Echtheit angibt.
+Eine 1 bedeutet, dass das gegeben Bild real ist, eine -1 wiederum, dass es vom Generator stammt.
 \newline
 
-Der Discriminator erhält als Eingabe ein Bild als Array und zusätzlich ein Label als Zahl.
-Die Ausgabe ist eine Zahl zwischen 1 und -1, die die vorhergesagte Echtheit angibt.
+Der Generator erhält als Eingabe einen 100 Stellen langes Array mit Zufallszahlen (Latent-Dimension) und den gleichen Label-Skalar, den auch der Discriminator erhält.
+Die Zufallszahl wird dabei als Vektor übergeben.
+Die Ausgabe des Generators entspricht dem bereits beschrieben Bild.
+Logischerweise muss dieser Output mit der Bild-Eingabe des Discriminators übereinstimmen, also einer Matrix in der Form \textit{[28,28]}.
 
 \subsection{Dense GAN}
 \label{section:dense-gan}
 Das Dense GAN ist an einem Tutorial für das MNIST Datenset inspiriert.\todo{quelle}
 Diese Architektur zeichnet vor allem aus, das zur Verarbeitung ausschließlich Dense-Layer zum Einsatz kommen.
-Damit repräsentiert es als einziges Modell das Dense-Layer, da alle anderen Architekturen hauptsächlich auf Convolutional-Layer setzten.
-Somit lässt sich ein interessanter Vergleich der Ergebnisse ziehen.
-
-Die Architektur wurde zu großen Teilen übernommen.
-Jedoch wurde im Tutorial nur ein GAN ohne Konditionalisierung beschrieben.
-Folglich fehlt das Label als Eingabe, was in der dieser Architektur ergänzt wird.
-\newline
+Die Architektur wurde zu großen Teilen aus der Vorlage übernommen.
+Die größte Abweichung liegt in dem hinzugefügten Label-Input, da im Tutorial nur ein GAN ohne Konditionalisierung beschrieben wurde.
 
 \subsubsection{Discriminator}
-Der Input des Discriminators entspricht den klassischen CGAN.
-Wie in der Abbildung \ref{architecture:densegan-dis-input} zu erkennen ist, wird der Label-Input auf die gleiche Größe wie der Bild-Input gebracht.
-Anschließend werden beide Eingaben mit einer Multiply Schicht vereint.
+In der Abbildung \ref{architecture:densegan-dis-input} sind die beiden Eingabe Schichten des Disciminators und ihre Vereinigung zu erkennen.
+Beide Eingaben werden vor den Verarbeitung, also den Dense Schichten, miteinander verbunden.
+Das steht zum starken Kontrast des DC-GAN Discriminators, da dort erst beide Inputs verarbeitet und anschließend multipliziert werden.
+Es handelt sich dabei schlicht um zwei verschiedene Ansätze, welche deutlicher werden, sobald der Discriminator des DC-GAN beschrieben wird.
 
 \begin{figure}[H]
 	\centering
@@ -424,6 +425,36 @@ Anschließend werden beide Eingaben mit einer Multiply Schicht vereint.
 	\caption{Inputs des Dense-GAN-Discriminators}
 	\label{architecture:densegan-dis-input}
 \end{figure}
+
+Ein wichtiger Schritt ist das Angleichen des Bild und Labels.
+Die später folgenden DenseLayer sollen mit Vektoren arbeiten, weshalb beide Eingaben zu einem gleich großen Vektor umgeformt werden.
+Das Bild wird durch eine Flatten Schicht von Matrix in eine Vektor Form gebracht. 
+Dabei werden die einzelnen Neuronen einfach in eine Reihe verschoben, ohne irgendwelche Anpassungen an den Werten vorzunehmen.
+Somit erklärt sich auch die Vektorlänge: \begin{equation}
+	28 * 28 = 784.
+\end{equation}
+Um das Label auf die gewünschte Länge zu bringen, wird der Skalar \textit{embeddet}.
+Dadurch wird jeder Klasse einen eigener Vektor mit der Länge \textit{784} per Gewichte zugewiesen.
+Dieser spezieller Vektor repräsentiert dementsprechend eine ganz bestimmtes Label, welche anschließend mit dem Bild-Vektor multipliziert wird.
+\newline
+
+In der Abbildung \ref{architecture:densegan-dis-dense} ist der zweite Zeil des Diskriminators zu erkennen.
+Nach der Multiplikation werden die mit dem Label kombinierten Bilddaten mittels vollverbunden Schichten verarbeitet.
+Dabei besteht jeder Verabeitungsschritt aus einem DenseLayer, gefolgt von der LeakyReLU Aktivierungsfunktion.
+Drei dieser Schritte existieren, wobei sich bezüglich der einzelnen Output-Größen stark an das Tutorial orientiert wurde.
+Als erstes wird der Vektor auf \textit{128} verkleinert.
+Anschließend wird die Länge zwei mal verdoppelt, sodass am Ende ein Vektor mit der Größe von \textit{512} ausgegeben wird.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textheight]{kapitel/5_ergebnisse/architectures/densegan_discriminator/dense.png}
+	\caption{Verabeitungs Schichten des Dense-GAN-Discriminators}
+	\label{architecture:densegan-dis-dense}
+\end{figure}
+
+Nach den Verabeitungsschichten wird zunächst noch der Dropout angewendet.
+Die Funktion des Droupouts wurde bereits im Kapitel der Hyperparameter beschrieben.
+Anschließend muss der 	
 
 \subsubsection{Generator}
 
