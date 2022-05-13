@@ -83,13 +83,62 @@ Auch dies kann in der Abbildung \ref{img:neural-networks} beobachtet werden, wob
 Diese Eigenschaft macht das DenseLayer zu einem der weitestverbreiteten Schichten innerhalb Neuronaler Netze \cite{dense-layer}.
 Vor allem im Bereich der Klassifizierung wird es häufig eingesetzt.
 
-\subsection{ConvolutionalLayer und ConvolutionalTransposeLayer}
+\subsubsection{ConvolutionalLayer}
+Das ConvolutionalLayer stellt eine so genannte Faltungsoperation dar.
+Dabei wird eine Matrix aus Gewichten, Filter oder Kernel genannt, über den Input bewegt.
+Bei jeder Position werden die Gewichte mit dem darunter liegenden Inputwert multipliziert und anschließend alle Produkte summiert \cite{convolutional_tut}.
+In der Abbildung \ref{img:convelutional_layer} wird dies für eine zwei dimensionale Faltung visualisiert.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=6cm]{kapitel/2_stand_der_technik/img/convolutional_layer.png}
+	\caption[Anwendung einer Faltungsoperation]{Anwendung einer Faltungsoperation \cite{convolutional-malware}}
+	\label{img:convelutional_layer}
+\end{figure}
 
 
-\subsubsection{FlattenLayer und ReshapeLayer} 
-\todo{das hier erklären?}
+Dieser Prozess kann für verschiedene Zwecke, wie der Kantendetektion in Bilder, verwendet werden.
+Bei einem ConvolutionalLayer lernt das Modell die einzelnen Gewichte des Filters, um automatisch Features zu erkennen.
+Den Output nennt man dann eine \textit{FeatureMap} \cite{convolutional_tut}.
+\newline
 
-\subsubsection{ActivationLayer und BatchNormalization}
+In einem Convolutional Neural Network wird diese Schicht so verwendet, dass die resultierenden \textit{FeatureMap} immer kleiner werden.
+Wie stark die Ausgabe minimiert wird, definieren die Kernel-Größe, Padding und Stride \cite{padding_stride}.
+Durch Padding wird der Rand um die Eingabe herum aufgefüllt.
+Stride gibt an, wie viele Felder die Matrix nach jeder Operation weiter springt, um so beispielsweise eine Überlappung der Faltung zu erzeugen.
+Den Einfluss von verschiedenen Stride-Werten kann sehr gut in Abbildung \ref{img:convelutional_stride} erkannt werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{kapitel/2_stand_der_technik/img/stride.png}
+	\caption[Der Einfluss verschiedener Werte für Stride]{Der Einfluss verschiedener Werte für Stride \cite{convolutional_transpose}}
+	\label{img:convelutional_stride}
+\end{figure}
+
+\subsubsection{ConvolutionalTransposeLayer}
+
+Das Gegenstück zum ConvolutionalLayer ist das ConvolutionalTransposeLayer.
+Dabei wird ein einzelner Wert aus dem Input mit jedem Gewicht des Kernels multipliziert.
+Wie in der Abbildung \ref{img:convelutional_transpose_layer} zu erkennen ist, erreicht man somit einen größeren Output.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm]{kapitel/2_stand_der_technik/img/convolutional_transpose_layer_cut.png}
+	\caption[Die umgekehrte Faltungsoperation]{Die umgekehrte Faltungsoperation \cite{convolutional_transpose}}
+	\label{img:convelutional_transpose_layer}
+\end{figure}
+
+Anschließend müssen nur noch die einzelnen Ergebnisse relativ zu ihrer ursprünglichen Position übereinander gelegt und summiert werden (siehe Abbildungs \ref{img:convelutional_transpose_layer_final}).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=7cm]{kapitel/2_stand_der_technik/img/convolutional_transpose_layer_final.png}
+	\caption[Das Vereinigen der Ergebnisse]{Das Vereinigen der Ergebnisse \cite{convolutional_transpose}}
+	\label{img:convelutional_transpose_layer_final}
+\end{figure}
+
+
+\subsubsection{ActivationLayer}
 Aktivierungsfunktionen sind ein wichtiges Werkzeug innerhalb Neuronaler Netze.
 Sie bilden ein großes Spektrum an Werten auf einen kleinen Bereich ab.
 Beliebte Funktionen sind dabei LeakyReLU, Tanh oder Softmax.
@@ -97,16 +146,32 @@ Häufig kann man sie am Ende eines Modells finden.
 Nicht selten stellen sie das OutputLayer eines Netzes dar.
 Jedoch werden sie auch innerhalb der HiddenLayer verwendet.
 Sie folgen häufig auf Dense oder ConvolutionalLayer.
-\newline
 
+\subsubsection{BatchNormalization}
 
+Normalisierung stellt einen Schritt der Vorverarbeitung dar, bei dem die Trainingsdaten standardisiert werden.
+Dabei werden die Daten gemittelt und die Standardabweichung wird auf einen immer gleichen Wert gebracht.
+Bei der \textit{BatchNormalization} wird dieser Prozess innerhalb einer Schicht angewendet.
+Dies lässt sich in der Abbildung \ref{img:batch-norm} erkennen.
+Dabei steht das \textit{z} für den Wert, der das Neuron errechnet, \textit{a} für die Aktivierungsfunktionen der jeweiligen Schicht und die rote Linie dazwischen repräsentiert die Normalisierung.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{kapitel/2_stand_der_technik/img/batchNormalization.png}
+	\caption[Anwendung der BatchNormalization]{Anwendung der BatchNormalization \cite{batch-normalization}}
+	\label{img:batch-norm}
+\end{figure}
 
+\textit{BatchNormalization} soll vor allem einen Effekt namens \textit{covariate shift} unterbinden \cite{batch-normalization-paper}.
+Dieser kann eintreten, sobald stark abweichende Daten vom Neuronalen Netz verarbeitet werden sollen, die das Modell noch nie gesehen hat.
+Der \textit{covariate shift} beschreibt dabei, wie stark sich die Verteilung des Inputs einer Schicht plötzlich verändert.
+Diese unbekannte Verteilung wird vor allem durch die erwähnten, noch nie verarbeiteten Daten ausgelöst.
+Durch die Normalisierung innerhalb der Schicht, wird die Verteilung deutlich minimiert, wodurch das Training beschleunigt werden kann. 
 
 \subsubsection{MultiplyLayer}
 Diese Schicht repräsentiert, wie der Name vermuten lässt, einen arithmetischen Operator.
 Es werden mehrere Input-Tensoren zu einem Output-Tensor multipliziert.
-Dabei muss natürlich sichergestellt werden, das alle hineingegebene Tensoren den gleichen Formfaktor besitzen.
+Dabei muss natürlich sichergestellt werden, das alle hineingegeben Tensoren den gleichen Formfaktor besitzen.
 Diese Schicht wird eine große Rolle bei der Architekturen von GANs spielen, da dort zwei Inputs zu einem Output vereinigt werden müssen.
 
 \section{General Adversarial Network}
