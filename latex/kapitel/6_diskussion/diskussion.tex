@@ -65,10 +65,9 @@ Beim Dense GAN werden hingegen eher einzelne Pixel falsch eingefärbt.
 
 \subsubsection{Unterscheidbarkeit der Formen}
 Beide GANs neigen zur Vermischung von Eigenschaften unterschiedlicher Figuren, zum Beispiel ein Kreis mit einer geraden Kante.
-\todo{trainingsdaten haten?}
 Das könnte auch an der Ähnlichkeit der Kreise und Quadrate im kleinen Pixelformat liegen.
 Die Schwierigkeiten beim Erzeugen von Dreiecken könnte auch damit zu tun haben, da sich die Figur stärker von den anderen beiden unterscheidet.
-Durch das prototypische Zusatztraining beim Dense GAN nehmen die Ähnlichkeiten zwischen den Figuren aber ab.
+Durch das exemplarische Zusatztraining beim Dense GAN nehmen die Ähnlichkeiten zwischen den Figuren aber ab und die besonderen Besonderheiten der einzelnen Figuren werden stärker hervorgehoben.
 
 \section{Beschränkung der Forschung}
 Für das Training und somit auch die Ergebnisse war insbesondere die verfügbare Hardware ein große Beschränkung.
@@ -79,6 +78,12 @@ Weitere Trainingsdurchläufe haben sich prototypisch ausch schon beim Dense GAN 
 Die Trainingsdaten besitzen auch kein Bildrauschen oder ähnliche Verfälschungen.
 Das würde das Training zusätzlich erschweren, aber gleichzeitig die entstehenden Netze robuster machen.
 Dadurch können dann auch die Ergebnisse für unverfälschte Bilder verbessert werden.
+
+\section{Fazit}
+Es konnten 2 GAN Architekturen gefunden werden, die beide Ergebnisse erzeugen.
+Die Verwendung eines Dense GANs hat sich im beschränkten Training mit 100 Epochen als besser erwiesen.
+Abbildungen der verwendeten Architektur befinden sich im Anhang: \cref{architecture:densegan-dis} und \cref{architecture:densegan-gen}.
+Ein intensiveres Training könnte aber nochmals bessere Ergebnisse hervorbringen.
 
 \section{Ausblick}
 Für zukünftige Forschung lassen sich insbesondere die Trainingsdaten weiter anpassen und die angesprochene Verfälschung der Bilder einbauen.
