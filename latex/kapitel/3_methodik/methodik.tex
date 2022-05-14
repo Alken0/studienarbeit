@@ -454,45 +454,121 @@ Anschließend wird die Länge zwei mal verdoppelt, sodass am Ende ein Vektor mit
 
 Nach den Verabeitungsschichten wird zunächst noch der Dropout angewendet.
 Die Funktion des Droupouts wurde bereits im Kapitel der Hyperparameter beschrieben.
-Anschließend muss der 	
+Anschließend müssen die Neuronen per Dense Schicht komprimiert werden.
+Dadurch wird ein einziges Output-Neuron erreicht, welches die Vorhersage des Discriminators darstellt.
 
 \subsubsection{Generator}
+Wie bereits beschrieben, besitzt der Generator zwei Eingaben: das Label und den Latent-Vektor.
+In der Abbildung \ref{architecture:densegan-gen-input} sind diese dargestellt.
+Auch der Generator arbeitet innerhalb seiner DenseLayer mit einem Vektor.
+Dementsprechend muss der Latent-Input nicht weiter vorverarbeitet werden und wird direkt in das MultiplyLayer gereicht
+Lediglich das Label wird ähnlich zum Discriminator per EmbeddingLayer in einen \textit{100} Neuronen langen Vektor umgewandelt.
+Anschließend werden beide Tensoren miteinander multipliziert.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.3\textheight]{kapitel/5_ergebnisse/architectures/densegan_generator/input.png}
+	\caption{Inputs des Dense-GAN-Generators}
+	\label{architecture:densegan-gen-input}
+\end{figure}
+
+Auch der Generator besitzt drei aufeinanderfolgende Verabeitungsschichten (siehe \ref{architecture:densegan-gen-dense}).
+Jedoch besteht diese Einheiten nicht nur aus einem DenseLayer und einer Aktivierungsfunktion.
+Durch die Eingabe eines Zufallsvektors ist die Werteverteilung von Datensatz zu Datensatz sehr unterschiedlich.
+Um das Training zu beschleunigen, wird zusätzlich eine BatchNormalization angewendet, welches die Werteverteilung angleichen sollte.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textheight]{kapitel/5_ergebnisse/architectures/densegan_generator/output.png}
+	\caption{Verabeitungs Schichten des Dense-GAN-Generators}
+	\label{architecture:densegan-gen-dense}
+\end{figure}
+
+Um die Ausgabe des Generators zu erreichen, müssen nach den Verabeitungselementen eine letztes DenseLayer folgen, welches die Neuronen-Anzahl auf \textit{784} erhöht.
+Anschließend werden diese in eine Matrix \textit{[28,28]} geformt, um ein generiertes Bild zu repräsentieren.
+\newline
 
 Sowohl die Architektur des Discriminators \cref{architecture:densegan-dis} als auch des Generators \cref{architecture:densegan-gen} ist in den Anlagen als volle Diagramme zu finden.
 
-\subsubsection{Hyperparameter}
-Für das Training wurde eine Anzahl an vordefinierten Hyperparameterkombinationen ausprobiert.
-\todo{Welche Hyperparameter wurden rausgeschmissen?}
-
-\subsection{DC-GAN-Late-Label}
+\subsection{DC-GAN}
 \label{section:dc-gan-late-label}
 Die Architektur dieses Modells basiert nicht auf anderen Papern oder Tutorials.
-Stattdessen wird die Idee ausprobiert, die Convolutional Layer des Discriminators ausschließlich auf die Bilder anzuwenden.
-Das Label wird dann erst im letzten Schritt mit dem Ergebnis der Convolutional Layer verknüpft und bewertet.
-Die Entscheidung ist mit dem Verhalten der Convolutional Layern zu begründen.
-Denn die Layer extrahieren Zusammenhänge von nebeneinanderliegenden Pixeln.
-Diese Zusammenhänge sind jedoch nicht natürlich bei einem synthetischen Latent-Vektor gegeben.
+Der Hauptaspekt liegt hier in der Verwendung des Convolutional- und ConvolutionalTransposedLayer.
+Diese sollen die in vorherigen Architektur verwendeten Dense-Schichten ersetzten.
 
-Die Besonderheit der Architektur liegt in der späten Fusionierung von Bild- und Labeldaten beim Discriminator.
-Ein Diagramm mit der genauen Architektur befindet sich im Anhang (Discriminator \cref{architecture:dcgan-dis} und Generator \cref{architecture:dcgan-gen}).
+\subsubsection{Discriminator}
+Eine Besonderheit der Architektur liegt in der späten Fusionierung von Bild- und Labeldaten beim Discriminator.
+Das bedeutet, dass die Bilddaten zunächst verarbeitet werden, bevor das Label einen Einfluss hat.
+In der Abbildung \ref{architecture:dcgan-dis-bild} ist Verabeitung jenes Bild-Inputs visualisiert.
+Wie man erkennen kann, existieren drei verschiedene Faltungsstufen, die jeweils aus einem ConvolutionalLayer, einer Aktivierungsfunktion und einem DropoutLayer bestehen.
+\newline
 
-Allgemein werden primär Convolutional und Convolutional Transposed Layer genutzt.
-Beim Discriminator besteht eine Schicht aus einer Kombination von Conv2d, LeakyReLu (mit einem alpha von 0.2) und Dropout (beeinflusst vom Hyperparameter).
-Der Generator besteht aus Schichten von Conv2DTranspose, BatchNormalisation und LeakyReLu (mit einem alpha von 0.2).
+Der Formfaktor bei ConvolutionalLayer unterscheidet sich deutlich zu denen des DenseLayer.
+Wie man erkennen kann, wird hier mit dreidimensionalen Tensoren gearbeitet.
+Dabei bewegt sich der Kernel über ersten beiden Achsen, wie im Kapitel 2.1.2 bereits beschrieben wurde.
+Es wurden Kernel-Größe, Padding und Stride jeweils so gewählt, dass jeder Faltung die Bildgröße halbiert wird (bei der letzten Faltung wird auf \textit{4} aufgerundet).
+Die letzte Dimension repräsentiert dabei verschiedene \textit{FeatureMaps}.
+Das bedeutet, dass pro Eintrag in der dritten Dimension eine eigene Faltungsmatrix trainiert werden muss.
+Beim ersten Verabeitungsschritt wird auf \textit{64} verschiedene \textit{FeatureMaps} aufgeteilt.
+Anschließend wird die Anzahl verdoppelt, bis sie einen Wert von \textit{256} erreicht.
 
-\subsubsection{Hyperparameter}
-\todo{welche hyperparameter anpassungen?}
-Die Hyperparameter werden mithilfe des Gridsearchverfahrens optimiert.
-\begin{table}[H]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{l l}
-		Name                        & Werte            \\ \hline
-		Epochen                     & 100              \\
-		Batch Size                  & 32, 64            \\
-		Dropout                     & 0.3, 0.4         \\
-		Smoothness                  & 0, 0.1           \\
-		Learning Rate Discriminator & 2e-3, 2e-4, 3e-4 \\
-		Learning Rate Generator     & 2e-3, 2e-4, 3e-4
-	\end{tabular}
-	\caption{Hyperparameter für das Training des 'DC-GAN-Late-Label's}
-\end{table}
+	\includegraphics[width=0.45\textheight]{kapitel/5_ergebnisse/architectures/dcgan_disriminator/label_input.png}
+	\caption{Bild-Input des DC-GAN-Discriminator}
+	\label{architecture:dcgan-dis-bild}
+\end{figure}
+
+Die Bildinformationen haben dementsprechend nach der Verarbeitung einen Formfaktor von \textit{[4,4,256]}.
+Damit sie mit dem Label multipliziert werden können, muss das Label die Größe \textit{[4,4,1]} annehmen.
+Wie in der Abbildung \ref{architecture:dcgan-dis-label} aufgezeigt, wird das Labels über ein EmbeddingLayer in einen \textit{50} Neuronen langen Vektor transformiert.
+Es wurde bereits beschrieben, dass dieses \textit{Embedden}, dem Zuweisen eines einzigartigen Identifikations-Vektor jeder Klasse dient.
+Anschließend wird in einem DenseLayer die Neuronenanzahl auf \textit{16} komprimiert, um darauffolgend in die geforderte Form \textit{[4,4,1]} überführt zu werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.3\textheight]{kapitel/5_ergebnisse/architectures/dcgan_disriminator/bild_input.png}
+	\caption{Label-Input des DC-GAN-Discriminator}
+	\label{architecture:dcgan-dis-label}
+\end{figure}
+
+Die Vereinigung selbst fällt wie gewohnt aus.
+Nach der Multiplikation wird per FlattenLayer ein Vektor mit der Länge \textit{4096} erzeugt.
+Anschließend wird er auf ein Neuron komprimiert und eine lineare Aktivierungsfunktion angewendet, wie in Abbildung \ref{architecture:dcgan-dis-output} zu erkennen ist.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.2\textheight]{kapitel/5_ergebnisse/architectures/dcgan_disriminator/output.png}
+	\caption{Output des DC-GAN-Discriminator}
+	\label{architecture:dcgan-dis-output}
+\end{figure}
+
+\subsubsection{Generator}
+Der Generator setzt zu Verarbeitung auf das ConvolutionalTransposedLayer.
+Damit drei dieser Schichten implementiert werden können, muss das MultiplikationsLayer eine ähnlichen Output haben, wie der Diskriminator nach seinen Faltungsschichten.
+Das kommt davon, dass das ConvolutionalTransposedLayer im Grunde nur ein umgekehrtes ConvolutionalLayer darstellt.
+Dafür wurde sich für eine Formgröße \textit{[7,7,255]} entschieden.
+Damit das Verhältnis zwischen Label und Bild / Latent identisch zum Discriminator ist, wird der Label-Skalar zu \textit{[7,7,1]} und der Zufallsvektor zu \textit{[7,7,255]} transformiert.
+Das Verfahren dieser Transformation entspricht den bereits gezeigten Techniken und kann in der Abbildung \ref{architecture:dcgan-gen-intpu} betrachtet werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.3\textheight]{kapitel/5_ergebnisse/architectures/dcgan_generator/input.png}
+	\caption{Inputs des DC-GAN-Generators}
+	\label{architecture:dcgan-gen-intpu}
+\end{figure}
+
+Auch im DC-GAN Generator findet man drei Verarbeitungsabschnitte, wie in Abbildung \ref{architecture:dcgan-dis-output} visualisiert.
+In den ersten beiden Schritten wird nach der Transpose-Schicht eine BatchNormalization und LeakyReLU-Aktivierung angewendet.
+Auch hier wird die Normalisierung aufgrund des stark fluktuierenden Latend-Vektor angewendet.
+Nach dem letzten ConvolutionalTransposedLayer, bei dem auch die gewünschte Größe von \textit{[28,28,1]} erreicht wird, nur noch eine Tanh-Aktivierungsfunktion ausgeführt.
+Die letzte Schicht dient lediglich dazu, die 3. Achse zu entfernen.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textheight]{kapitel/5_ergebnisse/architectures/dcgan_generator/output.png}
+	\caption{Verabeitungs Schichten des DC-GAN-Generators}
+	\label{architecture:dcgan-gen-output}
+\end{figure}
+
+Ein Diagramm mit den vollen Architekturen befinden sich im Anhang (Discriminator \cref{architecture:dcgan-dis} und Generator \cref{architecture:dcgan-gen}).
