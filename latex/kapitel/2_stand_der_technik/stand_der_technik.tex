@@ -54,9 +54,8 @@ Für das Training müssen zusätzliche Konfigurationen festgelegt werden, die Hy
 Im Gegensatz zu den Parametern neuronaler Netze werden sie durch das Training nicht verändert.
 Bei Hyperparametern handelt es sich zum Beispiel um die Anzahl an Neuronen in einer bestimmten Schicht \cite{hyperparameters-gan-using-genetic-algorithm}.
 Die Auswahl an Hyperparametern hat einen sehr großen Einfluss auf den Trainingserfolg von Modellen.
-Zusätzlich unterscheiden sich optimale Hyperparameter je nach Architektur und zugrundelegenden Daten, weswegen eine eigene Hyperparametersuche immer sinnvoll ist. \todo{quelle}
+Zusätzlich unterscheiden sich optimale Hyperparameter je nach Architektur und zugrundelegenden Daten, weswegen eine eigene Hyperparametersuche immer sinnvoll ist.
 Es sind auch nicht alle Hyperparameter gleichbedeutend für den Trainingserfolg, beispielsweise die Lernrate hat einen besonders großen Einfluss auf den Trainingserfolg \cite{learning-rate-most-important}.
-Die Suche nach optimalen Hyperparametern ist sehr komplex, weswegen spezielle Suchverfahren entwickelt wurden. \todo{Überleitung zu Hyperparam Suchverfahren?}
 
 \subsection{Verschiedene Schichten}
 Wie bereits erwähnt, werden Neuronale Netze mittels Schichten aufgebaut.
@@ -209,7 +208,6 @@ Das ist deshalb wichtig, da die zugehörigen Bezeichnungen in der Literatur nich
 So werden beispielsweise je nach Kontext der Arbeit sowohl Cycle-GANs als auch Conditional GANs als CGANs bezeichnet.
 
 \subsubsection{CGAN}
-\todo[inline, shadow]{verständlich?}
 Das \acrfull{CGAN} \cite{mirza2014conditional, gan-conditional} erlaubt die Beeinflussung der Generierung durch Labels.
 Dafür wird der normale Trainingsablauf eines GANs durch Labels erweitert, wie in der Abbildung dargestellt.
 \begin{figure}[H]
@@ -245,7 +243,6 @@ Pro Schicht ergeben sich $|weights| = inputs * outputs$, was bei größeren Arch
 Insbesondere im Vergleich zu Convolutional Layern macht dies einen enormen Unterschied.
 
 \subsubsection{DC-GAN}
-\todo{Belege}
 Ein DC-GAN oder auch Deep Convolutional GAN besteht hauptsächlich aus Convolutional Layern.
 Im Generator finden vor allem Convolutional Transposed Layer ihre Anwendung.
 Convolutional Transpose Layer funktionieren wie Convolutional Layer, jedoch vergrößern sie Ausschnitte, statt sie zu komprimieren.
@@ -266,8 +263,6 @@ Sollten die Beziehungen zwischen nahen Datenpunkten nicht existieren, können fa
 Insgesamt ist eine solche Architektur somit nicht so flexibel wie eine Dense Architektur, aber dafür effizienter.
 
 \section{Metriken}
-\subsection{Accuracy}
-\todo{falls in ergebnisse verwendet werden wird. evtl auch loss}
 \subsection{FID}	
 % TODO quelle: https://wandb.ai/ayush-thakur/gan-evaluation/reports/How-to-Evaluate-GANs-using-Frechet-Inception-Distance-FID---Vmlldzo0MTAxOTI
 Die Bewertung von Trainingserfolgen durch GANs ist nicht trivial, denn für die Bewertung muss die Qualität der generierten Bilder eingeschätzt werden.
@@ -348,7 +343,7 @@ Sollte der Generator diese Änderungen lernen, kann er den Discriminator täusch
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=10cm]{kapitel/2_stand_der_technik/img/adversrial-example.png}
-	\caption[Adversarial Example]{Durch das (nicht sichtbare) zusammenführen der 2 Bilder, wird der Panda fälschlicherweise als Gibbon klassifiziert}
+	\caption[Adversarial Example]{Durch das (für Menschen nicht erkennbare) zusammenführen der 2 Bilder, wird der Panda fälschlicherweise als Gibbon klassifiziert \cite{example-one-sided-label-smoothing}}
 	\label{smoothness-adversarial-example}
 \end{figure}
 
@@ -495,7 +490,7 @@ Ziel ist dabei nicht, eine optimale Netzarchitektur oder Ergebnisse zu erzielen.
 Stattdessen stellt die Arbeit einen Machbarkeitsbeweis für CGANs im Allgemeinen dar.
 \newline
 
-Auf dem Paper aufbauend existiert ein Tutorial Notebook \cite{cgan-tutorial-notebook}, noch einmal explizit für das MNIST Datenset.
+Auf dem Paper aufbauend existiert ein Tutorial Notebook \cite{inspiration-dense-and-dc-gan}, noch einmal explizit für das MNIST Datenset.
 Das ist zwar der gleiche Datensatz, der auch im Paper genutzt wird, jedoch wird dort die genaue Netzarchitektur nur grob beschrieben.
 Das Notebook hingegen enthält sogar Codebeispiele in Tensorflow, die eine Beispielimplementation bilden.
 \newline
@@ -508,24 +503,9 @@ Nach 100 Epochen Training erreicht diese Architektur die folgenden Ergebnisse \t
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=7cm]{kapitel/2_stand_der_technik/img/cgan-notebook-ergebnisse.png}
-	\caption{Ergebnisse Notebook \cite{cgan-tutorial-notebook}) }
+	\caption{Ergebnisse Notebook \cite{inspiration-dense-and-dc-gan}) }
 \end{figure}
 
-\subsection{LightCovidNet}
-Das LightCovidNet \cite{inspiration-dc-gan-med} erlaubt die Erkennung von Krankheitsfällen in Lungen Röntgenscans.
-Bei den Krankheitsbildern handelt es sich um COVID-19 und virale Lungenentzündungen.
-Das Netz wurde dafür zum Teil auf synthetische COVID-19 Bilder trainiert, um einem Missverhältnis an Bildern für die Krankheiten in den Trainingsdaten entgegenzuwirken.
-Das zur Generierung verwendete GAN erlaubt die Erzeugung von allen Krankheitstypen und auch Bildern von gesunden Lungen, wobei für die Arbeit nur die Generierung von COVID-19 Bildern von Interesse war.
-\newline
-
-Das dadurch entstandene GAN ist auch für diese Arbeit interessant, da es in der Lage ist, komplexe Formen mithilfe von relativ weniger Parameter zu generieren.
-Die Parameteranzahl ist so gering, da in der Architektur hauptsächlich Convolutional(-Transpose) statt Dense-Layern eingesetzt werden.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=9cm]{kapitel/2_stand_der_technik/img/light-covid-net-ergebnisse.png}
-	\caption{Ergebnisse GAN aus LightCovidNet \cite{inspiration-dc-gan-med}}
-\end{figure}
 
 
 \begin{comment}
